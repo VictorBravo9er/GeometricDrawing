@@ -1,7 +1,7 @@
 from Drawables.Line import Line
 from Drawables.Drawable import Drawable
 import numpy as np
-from math import radians, atan, degrees, sqrt, cos, sin, inf
+from math import radians, atan, degrees, sqrt, cos, sin, inf, pi
 
 
 class Point(Drawable):
@@ -35,11 +35,17 @@ class Point(Drawable):
     def setPoint(self, x:float, y:float):
         (self.X, self.Y) = (x, y)
 
+    def angleTo(self, point):
+        angle = atan(self.slopeTo(point))
+        if self.Y < point.Y:
+            return angle
+        return(angle * -1)
+
     def angleFromPoints(self, pointA, pointB):
-        m1 = self.slopeTo(pointA)
-        m2 = self.slopeTo(pointB)
-        m = ((m2 - m1) / (1 + m1 * m2))
-        return(degrees(atan(m)))
+        a1 = self.angleTo(pointA)
+        a2 = self.angleTo(pointB)
+        angle = a2 - a1
+        return(angle)
 
     def slopeTo(self, point):
         den = (self.X - point.X)
@@ -98,9 +104,9 @@ class Point(Drawable):
 
 
 
-    @staticmethod
-    def middlePoint(point1, point2):
-        return(Point.fromCoOrdinates((point1.X + point2.X)/2, (point1.Y + point2.Y)/2))
+    @classmethod
+    def middlePoint(cls, point1, point2):
+        return(cls.fromCoOrdinates((point1.X + point2.X)/2, (point1.Y + point2.Y)/2))
 
 
     def _reflectPoint(self, point):
@@ -120,7 +126,7 @@ class Point(Drawable):
         return self.distanceToPoint(line.projectionOf(self))
 
     def distanceToPoint(self, point):
-        return sqrt(((self.Y - point.Y) ** 2) + ((self.X - point.X) ** 2))
+        return sqrt(self.squaredDistance(point))
 
     def _reflectLine(self, angle:float=0, intercept:float=0):
         homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
