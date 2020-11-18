@@ -16,50 +16,30 @@ class Point(Drawable):
 
     @classmethod
     def fromPoint(cls, point):
-        """
-        Construct new point from existing Point.
-
-        args:\tpoint - a point\n
-        return:\tPoint
-        """
+        """Construct new point from existing Point."""
         new = cls()
         new.setPoint(point.X, point.Y)
         return(new)
         
     @classmethod
     def fromCoOrdinates(cls, x:float, y:float):
-        """
-        Construct new Point using point Coordinates.
-
-        args:\n\tx - x-coordinate\n\ty - y-coordinate\nreturn: Point
-        """
+        """Construct new Point using point Coordinates."""
         new = cls()
         new.setPoint(x, y)
         return(new)
 
     @classmethod
     def fromMetrics(cls, angle:float, distance:float, point):
-        """
-        Construct point using some Metrics.
-
-        args:
-        \nangle - in radians
-        \ndistance - units(-ve allowed)
-        \npoint - reference Point\n
-        return: Point
-        """
+        """Construct point using some Metrics. Angle in radians."""
         new = cls.fromPoint(point)
-        new._translate(distance * cos(angle), distance * sin(angle))
+        if distance != 0:
+            new._translate(distance * cos(angle), distance * sin(angle))
         #new._translate(distance, 0)
         #new._rotate(point, angle)
         return new
 
     def setPoint(self, x:float, y:float):
-        """
-        Set x and y.
-        
-        args:x, y
-        """
+        """Set x and y."""
         (self.X, self.Y) = (x, y)
 
     def angleTo(self, point):
@@ -129,7 +109,7 @@ class Point(Drawable):
         """Rotate the point around a centre."""
         if angle == 0:
             return
-        if not isinstance(centre, Point):
+        if centre == None:
             centre = Point()
         self._translate(centre.X, centre.Y)
         homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
@@ -167,15 +147,17 @@ class Point(Drawable):
         """Distance(perpendicular) from a line."""
         return self.distanceToPoint(line.projectionOf(self))
 
+    def distanceL1(self, point):
+        """L1 distance."""
+        return( abs(self.Y - point.Y) + abs(self.X - point.X) )
+
     def distanceToPoint(self, point):
         """Distance to/from a point."""
         return sqrt(self.squaredDistance(point))
 
-    def _reflectLine(self, slope:float=0, intercept:float=0):
+    def _reflectLine(self, line):
         """Reflect point about a line."""
-        line:Line = Line()
         slope, intercept = line.getMetrics()
-        slope = atan(slope)
         homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
         newCoord:np.array = np.dot(self.reftectionMatrix(slope,intercept), homoCoord)
         (self.X, self.Y) = newCoord.reshape(-1)[0:2]#np.round(newCoord[0:2]).astype(int)

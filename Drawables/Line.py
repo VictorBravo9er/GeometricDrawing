@@ -1,24 +1,33 @@
+"""Module Line."""
 from Drawables.Drawable import Drawable
 import numpy as np
-from math import inf, radians, degrees, atan, sin, sqrt, cos
+from math import inf, pi, radians, degrees, atan, sin, sqrt, cos
 
 
 class Line(Drawable):
-    """description of class"""
+    """Description of class."""
+
     def __init__(self):
+        """Construct default."""
         from Drawables.Point import Point
         super().__init__()
         # Drawable.__init__(self)
-        self.start = Point()
-        self.end = Point()
+        self.start:Point
+        self.end:Point
 
     @classmethod
-    def fromLine(cls, line):
+    def fromLine(cls, line, distance:float=0):
+        """Derive another line from an existing one."""
+        from Drawables.Point import Point
         if not isinstance(line, cls):
             raise TypeError("Type mismatch")
         new = cls()
-        new.start.setPoint(*(line.start.getPoint()))
-        new.end.setPoint(*(line.end.getPoint()))
+        angle, _ = Line.getMetrics(line)
+        angle = atan(angle) + (pi / 2)
+        if line.start.Y > line.end.Y:
+            distance *= -1
+        new.start = Point.fromMetrics(angle, distance, line.start)
+        new.end = Point.fromMetrics(angle, distance, line.end)
         return new
 
     @classmethod
@@ -44,12 +53,17 @@ class Line(Drawable):
             self._length = l
             return(l)
 
+    def distanceL1(self):
+        return self.start.distanceL1(self.end)
+
     def slope(self):
         return(self.start.slopeTo(self.end))
 
     def getMetrics(self):
         #y = mx + c
         m = self.slope()
+        if m == inf:
+            return(inf, self.start.X)
         (x, y) = self.start.getPoint()
         c = (y - m * x)
         return(m, c)
