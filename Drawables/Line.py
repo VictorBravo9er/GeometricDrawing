@@ -50,7 +50,7 @@ class Line(Drawable):
     def getMetrics(self):
         #y = mx + c
         m = self.slope()
-        (x, y) = self.start.getPoints()
+        (x, y) = self.start.getPoint()
         c = (y - m * x)
         return(m, c)
 
