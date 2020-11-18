@@ -7,6 +7,7 @@ from math import inf, pi, radians, degrees, atan, sin, sqrt, cos
 class Line(Drawable):
     """Description of class."""
 
+    __name__ = "Line"
     def __init__(self):
         """Construct default."""
         from Drawables.Point import Point
@@ -176,9 +177,9 @@ class Line(Drawable):
         self.start._reflectPoint(point)
         self.end._reflectPoint(point)
 
-    def _reflectLine(self, angle:float=0, intercept:float=0):
-        self.start._reflectLine(angle, intercept)
-        self.end._reflectLine(angle, intercept)
+    def _reflectLine(self, line):
+        self.start._reflectLine(line)
+        self.end._reflectLine(line)
 
     def __str__(self) -> str:
         return f"Points: ({self.start.X}, {self.start.Y}), ({self.end.X}, {self.end.Y})"

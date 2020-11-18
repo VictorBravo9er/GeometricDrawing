@@ -4,9 +4,7 @@ from math import sin, cos, inf, atan
 
 class Drawable(object):
     """Description of class."""
-
-    res = {}
-
+    
     def __init__(self):
         """Build Base constructor."""
         object.__init__(self)

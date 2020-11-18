@@ -5,17 +5,20 @@ from Drawables.Polygon import Polygon
 
 class Triangle(Polygon):
 
+    __name__ = "Triangle"
     def __init__(self):
         super().__init__()
 
     @classmethod
     def fromLine(cls, line, point):
+        new = cls()
         points = [point, line.start, line.end]
-        return cls.fromPoints(points)
+        new.setPolygon(points)
+        return(new)
 
     @classmethod
     def fromTriangle(cls, triangle):
-        return cls.fromPolygon(triangle)
+        return super().fromPolygon(triangle)
 
     def area(self):
         # Heron's Formula

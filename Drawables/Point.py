@@ -8,6 +8,7 @@ from math import radians, atan, degrees, sqrt, cos, sin, inf, pi
 class Point(Drawable):
     """Description of class."""
 
+    __name__ = "Point"
     def __init__(self):
         """Construct new Point."""
         super().__init__()
@@ -109,7 +110,7 @@ class Point(Drawable):
         """Rotate the point around a centre."""
         if angle == 0:
             return
-        if centre == None:
+        if centre is None:
             centre = Point()
         self._translate(centre.X, centre.Y)
         homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
@@ -165,24 +166,28 @@ class Point(Drawable):
     def bisectAround(self, pointA, pointB):
         """Bisector of angle AXB."""
         from Drawables.Line import Line
-        angle = self.angleFromPoints(pointA, pointB)
         vLen = (self.distanceToPoint(pointA) + self.distanceToPoint(pointB)) / 2
-        bisector = Line.fromMetrics(angle/2, vLen, self)
+        angle = ( self.angleTo(pointA) + self.angleTo(pointB) ) / 2
+        bisector = Line.fromMetrics(angle, vLen, self)
         return bisector
 
     def lineToPoint(self, point):
+        """Return a line from current point to another point."""
         from Drawables.Line import Line
         return(Line.fromPoints(self, point))
 
     def lineTo(self, angle:float, distance:float):
+        """Return a line using certain metrics."""
         from Drawables.Line import Line
         return(Line.fromMetrics(angle, distance, self))
 
     def triangleTo(self, line):
+        """Draw a triangle, provided a side of the triangle."""
         from Drawables.Triangle import Triangle
-        Triangle.fromLine(line, self)
+        return Triangle.fromLine(line, self)
 
-    def circleAroundChord(self, chord, distance:float):
+    def circleAroundChord(self, chord):
+        """Create a circle using a centre and a chord."""
         from Drawables.Circle import Circle
         e = self.squaredDistance(chord.start)
         if e != self.squaredDistance(chord.end):
@@ -190,6 +195,7 @@ class Point(Drawable):
         return(Circle.fromMetrics(self, sqrt(e)))
 
     def circleAroundRadius(self, radius:float):
+        """Create a circle using a centre and a radius."""
         from Drawables.Circle import Circle
         return Circle.fromMetrics(self, radius)
 
@@ -197,4 +203,4 @@ class Point(Drawable):
         return line.perpendicularTo(self)
 
     def __str__(self):
-        return(f"Point: ({self.X}, {self.Y})")
+        return(f"{self.__name__}: ({self.X}, {self.Y})")
