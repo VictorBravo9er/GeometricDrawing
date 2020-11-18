@@ -6,7 +6,7 @@
     ],//done
     "lengthTo":[
       [ "point" ]
-    ],
+    ],//done
     "bisectorAround": [
       [ "point", "point" ]
     ],//done

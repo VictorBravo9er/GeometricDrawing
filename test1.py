@@ -1,4 +1,3 @@
-from math import sqrt
 from Drawables.Point import Point
 from Drawables.Line import  Line
 

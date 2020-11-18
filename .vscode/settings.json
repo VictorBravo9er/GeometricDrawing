@@ -4,5 +4,6 @@
     "python.linting.pycodestyleEnabled": false,
     "python.linting.pydocstyleEnabled": true,
     "python.linting.pylintEnabled": false,
-    "python.linting.enabled": true
+    "python.linting.enabled": true,
+    "jupyter.jupyterServerType": "remote"
 }
