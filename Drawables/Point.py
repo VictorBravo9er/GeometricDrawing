@@ -136,7 +136,7 @@ class Point(Drawable):
         self.X = 2 * point.X - self.X
         self.Y = 2 * point.Y - self.Y
 
-    def squaredDistance(self, point):
+    def distanceSquared(self, point):
         """Return square of pythagorean distance."""
         return(((self.Y - point.Y) ** 2) + ((self.X - point.X) ** 2))
 
@@ -154,7 +154,7 @@ class Point(Drawable):
 
     def distanceToPoint(self, point):
         """Distance to/from a point."""
-        return sqrt(self.squaredDistance(point))
+        return sqrt(self.distanceSquared(point))
 
     def _reflectLine(self, line):
         """Reflect point about a line."""
@@ -189,8 +189,8 @@ class Point(Drawable):
     def circleAroundChord(self, chord):
         """Create a circle using a centre and a chord."""
         from Drawables.Circle import Circle
-        e = self.squaredDistance(chord.start)
-        if e != self.squaredDistance(chord.end):
+        e = self.distanceSquared(chord.start)
+        if e != self.distanceSquared(chord.end):
             raise Exception("Can not construct")
         return(Circle.fromMetrics(self, sqrt(e)))
 

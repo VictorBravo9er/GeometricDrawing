@@ -30,6 +30,6 @@ print(p3.slopeTo(p1))
 p4 = Point.middlePoint(p1, p2)
 print(p4)
 
-a = p1.squaredDistance(p2)
+a = p1.distanceSquared(p2)
 b = p1.distanceToPoint(p2)
 print(a,b)
