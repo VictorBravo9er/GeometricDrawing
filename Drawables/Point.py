@@ -1,5 +1,4 @@
 """Module for Point."""
-from Drawables.Line import Line
 from Drawables.Drawable import Drawable
 import numpy as np
 from math import radians, atan, degrees, sqrt, cos, sin, inf, pi
@@ -136,25 +135,32 @@ class Point(Drawable):
         self.X = 2 * point.X - self.X
         self.Y = 2 * point.Y - self.Y
 
-    def distanceSquared(self, point):
+    def distanceSquared(self, o):
         """Return square of pythagorean distance."""
-        return(((self.Y - point.Y) ** 2) + ((self.X - point.X) ** 2))
+        from Drawables.Line import Line
+        if isinstance(o, Line):
+            o = o.projectionOf(self)
+        if isinstance(o,Point):
+            return(((self.Y - o.Y) ** 2) + ((self.X - o.X) ** 2))
+        return inf
 
     def projectionOn(self, line):
         """Return self-projection on a line."""
         return line.projectionOf(self)
 
-    def distanceToLine(self, line):
-        """Distance(perpendicular) from a line."""
-        return self.distanceToPoint(line.projectionOf(self))
-
-    def distanceL1(self, point):
+    def distanceL1(self, o):
         """L1 distance."""
-        return( abs(self.Y - point.Y) + abs(self.X - point.X) )
+        from Drawables.Line import Line
+        if isinstance(o, Line):
+            o = o.projectionOf(self)
+        if isinstance(o,Point):
+            return( abs(self.Y - o.Y) + abs(self.X - o.X) )
+        return inf
 
-    def distanceToPoint(self, point):
+
+    def distanceTo(self, o):
         """Distance to/from a point."""
-        return sqrt(self.distanceSquared(point))
+        return sqrt(self.distanceSquared(o))
 
     def _reflectLine(self, line):
         """Reflect point about a line."""
@@ -166,7 +172,7 @@ class Point(Drawable):
     def bisectAround(self, pointA, pointB):
         """Bisector of angle AXB."""
         from Drawables.Line import Line
-        vLen = (self.distanceToPoint(pointA) + self.distanceToPoint(pointB)) / 2
+        vLen = (self.distanceTo(pointA) + self.distanceTo(pointB)) / 2
         angle = ( self.angleTo(pointA) + self.angleTo(pointB) ) / 2
         bisector = Line.fromMetrics(angle, vLen, self)
         return bisector
@@ -200,7 +206,9 @@ class Point(Drawable):
         return Circle.fromMetrics(self, radius)
 
     def perpendicularTo(self, line):
+        """Return a perpendicular from self to a line provided."""
         return line.perpendicularTo(self)
 
     def __str__(self):
+        """Text return."""
         return(f"{self.__name__}: ({self.X}, {self.Y})")

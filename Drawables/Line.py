@@ -1,4 +1,5 @@
 """Module Line."""
+from numpy.core.numeric import ComplexWarning
 from Drawables.Drawable import Drawable
 import numpy as np
 from math import inf, pi, radians, degrees, atan, sin, sqrt, cos
@@ -23,7 +24,7 @@ class Line(Drawable):
         if not isinstance(line, cls):
             raise TypeError("Type mismatch")
         new = cls()
-        angle, _ = Line.getMetrics(line)
+        angle = line.slope()
         angle = atan(angle) + (pi / 2)
         if line.start.Y > line.end.Y:
             distance *= -1
@@ -33,6 +34,7 @@ class Line(Drawable):
 
     @classmethod
     def fromPoints(cls, pointA, pointB):
+        """Construct a line provided two end-points are given."""
         new = cls()
         new.start = pointA
         new.end = pointB
@@ -40,6 +42,7 @@ class Line(Drawable):
 
     @classmethod
     def fromMetrics(cls, angle:float, length:float, point):
+        """Draw Line using some metrics."""
         from Drawables.Point import Point
         new = cls()
         new.start = point
@@ -47,20 +50,27 @@ class Line(Drawable):
         return new
 
     def length(self):
+        """Find length of the Line segment."""
         try:
             return self._length
         except(Exception):
-            l = self.start.distanceToPoint(self.end)
-            self._length = l
-            return(l)
+            self._length = self.start.distanceTo(self.end)
+            return(self._length)
 
-    def distanceL1(self):
-        return self.start.distanceL1(self.end)
+    def lenghtl1(self):
+        """Find length of the Line segment."""
+        try:
+            return self._length
+        except(Exception):
+            self._lengthL1 = self.start.distanceL1(self.end)
+            return self.start.distanceL1(self.end)
 
     def slope(self):
+        """Return slope of line."""
         return(self.start.slopeTo(self.end))
 
     def getMetrics(self):
+        """Return slope and y-intercept of Line segment."""
         #y = mx + c
         m = self.slope()
         if m == inf:
@@ -71,16 +81,16 @@ class Line(Drawable):
 
     def parallelLine(self, distance):
         new = Line.fromLine(self)
-        angle = new.slope()
-        angle = degrees(atan(angle))
-        angle += 90
+        """        if distance == 0:
+            return new"""
+        angle = atan(new.slope()) + (0.5 * pi)
         new._translate(distance * cos(angle), distance * sin(angle))
         return new
 
     def intersectionWith(self, line):
         from Drawables.Point import Point
-        (m1, c1) =self.getMetrics()
-        (m2, c2) =line.getMetrics()
+        (m1, c1) = self.getMetrics()
+        (m2, c2) = line.getMetrics()
         x = (c1 - c2) / (m2 - m1)
         y = m1 * x + c1
         return(Point.fromCoOrdinates(x, y))
@@ -93,7 +103,7 @@ class Line(Drawable):
     def distanceFromLine(self, line):
         (m1, c1) = self.getMetrics()
         (m2, c2) = line.getMetrics()
-        if m1 != m2:
+        if abs(m1 - m2) < self.comparisonLimit:
             return inf
         angle_rad = atan(abs(m1))
         return abs(c1 - c2) * cos(angle_rad)
@@ -108,9 +118,9 @@ class Line(Drawable):
         return(Point.fromCoOrdinates(x, y))
 
     def projectionOf(self, point):
-        l  = self.start.distanceToPoint(self.end)
-        l1 = self.start.distanceToPoint(point)
-        l2 = self.end.distanceToPoint(point)
+        l  = self.start.distanceTo(self.end)
+        l1 = self.start.distanceTo(point)
+        l2 = self.end.distanceTo(point)
         n = ((l ** 2) + (l2 ** 2) - (l1 ** 2)) / (2 * l)
         m = l - n
         return self.sector(m/n)
@@ -181,5 +191,14 @@ class Line(Drawable):
         self.start._reflectLine(line)
         self.end._reflectLine(line)
 
+    def __ne__(self, o) -> bool:
+        """'!=' operator overload."""
+        return not self == o
+
+    def __eq__(self, o) -> bool:
+        """'==' operator overload."""
+        return(self.start == o.start and self.end == o.end)
+
     def __str__(self) -> str:
+        """Text return."""
         return f"Points: ({self.start.X}, {self.start.Y}), ({self.end.X}, {self.end.Y})"
