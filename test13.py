@@ -15,6 +15,6 @@ dist = 1
 l2 = l1.parallelLine(dist)
 print(l1, l2)
 assert abs(l1.slope() - l2.slope()) < Drawable.comparisonLimit
-dist2 = l1.distanceFromPoint(l2.start)
+dist2 = l1.distanceFromLine(l2)
 print(dist2)
 assert dist2 == dist
