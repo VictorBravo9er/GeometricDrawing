@@ -103,7 +103,8 @@ class Line(Drawable):
     def distanceFromLine(self, line):
         (m1, c1) = self.getMetrics()
         (m2, c2) = line.getMetrics()
-        if abs(m1 - m2) < self.comparisonLimit:
+        print(m1, m2)
+        if abs(m1 - m2) > self.comparisonLimit:
             return inf
         angle_rad = atan(abs(m1))
         return abs(c1 - c2) * cos(angle_rad)
