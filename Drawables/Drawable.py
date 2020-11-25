@@ -2,6 +2,7 @@
 import numpy as np
 from math import sin, cos, inf, atan
 import matplotlib.pyplot as plt
+from numpy.lib.function_base import iterable
 
 class Drawable(object):
     """Description of class."""
@@ -82,6 +83,14 @@ class Drawable(object):
     def getIdentityMatrix(self):
         """Identity Matrix."""
         return np.identity(3, dtype="float")
+
+    @staticmethod
+    def draw(drawables:list):
+        """Draw call."""
+        fig, ax = plt.subplots(1)
+        for drawable in drawables:
+            drawable.draw(ax)
+        plt.show()
 
     def __str__(self):
         """Text maker."""

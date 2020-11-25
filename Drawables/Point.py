@@ -166,7 +166,7 @@ class Point(Drawable):
         """Reflect point about a line."""
         slope, intercept = line.getMetrics()
         homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
-        newCoord:np.array = np.dot(self.reftectionMatrix(slope,intercept), homoCoord)
+        newCoord = np.dot(self.reftectionMatrix(slope,intercept), homoCoord)
         (self.X, self.Y) = newCoord.reshape(-1)[0:2]#np.round(newCoord[0:2]).astype(int)
 
     def bisectAround(self, pointA, pointB):
