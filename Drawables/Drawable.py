@@ -1,6 +1,7 @@
 """Base class."""
 import numpy as np
 from math import sin, cos, inf, atan
+import matplotlib.pyplot as plt
 
 class Drawable(object):
     """Description of class."""

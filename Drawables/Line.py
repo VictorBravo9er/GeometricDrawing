@@ -202,3 +202,9 @@ class Line(Drawable):
     def __str__(self) -> str:
         """Text return."""
         return f"Points: ({self.start.X}, {self.start.Y}), ({self.end.X}, {self.end.Y})"
+
+    def draw(self, axes):
+        """Draw plots."""
+        x = self.start.X, self.end.X
+        y = self.start.Y, self.end.Y
+        axes.plot(x,y)

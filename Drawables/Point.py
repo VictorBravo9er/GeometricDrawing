@@ -79,7 +79,7 @@ class Point(Drawable):
         if sx == 1 and sy == 1:
             return
         homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
-        newCoord:np.array = np.dot(self.scaleMatrix(sx,sy), homoCoord)
+        newCoord = np.dot(self.scaleMatrix(sx,sy), homoCoord)
         (self.X, self.Y) = newCoord.reshape(-1)[0:2]#np.round(newCoord[0:2]).astype(int)
 
     def __ne__(self, point):
@@ -97,7 +97,7 @@ class Point(Drawable):
         if tx == 0 and ty == 0:
             return
         homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
-        newCoord:np.array = np.dot(self.translateMatrix(tx,ty), homoCoord)
+        newCoord = np.dot(self.translateMatrix(tx,ty), homoCoord)
         (self.X, self.Y) = newCoord.reshape(-1)[0:2]#np.round(newCoord[0:2]).astype(int)
 
     def __add__(self, other):
@@ -113,7 +113,7 @@ class Point(Drawable):
             centre = Point()
         self._translate(centre.X, centre.Y)
         homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
-        newCoord:np.array = np.dot(self.rotateMatrix(angle), homoCoord)
+        newCoord = np.dot(self.rotateMatrix(angle), homoCoord)
         (self.X, self.Y) = newCoord.reshape(-1)[0:2]#np.round(newCoord[0:2]).astype(int)
         self._translate(-centre.X, -centre.Y)
 
@@ -212,3 +212,7 @@ class Point(Drawable):
     def __str__(self):
         """Text return."""
         return(f"{self.__name__}: ({self.X}, {self.Y})")
+
+    def draw(self, axes):
+        """Draw plots."""
+        axes.scatter(self.X, self.Y, s=10)
