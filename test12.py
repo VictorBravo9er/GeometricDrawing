@@ -1,11 +1,11 @@
 import math
 from Drawables.Point import Point
 from Drawables.Line import  Line
-
+dr = []
 p1 = Point.fromCoOrdinates(0,0)
-
+dr.append(p1)
 p2 = Point.fromMetrics(45, 2, p1)
-
+dr.append(p2)
 p3 = Point.fromMetrics(45, -2, p2)
 
 l1 = Line.fromPoints(p1,p2)
