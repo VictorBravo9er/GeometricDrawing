@@ -1,4 +1,5 @@
 """Module Line."""
+from Drawables.Point import Point
 from numpy.core.numeric import ComplexWarning
 from Drawables.Drawable import Drawable
 import numpy as np
@@ -57,7 +58,7 @@ class Line(Drawable):
             self._length = self.start.distanceTo(self.end)
             return(self._length)
 
-    def lenghtl1(self):
+    def lengthl1(self):
         """Find length of the Line segment."""
         try:
             return self._length
@@ -80,14 +81,16 @@ class Line(Drawable):
         return(m, c)
 
     def parallelLine(self, distance):
+        """Draw a parallel Line."""
         new = Line.fromLine(self)
-        """        if distance == 0:
-            return new"""
+        if distance == 0:
+            return new
         angle = atan(new.slope()) + (0.5 * pi)
         new._translate(distance * cos(angle), distance * sin(angle))
         return new
 
     def intersectionWith(self, line):
+        """Point intersection of two lines."""
         from Drawables.Point import Point
         (m1, c1) = self.getMetrics()
         (m2, c2) = line.getMetrics()
@@ -95,60 +98,64 @@ class Line(Drawable):
         y = m1 * x + c1
         return(Point.fromCoOrdinates(x, y))
 
+    def distanceFrom(self, o):
+        """Distance from point or line."""
+        if isinstance(o, Point):
+            return o.distanceTo(self.projectionOf(o))
+        if isinstance(o, Line):
+            (m1, c1) = self.getMetrics()
+            (m2, c2) = o.getMetrics()
+            print(m1, m2)
+            if abs(m1 - m2) > self.comparisonLimit:
+                return inf
+            angle_rad = atan(abs(m1))
+            return abs(c1 - c2) * cos(angle_rad)
+        raise TypeError("Unsupported Type.")
+
     def bisector(self):
+        """Bisector of the line."""
         from Drawables.Point import Point
         return(Point.middlePoint(self.start, self.end))
         #return self.sector(1)
 
-    def distanceFromLine(self, line):
-        (m1, c1) = self.getMetrics()
-        (m2, c2) = line.getMetrics()
-        print(m1, m2)
-        if abs(m1 - m2) > self.comparisonLimit:
-            return inf
-        angle_rad = atan(abs(m1))
-        return abs(c1 - c2) * cos(angle_rad)
-
-    def sector(self, ratio:float):
+    def sector(self, m:float = 1, n:float = 1):
+        """Sector of line in a ratio."""
+        tot = m + n
         from Drawables.Point import Point
-        m = ratio
-        ratio = ratio + 1
-        n = 1
-        x = abs(n * self.start.X - m * self.end.X) / ratio
-        y = abs(n * self.start.Y - m * self.end.Y) / ratio
+        x = (n * self.start.X + m * self.end.X) / tot
+        y = (n * self.start.Y + m * self.end.Y) / tot
         return(Point.fromCoOrdinates(x, y))
 
     def projectionOf(self, point):
+        """Point projection."""
         l  = self.start.distanceTo(self.end)
         l1 = self.start.distanceTo(point)
         l2 = self.end.distanceTo(point)
         n = ((l ** 2) + (l2 ** 2) - (l1 ** 2)) / (2 * l)
         m = l - n
-        return self.sector(m/n)
+        return self.sector(m,n)
 
-    def distanceFromPoint(self, point):
-        return point.distanceToPoint(self.projectionOf(point))
-
-    def perpendicularTo(self, point):
+    def perpendicularFrom(self, point):
+        """Perpendicular from a point to the line."""
         return Line.fromPoints(self.projectionOf(point), point)
-        # x = (c1 - c2) / (m2 - m1)
-        # y = m1 * x + c1
-        # return(Point.fromCoOrdinates(x, y))
 
-    def perpendicularAtRatio(self, ratio:float):
-        return(self.perpendicularAtPoint(self.sector(ratio)))
-
-
-    def perpendicularAtPoint(self, point):
+    def perpendicularAt(self, var):
+        """Perpendicular at a point or ratio on the line."""
+        if isinstance(var, float):
+            return(self.perpendicularAt(self.sector(var)))
         from Drawables.Point import Point
-        len_ = self.length()
-        angle = degrees(atan(self.slope()))
-        point1 = Point.fromMetrics( angle, len_, point)
-        point2 = Point.fromMetrics( angle, len_, point)
-        return(Line.fromPoints(point1, point2))
+        if isinstance(var, Point):
+            from Drawables.Point import Point
+            len_ = self.length() / 2
+            angle = atan(-1/self.slope())
+            point1 = Point.fromMetrics( angle, len_, var)
+            point2 = Point.fromMetrics( angle,-len_, var)
+            return(Line.fromPoints(point1, point2))
+        raise TypeError("Unsupported Type.")
 
     def perpendicularBisector(self):
-        return(self.perpendicularAtPoint(self.bisector()))
+        """Perpendicular bisector."""
+        return(self.perpendicularAt(self.bisector()))
 
     def triangleTo(self, point):
         from Drawables.Triangle import Triangle

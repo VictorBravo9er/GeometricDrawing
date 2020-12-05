@@ -1,5 +1,6 @@
-from typing import Any
-from Drawables.Point import Point
+
+from Drawables.Circle import Circle
+from numpy.lib.function_base import median
 from math import sqrt
 from Drawables.Polygon import Polygon
 
@@ -17,11 +18,21 @@ class Triangle(Polygon):
         return(new)
 
     @classmethod
+    def fromPoints(cls, pointList: list):
+        new = cls()
+        new.setPolygon(pointList)
+        return new
+
+
+
+    @classmethod
     def fromTriangle(cls, triangle):
-        return super().fromPolygon(triangle)
+        new = cls()
+        new.setPolygon(Triangle.newVertices(triangle.vertices))
+        return new
 
     def area(self):
-        # Heron's Formula
+        """Heron's Formula."""
         try:
             return self._area
         except(Exception):
@@ -38,7 +49,7 @@ class Triangle(Polygon):
             return A
 
     def centroid(self):
-        return super().centroid()
+        pass
 
     def orthocentre(self):
         try:
@@ -50,20 +61,71 @@ class Triangle(Polygon):
     def circumcenter(self):
         pass
 
+    def incircle(self):
+        centre = None
+        try:
+            centre = self._incentre
+        except:
+            centre = self.incenter()
+        from Drawables.Line import Line
+        dist = Line.fromPoints(self.vertices[0], self.vertices[1]).distanceFrom(centre)
+        circ = Circle.fromMetrics(centre, dist)
+        return circ
+
     def incenter(self):
-        pass
+        """Find incentre of triangle."""
+        try:
+            return self._incentre
+        except:            
+            from Drawables.Line import Line
+            from Drawables.Point import Point
+            a,b,c = self.vertices[0:3]
+            l1 = a.bisectAround(c,b)
+            l2 = b.bisectAround(a,c)
+            p:Point = l1.intersectionWith(l2)
+            self._incentre = p
+            return p
 
     def medianFromPoint(self, point):
+        """Draw a median from a specified point."""
+        if isinstance(point, int):
+            point = self.vertices[point]
         if isinstance(point, Point):
-            pass
-            return None
-        idx = self.vertices.index(point)
-        return(self.medianFromPoint(idx))
+            if point not in self.vertices:
+                raise ValueError("Point not in Triangle.")
+            from Drawables.Line import Line
+            other = [x for x in self.vertices if x != point]
+            median = Line.fromPoints(point,
+                Point.middlePoint(other[0], other[1]))
+            return median
+        raise TypeError("Unsupported Type. Support: int,Point")
 
     def perpendicularFromPoint(self, point):
+        """Draw a perpendicular from a specified point."""
         if isinstance(point, int):
-            pass
-            return None
-        idx = self.vertices.index(point)
-        return(self.perpendicularFromPoint(idx))
-        
+            point = self.vertices[point]
+        if isinstance(point, Point):
+            if point not in self.vertices:
+                raise ValueError("Point not in Triangle.")
+            from Drawables.Line import Line
+            other = [x for x in self.vertices if x != point]
+            perpendicular = Line.fromPoints(
+                            other[0], other[1]
+                        ).perpendicularFrom(point)
+            return perpendicular
+        raise TypeError("Unsupported Type. Support: int,Point")
+
+    def _rotate(self, centre=None,angle:float=0):
+        from Drawables.Point import Point
+        if not isinstance(centre, Point):
+            centre = Point()
+        for point in self.vertices:
+            point._rotate(centre, angle)
+
+    def draw(self, axes):
+        """Draw Triangle."""
+        x = [p.X for p in self.vertices]
+        x.append(x[0])
+        y = [p.Y for p in self.vertices]
+        y.append(y[0])
+        axes.plot(x,y)

@@ -44,16 +44,19 @@ class Point(Drawable):
 
     def angleTo(self, point):
         """Find angle(radians) to another point w.r.t. X-axis. -ve allowed."""
-        angle = atan(self.slopeTo(point))
-        if self.Y < point.Y:
-            return angle
-        return(angle * -1)
+        slope = self.slopeTo(point)
+        angle = atan(slope)
+        if self.X < point.X:
+            return angle % (2 * pi)
+        if slope == inf and self.Y < point.Y:
+            return pi / 2
+        return((angle + pi) % (2 * pi))
 
     def angleFromPoints(self, pointA, pointB):
         """Find angle(radian) subtended on self from A and B. -ve allowed."""
         a1 = self.angleTo(pointA)
         a2 = self.angleTo(pointB)
-        angle = a2 - a1
+        angle = (a2 - a1) % (2* pi)
         return(angle)
 
     def slopeTo(self, point):
@@ -88,7 +91,9 @@ class Point(Drawable):
 
     def __eq__(self, point):
         """'==' operator overload."""
-        if self.X == point.X and self.Y == point.Y:
+        if abs(self.X - point.X
+                ) < Drawable.comparisonLimit and abs(self.Y - point.Y
+                ) < Drawable.comparisonLimit:
             return True
         return False
 
@@ -135,6 +140,17 @@ class Point(Drawable):
         self.X = 2 * point.X - self.X
         self.Y = 2 * point.Y - self.Y
 
+    @staticmethod
+    def bisector(point1, point2):
+        """Draws perpendicular bisector between two points."""
+        distance = point1.distanceTo(point2) / 2
+        slope = atan(-1 / point2.slopeTo(point1))
+        point = Point.middlePoint(point1, point2)
+        point1 = Point.fromMetrics(slope,-distance, point)
+        point2 = Point.fromMetrics(slope, distance, point)
+        from Drawables.Line import Line
+        return Line.fromPoints(point1, point2)
+
     def distanceSquared(self, o):
         """Return square of pythagorean distance."""
         from Drawables.Line import Line
@@ -173,9 +189,13 @@ class Point(Drawable):
         """Bisector of angle AXB."""
         from Drawables.Line import Line
         vLen = (self.distanceTo(pointA) + self.distanceTo(pointB)) / 2
-        angle = ( self.angleTo(pointA) + self.angleTo(pointB) ) / 2
-        bisector = Line.fromMetrics(angle, vLen, self)
-        return bisector
+        angle = (( self.angleTo(pointA) + self.angleTo(pointB) ) / 2) % (2 * pi)
+
+        end = Point.fromMetrics(angle, vLen, self)
+        if Point.orientation(pointA, self, end) < 0:
+            return Line.fromPoints(self, end)
+        end = Point.fromMetrics(angle, -vLen, self)
+        return Line.fromPoints(self, end)
 
     def lineToPoint(self, point):
         """Return a line from current point to another point."""

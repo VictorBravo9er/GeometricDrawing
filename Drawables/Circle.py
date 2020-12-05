@@ -1,6 +1,8 @@
 """Module for Circle."""
-from math import pi, sqrt, degrees, radians
+from math import  pi, sqrt, degrees, radians
 from Drawables.Drawable import Drawable
+import numpy as np
+from numpy import sin,cos
 
 class Circle(Drawable):
     """Description of class."""
@@ -56,14 +58,13 @@ class Circle(Drawable):
 
     def centroid(self):
         """Centroid is the radius itself."""
-        return self.radius
+        return self.centre
 
     def diameterLength(self):
         """Diameter is twice the radius."""
         return(2 * self.radius)
 
     def diameterAlongPoint(self, point):
-        
         """Return a diameter along the direction of a certain point."""
         from Drawables.Point import Point
         from Drawables.Line import Line
@@ -87,6 +88,18 @@ class Circle(Drawable):
         point = Point.fromMetrics(slope, self.radius, self.centre)
         diameter = self.diameterAlongPoint(point)
         return diameter
+
+    def circlePlot(self):
+        """Return plottable graph of a circle."""
+        theta = np.linspace(0, 2 * pi, 1000)
+        x = self.radius * cos(theta) + self.centre.X
+        y = self.radius * sin(theta) + self.centre.Y
+        return(x,y)
+
+    def draw(self, axes):
+        """Draw a circle."""
+        x,y = self.circlePlot()
+        axes.plot(x,y)
 
     def commonChord(self, circle):
         """Calculate common chord with another circle.""" 

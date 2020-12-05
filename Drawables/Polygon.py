@@ -26,9 +26,18 @@ class Polygon(Drawable):
     @classmethod
     def fromPolygon(cls, polygon):
         new = cls()
-        copyPoints = list(polygon.vertices)
-        new.setPolygon(copyPoints)
+        new.setPolygon(Polygon.newVertices(polygon.vertices))
         return new
+
+    @staticmethod
+    def newVertices(points):
+        from Drawables.Point import Point
+        new = []
+        for i in range(len(points)):
+            new.append(Point.fromPoint(points[i]))
+        return new
+
+
 
     @classmethod
     def fromPoints(cls, pointList:list):
