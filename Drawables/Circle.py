@@ -102,6 +102,7 @@ class Circle(Drawable):
         axes.plot(x,y)
 
     def commonChord(self, circle):
+        pass
         """Calculate common chord with another circle.""" 
         from Drawables.Point import Point
         c1 = Point.fromPoint(self.centre)
