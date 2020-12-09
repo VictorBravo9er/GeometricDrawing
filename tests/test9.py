@@ -1,3 +1,4 @@
+import __init__
 import math
 from math import degrees, radians, sqrt
 from Drawables.Point import Point
@@ -10,11 +11,7 @@ a = Point.fromCoOrdinates(1,0)
 print(a)
 l = o.lineToPoint(a)
 
-b = Point.fromCoOrdinates(3,1)
-print(b)
-t = b.triangleTo(l)
-print(t)
-
-c = o.circleAroundRadius(20)
-
-print(c)
+print(l)
+l._rotate(angle=radians(-90))
+print(o,a)
+print(l)

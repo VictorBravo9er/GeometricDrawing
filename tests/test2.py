@@ -1,3 +1,4 @@
+import __init__
 from Drawables.Drawable import Drawable
 import math
 from Drawables.Point import Point

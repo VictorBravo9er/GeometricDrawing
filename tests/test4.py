@@ -1,3 +1,4 @@
+import __init__
 import math
 from math import degrees, sqrt
 from Drawables.Point import Point

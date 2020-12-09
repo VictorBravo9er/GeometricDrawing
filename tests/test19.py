@@ -1,3 +1,4 @@
+import __init__
 from Drawables.Circle import Circle
 from math import degrees, radians
 from Drawables.Drawable import Drawable

@@ -1,3 +1,4 @@
+import __init__
 from Drawables.Point import Point
 from Drawables.Line import  Line
 from math import radians

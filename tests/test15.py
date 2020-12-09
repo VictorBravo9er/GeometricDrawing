@@ -1,3 +1,4 @@
+import __init__
 from Drawables.Drawable import Drawable
 import math
 from Drawables.Point import Point
@@ -9,19 +10,23 @@ drawables.append(p1)
 p2 = Point.fromMetrics(45, 2, p1)
 drawables.append(p2)
 
-p3 = Point.fromMetrics(45, -2, p2)
+p3 = Point.fromMetrics(-45, 2, p2)
 drawables.append(p3)
+p4 = Point.fromCoOrdinates(0,1)
+drawables.append(p4)
 l1 = Line.fromPoints(p1,p2)
 drawables.append(l1)
 dist = 1
-l2 = l1.parallelLine(dist)
+l2 = l1.fromPoints(p3,p4)
 print(l1)
 print(l2)
 drawables.append(l2)
-assert abs(l1.slope() - l2.slope()) < Drawable.comparisonLimit
+y = l2.sector(0.5)
+x = l1.intersectionWith(l2)
+drawables.append(x)
+drawables.append(y)
 dist2 = l1.distanceFrom(l2)
-print(dist2)
-assert abs(dist2 - dist) < Drawable.comparisonLimit
-
+print(y.distanceTo(p3))
+print(y.distanceTo(p4))
 Drawable.draw(drawables)
 

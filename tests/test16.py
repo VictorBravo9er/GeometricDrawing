@@ -1,3 +1,4 @@
+import __init__
 from Drawables.Drawable import Drawable
 import math
 from Drawables.Point import Point
@@ -14,13 +15,16 @@ drawables.append(p3)
 p4 = Point.fromCoOrdinates(0,1)
 drawables.append(p4)
 
-l1 = Line.fromPoints(p2,p1)
-l2 = l1.perpendicularFrom(p3)
-l4 = l1.perpendicularAt(1.5)
-l3 = l1.perpendicularBisector()
+
+l = Point.bisector(p1,p2)
+drawables.append(l)
+
+p = l.sector(1.2)
+drawables.append(p)
+l1 = Line.fromPoints(p,p1)
+l2 = Line.fromPoints(p,p2)
 drawables.append(l1)
 drawables.append(l2)
-drawables.append(l3)
-drawables.append(l4)
+assert abs(l1.length() - l2.length()) < 0.00001
 
 Drawable.draw(drawables)

@@ -1,3 +1,4 @@
+import __init__
 from math import atan, degrees
 a:float = -1000
 
