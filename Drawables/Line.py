@@ -165,7 +165,7 @@ class Line(Drawable):
         if point == None:
             mid = self.bisector()
             radius = self.length() / 2
-            return mid.circleAroundRadius(radius)
+            return mid.circle(radius)
         else:
             return(point.circleAroundChord(self, distance))
 

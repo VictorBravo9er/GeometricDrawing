@@ -16,7 +16,7 @@ p4 = Point.fromCoOrdinates(0,1)
 drawables.append(p4)
 
 
-l = Point.bisector(p1,p2)
+l = Point.bisect(p1,p2)
 drawables.append(l)
 
 p = l.sector(1.2)

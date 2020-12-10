@@ -14,6 +14,8 @@ class Point(Drawable):
         self.X = 0
         self.Y = 0
 
+
+    # Constructors
     @classmethod
     def fromPoint(cls, point):
         """Construct new point from existing Point."""
@@ -38,9 +40,27 @@ class Point(Drawable):
         #new._rotate(point, angle)
         return new
 
+
+    # Getters and setters
     def setPoint(self, x:float, y:float):
         """Set x and y."""
         (self.X, self.Y) = (x, y)
+
+    def getPoint(self):
+        """Return point coordinates as a tuple."""
+        return(self.X, self.Y)
+
+
+    # Methods
+    def slopeTo(self, point):
+        """Find slope(directionless) to another point w.r.t. X-axis. -ve allowed."""
+        num = (self.Y - point.Y)
+        den = (self.X - point.X)
+        if den == 0:
+            if num == 0:
+                return 0
+            return inf
+        return(num / den)
 
     def angleTo(self, point):
         """Find angle(radians) to another point w.r.t. X-axis. -ve allowed."""
@@ -52,150 +72,58 @@ class Point(Drawable):
             return pi / 2
         return((angle + pi) % (2 * pi))
 
-    def angleFromPoints(self, pointA, pointB):
+    def angleFromPoints(self, point1, point2):
         """Find angle(radian) subtended on self from A and B. -ve allowed."""
-        a1 = self.angleTo(pointA)
-        a2 = self.angleTo(pointB)
+        a1 = self.angleTo(point1)
+        a2 = self.angleTo(point2)
         angle = (a2 - a1) % (2* pi)
         return(angle)
-
-    def slopeTo(self, point):
-        """Find slope(directionless) to another point w.r.t. X-axis. -ve allowed."""
-        num = (self.Y - point.Y)
-        den = (self.X - point.X)
-        if den == 0:
-            if num == 0:
-                return 0
-            return inf
-        return(num / den)
 
     def angleFromLine(self, line):
         """Find angle(radian) subtended on self from endpoints of a line. -ve allowed."""
         return(self.angleFromPoints(line.start, line.end))
 
-    def getPoint(self):
-        """Return point coordinates as a tuple."""
-        return(self.X, self.Y)
-   
-    def _scale(self, sx:float=1, sy:float=1):
-        """Scale the point. Has no effect on point itself, but affects the coorginates."""
-        if sx == 1 and sy == 1:
-            return
-        homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
-        newCoord = np.dot(self.scaleMatrix(sx,sy), homoCoord)
-        (self.X, self.Y) = newCoord.reshape(-1)[0:2]#np.round(newCoord[0:2]).astype(int)
+    def distanceTo(self, obj):
+        """Distance to/from a point."""
+        return sqrt(self.distanceSquared(obj))
 
-    def __ne__(self, point):
-        """'!=' operator overload."""
-        return not self.__eq__(point)
-
-    def __eq__(self, point):
-        """'==' operator overload."""
-        if abs(self.X - point.X
-                ) < Drawable.comparisonLimit and abs(self.Y - point.Y
-                ) < Drawable.comparisonLimit:
-            return True
-        return False
-
-    def _translate(self, tx:float=0, ty:float=0):
-        """Move the point around.""" 
-        if tx == 0 and ty == 0:
-            return
-        homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
-        newCoord = np.dot(self.translateMatrix(tx,ty), homoCoord)
-        (self.X, self.Y) = newCoord.reshape(-1)[0:2]#np.round(newCoord[0:2]).astype(int)
-
-    def __add__(self, other):
-        """'+' operator overload."""
-        new = Point.fromCoOrdinates(self.X + other.X, self.Y + other.Y)
-        return new
-
-    def _rotate(self, centre=None,angle:float=0):
-        """Rotate the point around a centre."""
-        if angle == 0:
-            return
-        if centre is None:
-            centre = Point()
-        self._translate(centre.X, centre.Y)
-        homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
-        newCoord = np.dot(self.rotateMatrix(angle), homoCoord)
-        (self.X, self.Y) = newCoord.reshape(-1)[0:2]#np.round(newCoord[0:2]).astype(int)
-        self._translate(-centre.X, -centre.Y)
-
-    def _normalize(self):
-        """Convert everything to int representation."""
-        self.X = int(self.X)
-        self.Y = int(self.Y)
-
-
-
-    @classmethod
-    def middlePoint(cls, point1, point2):
+    def middlePoint(self, point):
         """Return midPoint of 2 points."""
-        return(cls.fromCoOrdinates((point1.X + point2.X)/2, (point1.Y + point2.Y)/2))
-
-
-    def _reflectPoint(self, point):
-        """Reflect point about another point."""
-        self.X = 2 * point.X - self.X
-        self.Y = 2 * point.Y - self.Y
-
-    @staticmethod
-    def bisector(point1, point2):
-        """Draws perpendicular bisector between two points."""
-        distance = point1.distanceTo(point2) / 2
-        slope = atan(-1 / point2.slopeTo(point1))
-        point = Point.middlePoint(point1, point2)
-        point1 = Point.fromMetrics(slope,-distance, point)
-        point2 = Point.fromMetrics(slope, distance, point)
-        from Drawables.Line import Line
-        return Line.fromPoints(point1, point2)
-
-    def distanceSquared(self, o):
-        """Return square of pythagorean distance."""
-        from Drawables.Line import Line
-        if isinstance(o, Line):
-            o = o.projectionOf(self)
-        if isinstance(o,Point):
-            return(((self.Y - o.Y) ** 2) + ((self.X - o.X) ** 2))
-        return inf
+        return(Point.fromCoOrdinates((self.X + point.X)/2, (self.Y + point.Y)/2))
 
     def projectionOn(self, line):
         """Return self-projection on a line."""
         return line.projectionOf(self)
 
-    def distanceL1(self, o):
-        """L1 distance."""
+    def bisect(self, point):
+        """Draws perpendicular bisector between two points."""
+        distance = self.distanceTo(point) / 2
+        slope = atan(-1 / point.slopeTo(self))
+        point = Point.middlePoint(self, point)
+        p2 = Point.fromMetrics(slope,-distance, point)
+        point = Point.fromMetrics(slope, distance, point)
         from Drawables.Line import Line
-        if isinstance(o, Line):
-            o = o.projectionOf(self)
-        if isinstance(o,Point):
-            return( abs(self.Y - o.Y) + abs(self.X - o.X) )
-        return inf
+        return Line.fromPoints(p2, point)
 
-
-    def distanceTo(self, o):
-        """Distance to/from a point."""
-        return sqrt(self.distanceSquared(o))
-
-    def _reflectLine(self, line):
-        """Reflect point about a line."""
-        slope, intercept = line.getMetrics()
-        homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
-        newCoord = np.dot(self.reftectionMatrix(slope,intercept), homoCoord)
-        (self.X, self.Y) = newCoord.reshape(-1)[0:2]#np.round(newCoord[0:2]).astype(int)
-
-    def bisectAround(self, pointA, pointB):
+    def bisectAnglePoints(self, point1, point2):
         """Bisector of angle AXB."""
         from Drawables.Line import Line
-        vLen = (self.distanceTo(pointA) + self.distanceTo(pointB)) / 2
-        angle = (( self.angleTo(pointA) + self.angleTo(pointB) ) / 2) % (2 * pi)
+        vLen = (self.distanceTo(point1) + self.distanceTo(point2)) / 2
+        angle = (( self.angleTo(point1) + self.angleTo(point2) ) / 2) % (2 * pi)
 
         end = Point.fromMetrics(angle, vLen, self)
-        if Point.orientation(pointA, self, end) < 0:
+        if Point.orientation(point1, self, end) < 0:
             return Line.fromPoints(self, end)
         end = Point.fromMetrics(angle, -vLen, self)
         return Line.fromPoints(self, end)
+
+    def bisectAngleLine(self, line):
+        """Bisector of angle sublended at point from ends of a line."""
+        return self.bisectAnglePoints(line.start, line.end)
+
+    def perpendicularTo(self, line):
+        """Return a perpendicular from self to a line provided."""
+        return line.perpendicularTo(self)
 
     def lineToPoint(self, point):
         """Return a line from current point to another point."""
@@ -212,23 +140,109 @@ class Point(Drawable):
         from Drawables.Triangle import Triangle
         return Triangle.fromLine(line, self)
 
-    def circleAroundChord(self, chord):
+    def circleFromChord(self, line):
         """Create a circle using a centre and a chord."""
         from Drawables.Circle import Circle
-        e = self.distanceSquared(chord.start)
-        if e != self.distanceSquared(chord.end):
-            raise Exception("Can not construct")
+        e = self.distanceSquared(line.start)
+        if e != self.distanceSquared(line.end):
+            raise Exception("Can not be constructed")
         return(Circle.fromMetrics(self, sqrt(e)))
 
-    def circleAroundRadius(self, radius:float):
+    def circleFromTangent(self, line):
+        """Create a circle using a centre and \
+            a tangent to the circle."""
+        from Drawables.Circle import Circle
+        Circle.fromMetrics(self, self.distanceTo(line))
+
+    def circle(self, radius:float):
         """Create a circle using a centre and a radius."""
         from Drawables.Circle import Circle
         return Circle.fromMetrics(self, radius)
 
-    def perpendicularTo(self, line):
-        """Return a perpendicular from self to a line provided."""
-        return line.perpendicularTo(self)
 
+    # Helpers
+    def distanceSquared(self, o):
+        """Return square of pythagorean distance."""
+        from Drawables.Line import Line
+        if isinstance(o, Line):
+            o = o.projectionOf(self)
+        if isinstance(o,Point):
+            return(((self.Y - o.Y) ** 2) + ((self.X - o.X) ** 2))
+        return inf
+
+    def distanceL1(self, o):
+        """L1 distance."""
+        from Drawables.Line import Line
+        if isinstance(o, Line):
+            o = o.projectionOf(self)
+        if isinstance(o,Point):
+            return( abs(self.Y - o.Y) + abs(self.X - o.X) )
+        return inf
+
+    def __add__(self, other):
+        """'+' operator overload."""
+        new = Point.fromCoOrdinates(self.X + other.X, self.Y + other.Y)
+        return new
+
+    def __ne__(self, point):
+        """'!=' operator overload."""
+        return not self.__eq__(point)
+
+    def __eq__(self, point):
+        """'==' operator overload."""
+        if abs(self.X - point.X
+                ) < Drawable.comparisonLimit and abs(self.Y - point.Y
+                ) < Drawable.comparisonLimit:
+            return True
+        return False
+
+    def _scale(self, sx:float=1, sy:float=1):
+        """Scale the point. Has no effect on point itself, but affects the coorginates."""
+        if sx == 1 and sy == 1:
+            return
+        homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
+        newCoord = np.dot(self.scaleMatrix(sx,sy), homoCoord)
+        (self.X, self.Y) = newCoord.reshape(-1)[0:2]#np.round(newCoord[0:2]).astype(int)
+
+    def _normalize(self):
+        """Convert everything to int representation."""
+        self.X = int(self.X)
+        self.Y = int(self.Y)
+
+    def _translate(self, tx:float=0, ty:float=0):
+        """Move the point around.""" 
+        if tx == 0 and ty == 0:
+            return
+        homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
+        newCoord = np.dot(self.translateMatrix(tx,ty), homoCoord)
+        (self.X, self.Y) = newCoord.reshape(-1)[0:2]#np.round(newCoord[0:2]).astype(int)
+
+    def _rotate(self, centre=None,angle:float=0):
+        """Rotate the point around a centre."""
+        if angle == 0:
+            return
+        if centre is None:
+            centre = Point()
+        self._translate(centre.X, centre.Y)
+        homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
+        newCoord = np.dot(self.rotateMatrix(angle), homoCoord)
+        (self.X, self.Y) = newCoord.reshape(-1)[0:2]#np.round(newCoord[0:2]).astype(int)
+        self._translate(-centre.X, -centre.Y)
+
+    def _reflectPoint(self, point):
+        """Reflect point about another point."""
+        self.X = 2 * point.X - self.X
+        self.Y = 2 * point.Y - self.Y
+
+    def _reflectLine(self, line):
+        """Reflect point about a line."""
+        slope, intercept = line.getMetrics()
+        homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
+        newCoord = np.dot(self.reftectionMatrix(slope,intercept), homoCoord)
+        (self.X, self.Y) = newCoord.reshape(-1)[0:2]#np.round(newCoord[0:2]).astype(int)
+
+
+    # Output interface
     def __str__(self):
         """Text return."""
         return(f"{self.__name__}: ({self.X}, {self.Y})")

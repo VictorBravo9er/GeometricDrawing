@@ -16,6 +16,6 @@ print(b)
 t = b.triangleTo(l)
 print(t)
 
-c = o.circleAroundRadius(20)
+c = o.circle(20)
 
 print(c)

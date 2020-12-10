@@ -37,7 +37,7 @@ c3 = Circle.fromMetrics(p1, 1)
 
 drawables.append(c2)
 drawables.append(c3)
-a = p3.bisectAround(p2, p1)
+a = p3.bisectAnglePoints(p2, p1)
 #ch = c.commonChord(c3)
 #drawables.append(ch)
 
