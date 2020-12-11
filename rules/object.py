@@ -8,15 +8,17 @@ from Drawables.Circle import Circle
 from Drawables.Triangle import Triangle
 from typing import List, Tuple
 objectADT = {
-    int:"integer number",
-    float:"floating point number",
-    bool:"boolean value",
-    Drawable:"drawable",
-    Point:"point",
-    Line:"line",
-    Circle:"circle",
-    Polygon:"polygon",
-    Triangle:"triangle"
+    "int":int,
+    "float":float,
+    "boolean":bool,
+    "drawable":Drawable,
+    "point":Point,
+    "line":Line,
+    "circle":Circle,
+    "polygon":Polygon,
+    "triangle":Triangle
 }
 
 def isfloatOrBool(target:str):
+    """Don't know what it does yet.""" 
+    pass

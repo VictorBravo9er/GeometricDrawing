@@ -4,31 +4,31 @@ pointADT = {
     "target":Point,
     "base":None,
     "new":{
-        (float,float,):{
-            "args":("x","y",),
-            "target":Point.fromCoOrdinates,
+        (Point,Point,):{
+            "args":("point1","point2"),
+            "target":Line.fromPoints,
         },
         (float,float,Point,):{
-            "args":("angle","distance","point",),
-            "target":Point.fromMetrics,
+            "args":("angle","length","point",),
+            "target":Line.fromMetrics,
         },
         "return":Point
     },
     "copy":{
-        "args":("point",),
-        "types":(Point,),
-        "target":Point.fromPoint,
-        "return":Point
+        "args":("line",),
+        "types":(Line,),
+        "target":Line.fromLine,
+        "return":Line
     },
     "set":{
-        "args":("x","y",),
-        "types":(float, float,),
-        "target":Point.setPoint,
+        "args":("start","end",),
+        "types":(Point, Point,),
+        "target":Line.setLine,
         "return":None
     },
     "slopeTo":{
-        "args":("point",),
-        "types":(Point,),
+        "args":tuple(),
+        "types":tuple(),
         "target":Point.slopeTo,
         "return":float
     },

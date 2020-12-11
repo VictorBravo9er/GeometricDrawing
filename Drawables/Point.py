@@ -41,7 +41,7 @@ class Point(Drawable):
         return new
 
 
-    # Getters and setters
+    # Getters and Setters
     def setPoint(self, x:float, y:float):
         """Set x and y."""
         (self.X, self.Y) = (x, y)
@@ -152,7 +152,7 @@ class Point(Drawable):
         """Create a circle using a centre and \
             a tangent to the circle."""
         from Drawables.Circle import Circle
-        Circle.fromMetrics(self, self.distanceTo(line))
+        return Circle.fromMetrics(self, self.distanceTo(line))
 
     def circle(self, radius:float):
         """Create a circle using a centre and a radius."""

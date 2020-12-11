@@ -1,5 +1,4 @@
 """Module Line."""
-from Drawables.Point import Point
 from numpy.core.numeric import ComplexWarning
 from Drawables.Drawable import Drawable
 import numpy as np
@@ -18,6 +17,8 @@ class Line(Drawable):
         self.start:Point
         self.end:Point
 
+
+    # Constructors
     @classmethod
     def fromLine(cls, line, distance:float=0):
         """Derive another line from an existing one."""
@@ -34,11 +35,11 @@ class Line(Drawable):
         return new
 
     @classmethod
-    def fromPoints(cls, pointA, pointB):
+    def fromPoints(cls, point1, point2):
         """Construct a line provided two end-points are given."""
         new = cls()
-        new.start = pointA
-        new.end = pointB
+        new.start = point1
+        new.end = point2
         return new
 
     @classmethod
@@ -50,6 +51,26 @@ class Line(Drawable):
         new.end = Point.fromMetrics(angle, length, point)
         return new
 
+
+    # Getters and Setters
+    def getLine(self):
+        """Getter Method."""
+        return (self.start, self.end)
+
+    def setLine(self, start, end):
+        """Setter Method."""
+        (self.start, self.end) = (start, end)
+
+
+    # Methods
+    def slope(self):
+        """Return slope of line."""
+        return(self.start.slopeTo(self.end))
+
+    def angle(self):
+        """Angle subtended by line with x-axis."""
+        return self.start.angleTo(self.end)
+
     def length(self):
         """Find length of the Line segment."""
         try:
@@ -58,48 +79,9 @@ class Line(Drawable):
             self._length = self.start.distanceTo(self.end)
             return(self._length)
 
-    def lengthl1(self):
-        """Find length of the Line segment."""
-        try:
-            return self._length
-        except(Exception):
-            self._lengthL1 = self.start.distanceL1(self.end)
-            return self.start.distanceL1(self.end)
-
-    def slope(self):
-        """Return slope of line."""
-        return(self.start.slopeTo(self.end))
-
-    def getMetrics(self):
-        """Return slope and y-intercept of Line segment."""
-        #y = mx + c
-        m = self.slope()
-        if m == inf:
-            return(inf, self.start.X)
-        (x, y) = self.start.getPoint()
-        c = (y - m * x)
-        return(m, c)
-
-    def parallelLine(self, distance):
-        """Draw a parallel Line."""
-        new = Line.fromLine(self)
-        if distance == 0:
-            return new
-        angle = atan(new.slope()) + (0.5 * pi)
-        new._translate(distance * cos(angle), distance * sin(angle))
-        return new
-
-    def intersectionWith(self, line):
-        """Point intersection of two lines."""
-        from Drawables.Point import Point
-        (m1, c1) = self.getMetrics()
-        (m2, c2) = line.getMetrics()
-        x = (c1 - c2) / (m2 - m1)
-        y = m1 * x + c1
-        return(Point.fromCoOrdinates(x, y))
-
     def distanceFrom(self, o):
         """Distance from point or line."""
+        from Drawables.Point import Point
         if isinstance(o, Point):
             return o.distanceTo(self.projectionOf(o))
         if isinstance(o, Line):
@@ -111,6 +93,24 @@ class Line(Drawable):
             angle_rad = atan(abs(m1))
             return abs(c1 - c2) * cos(angle_rad)
         raise TypeError("Unsupported Type.")
+
+    def intersectionWith(self, line):
+        """Point intersection of two lines."""
+        from Drawables.Point import Point
+        (m1, c1) = self.getMetrics()
+        (m2, c2) = line.getMetrics()
+        x = (c1 - c2) / (m2 - m1)
+        y = m1 * x + c1
+        return(Point.fromCoOrdinates(x, y))
+
+    def parallelLine(self, distance=None, point=None):
+        """Draw a parallel Line."""
+        from Drawables.Point import Point
+        if isinstance(point, Point):
+            distance = point.distanceTo(self)
+        if isinstance(distance, float) or isinstance(distance, int):
+            return Line.fromLine(line=self, distance=distance)
+        raise Exception("Invalid parameter(s).")
 
     def bisector(self):
         """Bisector of the line."""
@@ -158,27 +158,52 @@ class Line(Drawable):
         return(self.perpendicularAt(self.bisector()))
 
     def triangleTo(self, point):
+        """Draw a Triangle."""
         from Drawables.Triangle import Triangle
         return Triangle.fromLine(self, point)
 
-    def circleAround(self, distance:float=0, point=None):
-        if point == None:
+    def circleAround(self, tangentPoint=None, chordPoint=None):
+        """Draw circle with line as diameter, chord or tangent."""
+        from Drawables.Point import Point
+        if chordPoint is None and tangentPoint is None:
             mid = self.bisector()
             radius = self.length() / 2
             return mid.circle(radius)
-        else:
-            return(point.circleAroundChord(self, distance))
+        if isinstance(tangentPoint, Point):
+            return Point.circleFromTangent(tangentPoint, self)
+        elif isinstance(chordPoint, Point):
+            return Point.circleFromChord(chordPoint, self)
+        raise Exception("invalid arguements.")
 
-    def square(direction:int=1):
+    def square(self, direction:str= "up"):
         pass
 
-    def rectangle(sideLength:float, direction:int=1):
+    def rectangle(sideLength:float, direction:str= "up"):
         pass
+
+
+    # Helpers
+    def getMetrics(self):
+        """Return slope and y-intercept of Line segment."""
+        #y = mx + c
+        m = self.slope()
+        if m == inf:
+            return(inf, self.start.X)
+        (x, y) = self.start.getPoint()
+        c = (y - m * x)
+        return(m, c)
+
+    def lengthl1(self):
+        """Find length of the Line segment."""
+        try:
+            return self._length
+        except(Exception):
+            self._lengthL1 = self.start.distanceL1(self.end)
+            return self.start.distanceL1(self.end)
 
     def _scale(self, sx:float=1, sy:float=1):
         self.start._scale(sx, sy)
         self.end._scale(sx, sy)
-
 
     def _translate(self, tx:float=0, ty:float=0):
         self.start._translate(tx, ty)

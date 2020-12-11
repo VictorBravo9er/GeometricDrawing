@@ -80,8 +80,8 @@ class Triangle(Polygon):
             from Drawables.Line import Line
             from Drawables.Point import Point
             a,b,c = self.vertices[0:3]
-            l1 = a.bisectAround(c,b)
-            l2 = b.bisectAround(a,c)
+            l1 = a.bisectAnglePoints(c,b)
+            l2 = b.bisectAnglePoints(a,c)
             p:Point = l1.intersectionWith(l2)
             self._incentre = p
             return p
