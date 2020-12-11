@@ -6,7 +6,16 @@ from Drawables.Line import Line
 from Drawables.Polygon import Polygon
 from Drawables.Circle import Circle
 from Drawables.Triangle import Triangle
-from typing import List, Tuple
+
+args:str = "arguements"
+trgt:str = "target"
+ret:str = "return"
+
+initOrder = (
+    Point, Line, Circle, Polygon, Triangle,
+    
+    )
+
 objectADT = {
     "int":int,
     "float":float,
@@ -19,6 +28,6 @@ objectADT = {
     "triangle":Triangle
 }
 
-def isfloatOrBool(target:str):
+def isfloatOrBool(trgt:str):
     """Don't know what it does yet.""" 
     pass

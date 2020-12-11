@@ -1,131 +1,130 @@
 """Point Structure."""
 from rules.object import *
 pointADT = {
-    "target":Point,
     "base":None,
     "new":{
         (float,float,):{
-            "args":("x","y",),
-            "target":Point.fromCoOrdinates,
+            args:("x","y",),
+            trgt:Point.fromCoOrdinates
         },
         (float,float,Point,):{
-            "args":("angle","distance","point",),
-            "target":Point.fromMetrics,
+            args:("angle","distance","point",),
+            trgt:Point.fromMetrics
         },
-        "return":Point
+        ret:Point
     },
     "copy":{
-        "args":("point",),
-        "types":(Point,),
-        "target":Point.fromPoint,
-        "return":Point
-    },
-    "set":{
-        "args":("x","y",),
-        "types":(float, float,),
-        "target":Point.setPoint,
-        "return":None
+        (Point,):{
+            args:("point",),
+            trgt:Point.fromPoint
+        },
+        ret:Point
     },
     "slopeTo":{
-        "args":("point",),
-        "types":(Point,),
-        "target":Point.slopeTo,
-        "return":float
+        (Point,):{
+            args:("point",),
+            trgt:Point.slopeTo
+        },
+        ret:float
     },
     "angleTo":{
-        "args":("point",),
-        "types":(Point,),
-        "target":Point.angleTo,
-        "return":float
+        (Point,):{
+            args:("point",),
+            trgt:Point.angleTo
+        },
+        ret:float
     },
-    "angleFromPoints":{
-        "args":("point1","point2",),
-        "types":(Point, Point,),
-        "target":Point.angleFromPoints,
-        "return":float
+    "angleFrom":{
+        (Point, Point,):{
+            args:("point1","point2",),
+            trgt:Point.angleFromPoints
+        },
+        (Line,):{
+            args:("line",),
+            trgt:Point.angleFromLine
+        },
+        ret:float
     },
-    "angleFromLine":{
-        "args":("line",),
-        "types":(Line,),
-        "target":Point.angleFromLine,
-        "return":float
-    },
-    "distanceToPoint":{
-        "args":("obj",),
-        "types":(Point,),
-        "target":Point.distanceTo,
-        "return":float
-    },
-    "distanceToLine":{
-        "args":("obj",),
-        "types":(Line,),
-        "target":Point.distanceTo,
-        "return":float
+    "distanceTo":{
+        (Point,):{
+            args:("obj",),
+            trgt:Point.distanceTo,
+        },
+        (Line,):{
+            args:("obj",),
+            trgt:Point.distanceTo
+        },
+        ret:float
     },
     "midPoint":{
-        "args":("point",),
-        "types":(Point,),
-        "target":Point.middlePoint,
-        "return":Point
+        (Point,):{
+            args:("point",),
+            trgt:Point.middlePoint
+        },
+        ret:Point
     },
     "projection":{
-        "args":("line",),
-        "types":(Line,),
-        "target":Point.projectionOn,
-        "return":Point
+        (Line,):{
+            args:("line",),
+            trgt:Point.projectionOn
+        },
+        ret:Point
     },
-    "bisectPoints":{
-        "args":("point",),
-        "types":(Point,),
-        "target":Point.bisect,
-        "return":Line
+    "bisector":{
+        (Point,):{
+            args:("point",),
+            trgt:Point.bisect
+        },
+        ret:Line
     },
-    "angleBisectLine":{
-        "args":("line",),
-        "types":(Line,),
-        "target":Point.bisectAngleLine,
-        "return":Line
-    },
-    "angleBisectPoints":{
-        "args":("point1","point2",),
-        "types":(Point, Point,),
-        "target":Point.bisectAnglePoints,
-        "return":Line
-    },
-    "lineToPoint":{
-        "args":("point",),
-        "types":(Point,),
-        "target":Point.lineToPoint,
-        "return":Line
+    "angleBisector":{
+        (Line,):{
+            args:("line",),
+            trgt:Point.bisectAngleLine
+        },
+        (Point, Point,):{
+            args:("point1","point2",),
+            trgt:Point.bisectAnglePoints
+        },
+        ret:Line
     },
     "lineTo":{
-        "args":("angle","distance",),
-        "types":(float, float,),
-        "target":Point.lineTo,
-        "return":Line
+        (Point,):{
+            args:("point",),
+            trgt:Point.lineToPoint
+        },
+        (float, float,):{
+            args:("angle","distance",),
+            trgt:Point.lineTo
+        },
+        ret:Line
     },
     "triangle":{
-        "args":("line",),
-        "types":(Line,),
-        "target":Point.triangleTo,
-        "return":Triangle
+        (Line,):{
+            args:("line",),
+            trgt:Point.triangleTo
+        },
+        ret:Triangle
     },
     "circle":{
-        "args":("radius",),
-        "types":(float,),
-        "target":Point.circle,
-        "return":Circle
+        (float,):{
+            args:("radius",),
+            trgt:Point.circle
+        },
+        ret:Circle
     },
     "tangentCircle":{
-        "args":("line",),
-        "types":(Line,),
-        "target":Point.circleFromTangent,
-        "return":Circle
+        (Line,):{
+            args:("tangent",),
+            trgt:Point.circleFrom
+        },
+        ret:Circle
     },
     "chordCircle":{
-        "args":("line",),
-        "types":(Line,),
-        "target":Point.circleFromChord,
-        "return":Circle
+        (Line,):{
+            args:("chord",),
+            trgt:Point.circleFrom
+        },
+        ret:Circle
     }
 }

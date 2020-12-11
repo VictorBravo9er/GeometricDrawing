@@ -97,13 +97,17 @@ class Point(Drawable):
 
     def bisect(self, point):
         """Draws perpendicular bisector between two points."""
+        """
         distance = self.distanceTo(point) / 2
         slope = atan(-1 / point.slopeTo(self))
         point = Point.middlePoint(self, point)
         p2 = Point.fromMetrics(slope,-distance, point)
         point = Point.fromMetrics(slope, distance, point)
+        """
         from Drawables.Line import Line
-        return Line.fromPoints(p2, point)
+        return Line.perpendicularBisector(
+            Line.fromPoints(self, point)
+            )
 
     def bisectAnglePoints(self, point1, point2):
         """Bisector of angle AXB."""
@@ -140,19 +144,20 @@ class Point(Drawable):
         from Drawables.Triangle import Triangle
         return Triangle.fromLine(line, self)
 
-    def circleFromChord(self, line):
-        """Create a circle using a centre and a chord."""
-        from Drawables.Circle import Circle
-        e = self.distanceSquared(line.start)
-        if e != self.distanceSquared(line.end):
-            raise Exception("Can not be constructed")
-        return(Circle.fromMetrics(self, sqrt(e)))
-
-    def circleFromTangent(self, line):
-        """Create a circle using a centre and \
-            a tangent to the circle."""
-        from Drawables.Circle import Circle
-        return Circle.fromMetrics(self, self.distanceTo(line))
+    def circleFrom(self, chord=None, tangent=None):
+        """Create a circle using a centre and a chord\
+            or a tangent."""
+        from Drawables.Line import Line
+        if isinstance(tangent, Line):
+            from Drawables.Circle import Circle
+            return Circle.fromMetrics(self, self.distanceTo(tangent))
+        if isinstance(chord, Line):
+            from Drawables.Circle import Circle
+            e = self.distanceSquared(chord.start)
+            if e != self.distanceSquared(chord.end):
+                raise Exception("Can not be constructed")
+            return(Circle.fromMetrics(self, sqrt(e)))
+        raise Exception("Invalid arguements.")
 
     def circle(self, radius:float):
         """Create a circle using a centre and a radius."""
@@ -245,7 +250,7 @@ class Point(Drawable):
     # Output interface
     def __str__(self):
         """Text return."""
-        return(f"{self.__name__}: ({self.X}, {self.Y})")
+        return(f"({self.X}, {self.Y})")
 
     def draw(self, axes):
         """Draw plots."""

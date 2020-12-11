@@ -89,28 +89,12 @@ class Line(Drawable):
             (m2, c2) = o.getMetrics()
             print(m1, m2)
             if abs(m1 - m2) > self.comparisonLimit:
-                return inf
+                raise Exception(
+                    f"Lines intersect at{self.intersectionWith(o)}"
+                    )
             angle_rad = atan(abs(m1))
             return abs(c1 - c2) * cos(angle_rad)
         raise TypeError("Unsupported Type.")
-
-    def intersectionWith(self, line):
-        """Point intersection of two lines."""
-        from Drawables.Point import Point
-        (m1, c1) = self.getMetrics()
-        (m2, c2) = line.getMetrics()
-        x = (c1 - c2) / (m2 - m1)
-        y = m1 * x + c1
-        return(Point.fromCoOrdinates(x, y))
-
-    def parallelLine(self, distance=None, point=None):
-        """Draw a parallel Line."""
-        from Drawables.Point import Point
-        if isinstance(point, Point):
-            distance = point.distanceTo(self)
-        if isinstance(distance, float) or isinstance(distance, int):
-            return Line.fromLine(line=self, distance=distance)
-        raise Exception("Invalid parameter(s).")
 
     def bisector(self):
         """Bisector of the line."""
@@ -125,6 +109,24 @@ class Line(Drawable):
         x = (n * self.start.X + m * self.end.X) / tot
         y = (n * self.start.Y + m * self.end.Y) / tot
         return(Point.fromCoOrdinates(x, y))
+
+    def intersectionWith(self, line):
+        """Point intersection of two lines."""
+        from Drawables.Point import Point
+        (m1, c1) = self.getMetrics()
+        (m2, c2) = line.getMetrics()
+        x = (c1 - c2) / (m2 - m1)
+        y = m1 * x + c1
+        return(Point.fromCoOrdinates(x, y))
+
+    def parallelLine(self, distance:float=None, point=None):
+        """Draw a parallel Line."""
+        from Drawables.Point import Point
+        if isinstance(point, Point):
+            distance = point.distanceTo(self)
+        if isinstance(distance, float) or isinstance(distance, int):
+            return Line.fromLine(line=self, distance=distance)
+        raise Exception("Invalid parameter(s).")
 
     def projectionOf(self, point):
         """Point projection."""
@@ -170,15 +172,15 @@ class Line(Drawable):
             radius = self.length() / 2
             return mid.circle(radius)
         if isinstance(tangentPoint, Point):
-            return Point.circleFromTangent(tangentPoint, self)
+            return Point.circleFrom(tangentPoint, tangent=self)
         elif isinstance(chordPoint, Point):
-            return Point.circleFromChord(chordPoint, self)
+            return Point.circleFrom(chordPoint, chord=self)
         raise Exception("invalid arguements.")
 
-    def square(self, direction:str= "up"):
+    def square(self, direction:str="up"):
         pass
 
-    def rectangle(sideLength:float, direction:str= "up"):
+    def rectangle(self, sideLength:float, direction:str="up"):
         pass
 
 
@@ -234,7 +236,7 @@ class Line(Drawable):
 
     def __str__(self) -> str:
         """Text return."""
-        return f"Points: ({self.start.X}, {self.start.Y}), ({self.end.X}, {self.end.Y})"
+        return f"({self.start.X}, {self.start.Y}), ({self.end.X}, {self.end.Y})"
 
     def draw(self, axes):
         """Draw plots."""

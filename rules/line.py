@@ -1,131 +1,153 @@
 """Point Structure."""
 from rules.object import *
-pointADT = {
-    "target":Point,
-    "base":None,
+lineADT = {
     "new":{
         (Point,Point,):{
-            "args":("point1","point2"),
-            "target":Line.fromPoints,
+            args:("point1","point2"),
+            trgt:Line.fromPoints,
         },
         (float,float,Point,):{
-            "args":("angle","length","point",),
-            "target":Line.fromMetrics,
+            args:("angle","length","point",),
+            trgt:Line.fromMetrics,
         },
-        "return":Point
+        ret:Point
     },
     "copy":{
-        "args":("line",),
-        "types":(Line,),
-        "target":Line.fromLine,
-        "return":Line
+        (Line,):{
+            args:("line",),
+            trgt:Line.fromLine
+        },
+        ret:Line
     },
-    "set":{
-        "args":("start","end",),
-        "types":(Point, Point,),
-        "target":Line.setLine,
-        "return":None
+    "angle":{
+        tuple():{
+            args:tuple(),
+            trgt:Line.angle
+        },
+        ret:float
     },
-    "slopeTo":{
-        "args":tuple(),
-        "types":tuple(),
-        "target":Point.slopeTo,
-        "return":float
+    "length":{
+        tuple():{
+            args:tuple(),
+            trgt:Line.length
+        },
+        ret:float
     },
-    "angleTo":{
-        "args":("point",),
-        "types":(Point,),
-        "target":Point.angleTo,
-        "return":float
+    "distanceFrom":{
+        (Line,):{
+            args:("obj",),
+            trgt:Point.distanceTo
+        },
+        (Point,):{
+            args:("obj",),
+            trgt:Point.distanceTo
+        },
+        ret:float
     },
-    "angleFromPoints":{
-        "args":("point1","point2",),
-        "types":(Point, Point,),
-        "target":Point.angleFromPoints,
-        "return":float
+    "bisector":{
+        tuple():{
+            args:tuple(),
+            trgt:Line.bisector
+        },
+        ret:Point
     },
-    "angleFromLine":{
-        "args":("line",),
-        "types":(Line,),
-        "target":Point.angleFromLine,
-        "return":float
+    "sector":{
+        (float, float,):{
+            args:("m", "n",),
+            trgt:Line.sector
+        },
+        ret:Point
     },
-    "distanceToPoint":{
-        "args":("obj",),
-        "types":(Point,),
-        "target":Point.distanceTo,
-        "return":float
+    "intersect":{
+        (Line,):{
+            args:("line",),
+            trgt:Line.intersectionWith
+        },
+        ret:Point
     },
-    "distanceToLine":{
-        "args":("obj",),
-        "types":(Line,),
-        "target":Point.distanceTo,
-        "return":float
+    "parallelLine":{
+        (Point,):{
+            args:("point",),
+            trgt:Line.parallelLine
+        },
+        (float,):{
+            args:("distance",),
+            trgt:Line.parallelLine
+        },
+        ret:Point
     },
-    "midPoint":{
-        "args":("point",),
-        "types":(Point,),
-        "target":Point.middlePoint,
-        "return":Point
+    "projectionOf":{
+        (Point,):{
+            args:("point",),
+            trgt:Line.projectionOf
+        },
+        ret:Point
     },
-    "projection":{
-        "args":("line",),
-        "types":(Line,),
-        "target":Point.projectionOn,
-        "return":Point
+    "perpendicularFrom":{
+        (Point,):{
+            args:("point",),
+            trgt:Line.perpendicularFrom
+        },
+        ret:Line
     },
-    "bisectPoints":{
-        "args":("point",),
-        "types":(Point,),
-        "target":Point.bisect,
-        "return":Line
+    "perpendicularAt":{
+        (Point,):{
+            args:("var",),
+            trgt:Line.perpendicularAt
+        },
+        (float,):{
+            args:("var",),
+            trgt:Line.perpendicularAt
+        },
+        ret:Line
     },
-    "angleBisectLine":{
-        "args":("line",),
-        "types":(Line,),
-        "target":Point.bisectAngleLine,
-        "return":Line
-    },
-    "angleBisectPoints":{
-        "args":("point1","point2",),
-        "types":(Point, Point,),
-        "target":Point.bisectAnglePoints,
-        "return":Line
-    },
-    "lineToPoint":{
-        "args":("point",),
-        "types":(Point,),
-        "target":Point.lineToPoint,
-        "return":Line
-    },
-    "lineTo":{
-        "args":("angle","distance",),
-        "types":(float, float,),
-        "target":Point.lineTo,
-        "return":Line
+    "perpendicularBisector":{
+        tuple():{
+            args:tuple(),
+            trgt:Line.perpendicularBisector
+        },
+        ret:Line
     },
     "triangle":{
-        "args":("line",),
-        "types":(Line,),
-        "target":Point.triangleTo,
-        "return":Triangle
+        (Point,):{
+            args:("point",),
+            trgt:Line.triangleTo
+        },
+        ret:Triangle
     },
     "circle":{
-        "args":("radius",),
-        "types":(float,),
-        "target":Point.circle,
-        "return":Circle
+        tuple():{
+            args:tuple(),
+            trgt:Line.circleAround
+        },
+        ret:Circle
     },
     "tangentCircle":{
-        "args":("line",),
-        "types":(Line,),
-        "target":Point.circleFromTangent,
-        "return":Circle
+        (Point,):{
+            args:("tangentPoint"),
+            trgt:Line.circleAround
+        },
+        ret:Circle
     },
     "chordCircle":{
-        "args":("line",),
-        "types":(Line,),
-        "target":Point.circleFromChord,
-        "return":Circle
+        (Point,):{
+            args:("chordPoint"),
+            trgt:Line.circleAround
+        },
+        ret:Circle
+    },
+    "quad":{
+        (str,):{
+            args:("direction"),
+            trgt:Line.square
+        },
+        ret:pass
+    },
+    "rectangle":{
+        (float, str,):{
+            args:("sideLength", "direction"),
+            trgt:Line.rectangle
+        },
+        ret:pass
     }
 }
