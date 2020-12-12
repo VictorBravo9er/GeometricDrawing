@@ -17,12 +17,21 @@ class Point(Drawable):
 
     # Constructors
     @classmethod
+    def fromSection(cls, point1, point2, m:float=1, n:float=1):
+        """Point sector using ratio m:n, and points point1 and point2."""
+        from Drawables.Line import Line
+        tot = m + n
+        x = (n * point1.X + m * point2.X) / tot
+        y = (n * point1.Y + m * point2.Y) / tot
+        return Point.fromCoOrdinates(x, y)
+
+    @classmethod
     def fromPoint(cls, point):
         """Construct new point from existing Point."""
         new = cls()
         new.setPoint(point.X, point.Y)
         return(new)
-        
+
     @classmethod
     def fromCoOrdinates(cls, x:float, y:float):
         """Construct new Point using point Coordinates."""
@@ -84,7 +93,7 @@ class Point(Drawable):
         return(self.angleFromPoints(line.start, line.end))
 
     def distanceTo(self, obj):
-        """Distance to/from a point."""
+        """Distance to/from a Line or a point. Expected arguements: [line], [point]."""
         return sqrt(self.distanceSquared(obj))
 
     def middlePoint(self, point):

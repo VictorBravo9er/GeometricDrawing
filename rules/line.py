@@ -1,6 +1,7 @@
 """Point Structure."""
 from rules.object import *
 lineADT = {
+    "is_a":None,
     "new":{
         (Point,Point,):{
             args:("point1","point2"),

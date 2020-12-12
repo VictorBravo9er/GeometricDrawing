@@ -1,14 +1,18 @@
 """Point Structure."""
 from rules.object import *
 pointADT = {
-    "base":None,
+    "is_a":None,
     "new":{
-        (float,float,):{
-            args:("x","y",),
+        (float, float,):{
+            args:("x", "y",),
             trgt:Point.fromCoOrdinates
         },
-        (float,float,Point,):{
-            args:("angle","distance","point",),
+        (Point, Point, float, float,):{
+            args:("point1", "point2", "m", "n",),
+            trgt:Point.fromSection
+        },
+        (float, float, Point,):{
+            args:("angle", "distance", "point",),
             trgt:Point.fromMetrics
         },
         ret:Point
@@ -36,7 +40,7 @@ pointADT = {
     },
     "angleFrom":{
         (Point, Point,):{
-            args:("point1","point2",),
+            args:("point1", "point2",),
             trgt:Point.angleFromPoints
         },
         (Line,):{
@@ -83,7 +87,7 @@ pointADT = {
             trgt:Point.bisectAngleLine
         },
         (Point, Point,):{
-            args:("point1","point2",),
+            args:("point1", "point2",),
             trgt:Point.bisectAnglePoints
         },
         ret:Line
@@ -94,7 +98,7 @@ pointADT = {
             trgt:Point.lineToPoint
         },
         (float, float,):{
-            args:("angle","distance",),
+            args:("angle", "distance",),
             trgt:Point.lineTo
         },
         ret:Line

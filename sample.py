@@ -1,6 +1,6 @@
 class sample:
+    from sample2 import sample2
     def __init__(self, a, b) -> None:
-        from sample2 import sample2
         self.a = a
         self.b = sample2(b)
 

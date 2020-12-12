@@ -104,11 +104,8 @@ class Line(Drawable):
 
     def sector(self, m:float = 1, n:float = 1):
         """Sector of line in a ratio."""
-        tot = m + n
         from Drawables.Point import Point
-        x = (n * self.start.X + m * self.end.X) / tot
-        y = (n * self.start.Y + m * self.end.Y) / tot
-        return(Point.fromCoOrdinates(x, y))
+        return(Point.fromSection(self.start, self.end, m, n))
 
     def intersectionWith(self, line):
         """Point intersection of two lines."""
@@ -164,14 +161,22 @@ class Line(Drawable):
         from Drawables.Triangle import Triangle
         return Triangle.fromLine(self, point)
 
-    def circleAround(self, tangentPoint=None, chordPoint=None):
+    def circleAround(self, chordDistance:float=None, tangentPoint=None, chordPoint=None):
         """Draw circle with line as diameter, chord or tangent."""
         from Drawables.Point import Point
-        if chordPoint is None and tangentPoint is None:
+        if chordPoint is None and tangentPoint is None and chordDistance is None:
             mid = self.bisector()
             radius = self.length() / 2
             return mid.circle(radius)
-        if isinstance(tangentPoint, Point):
+        if isinstance(chordDistance, float):
+            from Drawables.Circle import Circle
+            centre = Point.fromMetrics(
+                    (self.angle() + pi / 2) % (2 * pi),
+                    chordDistance,
+                    self.bisector()
+                )
+            return Circle.fromMetrics(centre, centre.distanceTo(self.end))
+        elif isinstance(tangentPoint, Point):
             return Point.circleFrom(tangentPoint, tangent=self)
         elif isinstance(chordPoint, Point):
             return Point.circleFrom(chordPoint, chord=self)
@@ -234,6 +239,8 @@ class Line(Drawable):
         """'==' operator overload."""
         return(self.start == o.start and self.end == o.end)
 
+
+    # Output interface
     def __str__(self) -> str:
         """Text return."""
         return f"({self.start.X}, {self.start.Y}), ({self.end.X}, {self.end.Y})"

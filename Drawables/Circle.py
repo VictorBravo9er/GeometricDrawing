@@ -15,14 +15,8 @@ class Circle(Drawable):
         self.centre:Point
         self.radius:float
 
-    def setCentre(self, point):
-        """Set centre."""
-        self.centre = point
 
-    def setRadius(self, radius:float):
-        """Set radius."""
-        self.radius = radius
-
+    # Constructors
     @classmethod
     def fromMetrics(cls, point, radius:float):
         """Construct a circle using a centre and a radius."""
@@ -47,6 +41,18 @@ class Circle(Drawable):
         new = cls.fromMetrics(point, 0 + circle.radius)
         return new
 
+
+    # Getters and Setters
+    def setCentre(self, point):
+        """Set centre."""
+        self.centre = point
+
+    def setRadius(self, radius:float):
+        """Set radius."""
+        self.radius = radius
+
+
+    # Methods
     def area(self):
         """Calculate area."""
         try:
@@ -54,7 +60,6 @@ class Circle(Drawable):
         except(Exception):
             self._area = pi * (self.radius) ** 2
             return self._area
-
 
     def centroid(self):
         """Centroid is the radius itself."""
@@ -96,11 +101,6 @@ class Circle(Drawable):
         y = self.radius * sin(theta) + self.centre.Y
         return(x,y)
 
-    def draw(self, axes):
-        """Draw a circle."""
-        x,y = self.circlePlot()
-        axes.plot(x,y)
-
     def commonChord(self, circle):
         pass
         """Calculate common chord with another circle.""" 
@@ -130,6 +130,18 @@ class Circle(Drawable):
         from Drawables.Line import Line
         return(Line.fromPoints(p1, p2))
 
+
+    # Helpers
+
+
+
+
+    # Output interface
     def __str__(self) -> str:
         """Text return."""
         return(f"{self.__name__} has centre {self.centre} and radius {self.radius}")
+
+    def draw(self, axes):
+        """Draw a circle."""
+        x,y = self.circlePlot()
+        axes.plot(x,y)
