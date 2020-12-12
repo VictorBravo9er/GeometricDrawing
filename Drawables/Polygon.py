@@ -9,11 +9,11 @@ class Polygon(Drawable):
         self.vertices:list
         self.size:int
 
-
-    def setPolygon(self, pointList):
+    def setPolygon(self, vertexList=None, edgeList=None):
+        """Set Polygon, provided a list of vertices or edes(lines)."""
         from Drawables.Line import Line
         vertices = list()
-        for curPoint in pointList:
+        for curPoint in vertexList:
             vertices.append(curPoint)
         self.vertices = vertices
         self.size = len(vertices)
@@ -31,8 +31,6 @@ class Polygon(Drawable):
         for i in range(len(points)):
             new.append(Point.fromPoint(points[i]))
         return new
-
-
 
     @classmethod
     def fromPoints(cls, pointList:list):

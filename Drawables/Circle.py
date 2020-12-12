@@ -1,9 +1,8 @@
 """Module for Circle."""
-from math import  pi, sqrt, degrees, radians
+from math import pi
 from Drawables.Drawable import Drawable
 from Drawables.Arc import Arc
-import numpy as np
-from numpy import sin,cos
+from numpy import sqrt
 
 class Circle(Arc):
     """Description of class."""
@@ -11,32 +10,37 @@ class Circle(Arc):
     def __init__(self):
         """Cunstruct a default, empty container."""
         super().__init__(None, -1)
-        from Drawables.Point import Point
 
 
     # Constructors
     @classmethod
-    def fromMetrics(cls, point, radius:float):
+    def fromMetrics(cls, centre, radius:float):
         """Construct a circle using a centre and a radius."""
         new = cls()
-        new.setCentre(point)
+        new.setCentre(centre)
         new.setRadius(radius)
         return new
 
     @classmethod
     def fromDiameter(cls, diameter):
         """Draw Circle around a given diameter."""
-        new = cls()
-        from Drawables.Point import Point
-        new.setCentre(Point.middlePoint(diameter.start, diameter.end))
-        new.setRadius(diameter.length / 2)
+        from Drawables.Line import Line
+        if isinstance(diameter, Line):
+            new = cls()
+            from Drawables.Point import Point
+            new.setCentre(Point.middlePoint(diameter.start, diameter.end))
+            new.setRadius(Line.length(diameter) / 2)
+            return new
+        raise Exception("Invalid arguement.")
 
     @classmethod
-    def fromCircle(cls, circle):
+    def fromCircle(cls, self):
         """Copy another circle."""
         from Drawables.Point import Point
-        point = Point.fromPoint(circle.centre)
-        new = cls.fromMetrics(point, 0 + circle.radius)
+        new = cls.fromMetrics(
+            Point.fromPoint(self.centre),
+            self.radius+0
+            )
         return new
 
 
@@ -49,19 +53,19 @@ class Circle(Arc):
         """Set radius."""
         self.radius = radius
 
+    def getRadius(self):
+        """Get radius."""
+        return self.radius
+
+    def getCentre(self):
+        """Get the radius itself."""
+        return self.centre
+
 
     # Methods
     def area(self):
         """Calculate area."""
-        try:
-            return self._area
-        except(Exception):
-            self._area = pi * (self.radius) ** 2
-            return self._area
-
-    def centroid(self):
-        """Centroid is the radius itself."""
-        return self.centre
+        return pi * (self.radius) ** 2
 
     def diameterLength(self):
         """Diameter is twice the radius."""
@@ -109,8 +113,9 @@ class Circle(Arc):
         R1 = R1 ** 2
         R2 = R2 ** 2
         x = ((X2 ** 2) - R2 + R1) / (2 * X2)
-        print(f"(0,0)->{R1**0.5}, ({X2},0)->{R2**0.5}  +. {x}")
         y = sqrt(R1 - (x ** 2))
+        if y < Drawable.comparisonLimit:
+            y = (X2) * 0.5
         p1 = Point.fromCoOrdinates(x, y)
         p2 = Point.fromCoOrdinates(x,-y)
         p1._rotate(origin, angle)
@@ -119,6 +124,21 @@ class Circle(Arc):
         p2._translate(tx, ty)
         from Drawables.Line import Line
         return(Line.fromPoints(p1, p2))
+
+    def tangentAt(self, point=None, angle:float=None):
+        """Draw a tangent on circle, with radius along a point, or an angle. Expected arguements: [point], [angle]."""
+        from Drawables.Point import Point
+        from Drawables.Line import Line
+        status = True
+        if isinstance(point, Point):
+            status = Point.distanceTo(self.centre, point) != self.radius
+            angle = 0
+            if status:
+                angle = self.centre.angleTo(point)
+        if isinstance(angle, float) or isinstance(angle, int):
+            if status:
+                point = Point.fromMetrics(angle, self.radius, self.centre)
+            return Line.fromPoints(self.centre, point).perpendicularAt(point)
 
 
     # Output interface

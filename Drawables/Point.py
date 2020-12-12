@@ -1,7 +1,7 @@
 """Module for Point."""
 from Drawables.Drawable import Drawable
 import numpy as np
-from math import radians, atan, degrees, sqrt, cos, sin, inf, pi
+from math import inf, pi, atan, sqrt, cos, sin
 
 
 class Point(Drawable):
@@ -180,17 +180,17 @@ class Point(Drawable):
         if isinstance(o, Line):
             o = o.projectionOf(self)
         if isinstance(o,Point):
-            return(((self.Y - o.Y) ** 2) + ((self.X - o.X) ** 2))
-        return inf
+            return float(((self.Y - o.Y) ** 2) + ((self.X - o.X) ** 2))
+        raise Exception("Invalid Arguement.")
 
     def distanceL1(self, o):
         """L1 distance."""
         from Drawables.Line import Line
         if isinstance(o, Line):
             o = o.projectionOf(self)
-        if isinstance(o,Point):
+        if isinstance(o, Point):
             return( abs(self.Y - o.Y) + abs(self.X - o.X) )
-        return inf
+        raise Exception("Invalid Arguement.")
 
     def __add__(self, other):
         """'+' operator overload."""
@@ -203,9 +203,13 @@ class Point(Drawable):
 
     def __eq__(self, point):
         """'==' operator overload."""
-        if abs(self.X - point.X
-                ) < Drawable.comparisonLimit and abs(self.Y - point.Y
-                ) < Drawable.comparisonLimit:
+        if not isinstance(point, self.__class__):
+            raise TypeError(f"Uncomparable Types. Can't compare {Point} with {type(point)}")
+        if abs(
+                self.X - point.X
+            ) < Drawable.comparisonLimit and abs(
+                self.Y - point.Y
+            ) < Drawable.comparisonLimit:
             return True
         return False
 
@@ -215,12 +219,12 @@ class Point(Drawable):
             return
         homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
         newCoord = np.dot(self.scaleMatrix(sx,sy), homoCoord)
-        (self.X, self.Y) = newCoord.reshape(-1)[0:2]#np.round(newCoord[0:2]).astype(int)
+        (self.X, self.Y) = [float(x) for x in newCoord.reshape(-1)[0:2]]#np.round(newCoord[0:2]).astype(int)
 
     def _normalize(self):
         """Convert everything to int representation."""
-        self.X = int(self.X)
-        self.Y = int(self.Y)
+        self.X = float(self.X)
+        self.Y = float(self.Y)
 
     def _translate(self, tx:float=0, ty:float=0):
         """Move the point around.""" 
@@ -228,19 +232,22 @@ class Point(Drawable):
             return
         homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
         newCoord = np.dot(self.translateMatrix(tx,ty), homoCoord)
-        (self.X, self.Y) = newCoord.reshape(-1)[0:2]#np.round(newCoord[0:2]).astype(int)
+        (self.X, self.Y) = [float(x) for x in newCoord.reshape(-1)[0:2]]#np.round(newCoord[0:2]).astype(int)
 
     def _rotate(self, centre=None,angle:float=0):
         """Rotate the point around a centre."""
-        if angle == 0:
-            return
-        if centre is None:
-            centre = Point()
-        self._translate(centre.X, centre.Y)
-        homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
-        newCoord = np.dot(self.rotateMatrix(angle), homoCoord)
-        (self.X, self.Y) = newCoord.reshape(-1)[0:2]#np.round(newCoord[0:2]).astype(int)
-        self._translate(-centre.X, -centre.Y)
+        try:
+            if angle == 0:
+                return
+            if centre is None:
+                centre = Point()
+            self._translate(centre.X, centre.Y)
+            homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
+            newCoord = np.dot(self.rotateMatrix(angle), homoCoord)
+            (self.X, self.Y) = [float(x) for x in newCoord.reshape(-1)[0:2]]#np.round(newCoord[0:2]).astype(int)
+            self._translate(-centre.X, -centre.Y)
+        except:
+            raise Exception("Invalid Arguement(s).")
 
     def _reflectPoint(self, point):
         """Reflect point about another point."""
@@ -252,7 +259,7 @@ class Point(Drawable):
         slope, intercept = line.getMetrics()
         homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
         newCoord = np.dot(self.reftectionMatrix(slope,intercept), homoCoord)
-        (self.X, self.Y) = newCoord.reshape(-1)[0:2]#np.round(newCoord[0:2]).astype(int)
+        (self.X, self.Y) = [float(x) for x in newCoord.reshape(-1)[0:2]]#np.round(newCoord[0:2]).astype(int)
 
 
     # Output interface

@@ -2,8 +2,6 @@
 import numpy as np
 from math import sin, cos, inf, atan
 import matplotlib.pyplot as plt
-from numpy.core.arrayprint import printoptions
-from numpy.lib.function_base import iterable
 
 class Drawable(object):
     """Description of class."""
@@ -107,7 +105,7 @@ class Drawable(object):
         print(f"{msg}\nValue{value}")
 
     @staticmethod
-    def draw(drawables:list, num:str=""):
+    def draw(drawables:list, num:str="", store:bool=False):
         """Draw call."""
         fig, ax = plt.subplots(1)
         ax.set_aspect(1)
@@ -123,8 +121,11 @@ class Drawable(object):
                     print(e.args[0])
             else:
                 print("Error with object:",drawable)
-        fig.savefig(f"data/save{num}.png")
-        plt.close()
+        if store:
+            fig.savefig(f"data/save{num}.png")
+            plt.close()
+        else:
+            plt.show()
         
 
 

@@ -1,5 +1,5 @@
 """Point Structure."""
-from rules.object import *
+from rules.drawable import *
 lineADT = {
     "is_a":None,
     "new":{

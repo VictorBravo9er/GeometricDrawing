@@ -1,11 +1,11 @@
-
+"""Module for Point."""
 from Drawables.Circle import Circle
-from numpy.lib.function_base import median
-from math import sqrt
+from numpy import sqrt
 from Drawables.Polygon import Polygon
 
 class Triangle(Polygon):
-
+    """Triangle class."""
+    
     __name__ = "Triangle"
     def __init__(self):
         super().__init__()
@@ -22,8 +22,6 @@ class Triangle(Polygon):
         new = cls()
         new.setPolygon(pointList)
         return new
-
-
 
     @classmethod
     def fromTriangle(cls, triangle):
@@ -62,14 +60,15 @@ class Triangle(Polygon):
         pass
 
     def incircle(self):
-        centre = None
         try:
             centre = self._incentre
-        except:
+        except: 
             centre = self.incenter()
         from Drawables.Line import Line
-        dist = Line.fromPoints(self.vertices[0], self.vertices[1]).distanceFrom(centre)
-        circ = Circle.fromMetrics(centre, dist)
+        distance = Line.fromPoints(
+                self.vertices[0], self.vertices[1]
+            ).distanceFrom(centre)
+        circ = Circle.fromMetrics(centre, distance)
         return circ
 
     def incenter(self):

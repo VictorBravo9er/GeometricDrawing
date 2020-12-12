@@ -1,8 +1,6 @@
 """Module Line."""
-from numpy.core.numeric import ComplexWarning
 from Drawables.Drawable import Drawable
-import numpy as np
-from math import inf, pi, radians, degrees, atan, sin, sqrt, cos
+from math import inf, pi, atan, cos
 
 
 class Line(Drawable):
@@ -102,7 +100,7 @@ class Line(Drawable):
         #return self.sector(1)
 
     def sector(self, m:float = 1, n:float = 1):
-        """Sector of line in a ratio."""
+        """Sector of line in a ratio of m:n."""
         from Drawables.Point import Point
         return(Point.fromSection(self.start, self.end, m, n))
 
@@ -131,7 +129,7 @@ class Line(Drawable):
         l2 = self.end.distanceTo(point)
         n = ((l ** 2) + (l2 ** 2) - (l1 ** 2)) / (2 * l)
         m = l - n
-        return self.sector(m,n)
+        return self.sector(m, n)
 
     def perpendicularFrom(self, point):
         """Perpendicular from a point to the line."""
@@ -236,6 +234,8 @@ class Line(Drawable):
 
     def __eq__(self, o) -> bool:
         """'==' operator overload."""
+        if not isinstance(o, self.__class__):
+            raise TypeError(f"Uncomparable Types. Can't compare {self.__class__} with {type(o)}")
         return(self.start == o.start and self.end == o.end)
 
 
