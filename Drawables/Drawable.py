@@ -2,6 +2,7 @@
 import numpy as np
 from math import sin, cos, inf, atan
 import matplotlib.pyplot as plt
+from numpy.core.arrayprint import printoptions
 from numpy.lib.function_base import iterable
 
 class Drawable(object):
@@ -98,13 +99,34 @@ class Drawable(object):
         return np.identity(3, dtype="float")
 
     @staticmethod
-    def draw(drawables:list):
+    def processData(data:tuple):
+        try:
+            msg, value = data
+        except Exception as e:
+            raise Exception(f"Expected 2 items, got {len(data)} items")
+        print(f"{msg}\nValue{value}")
+
+    @staticmethod
+    def draw(drawables:list, num:str=""):
         """Draw call."""
         fig, ax = plt.subplots(1)
         ax.set_aspect(1)
         for drawable in drawables:
-            drawable.draw(ax)
-        plt.show()
+            t = type(drawable)
+            if issubclass(t, Drawable):
+                drawable.draw(ax)
+            elif t == tuple:
+                # process values other than drawable figures
+                try:
+                    Drawable.processData(drawable)
+                except Exception as e:
+                    print(e.args[0])
+            else:
+                print("Error with object:",drawable)
+        fig.savefig(f"data/save{num}.png")
+        plt.close()
+        
+
 
     def __str__(self):
         """Text maker."""

@@ -8,7 +8,6 @@ from math import inf, pi, radians, degrees, atan, sin, sqrt, cos
 class Line(Drawable):
     """Description of class."""
 
-    __name__ = "Line"
     def __init__(self):
         """Construct default."""
         from Drawables.Point import Point

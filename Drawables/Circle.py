@@ -1,19 +1,17 @@
 """Module for Circle."""
 from math import  pi, sqrt, degrees, radians
 from Drawables.Drawable import Drawable
+from Drawables.Arc import Arc
 import numpy as np
 from numpy import sin,cos
 
-class Circle(Drawable):
+class Circle(Arc):
     """Description of class."""
 
-    __name__ = "Circle"
     def __init__(self):
         """Cunstruct a default, empty container."""
-        super().__init__()
+        super().__init__(None, -1)
         from Drawables.Point import Point
-        self.centre:Point
-        self.radius:float
 
 
     # Constructors
@@ -73,75 +71,51 @@ class Circle(Drawable):
         """Return a diameter along the direction of a certain point."""
         from Drawables.Point import Point
         from Drawables.Line import Line
-        newPoint = Point.fromPoint(point)
-        newPoint._reflectPoint(self.centre)
-        diameter = Line.fromPoints(point, newPoint)
-        return diameter
+        if self.radius != Point.distanceTo(self.centre, point):
+            point = Point.fromMetrics(
+                    Point.angleTo(self.centre, point),
+                    self.radius, self.centre
+                )
+        newPoint = Point.fromMetrics(
+                Point.angleTo(self.centre, point),
+                -self.radius, self.centre
+            )
+        return Line.fromPoints(point, newPoint)
 
-    def diameterAlongPointOnCircle(self, point):
-        """Return a diameter along the direction of a certain point on circle."""
-        from Drawables.Point import Point
-        from Drawables.Line import Line
-        newPoint = Point.fromPoint(point)
-        newPoint._reflectPoint(self.centre)
-        diameter = Line.fromPoints(point, newPoint)
-        return diameter
-
-    def diameterAlongSlope(self, slope:float):
+    def diameterAlongSlope(self, angle:float):
         """Return a diameter along a certain direction."""
         from Drawables.Point import Point
-        point = Point.fromMetrics(slope, self.radius, self.centre)
+        point = Point.fromMetrics(angle, self.radius, self.centre)
         diameter = self.diameterAlongPoint(point)
         return diameter
 
-    def circlePlot(self):
-        """Return plottable graph of a circle."""
-        theta = np.linspace(0, 2 * pi, 1000)
-        x = self.radius * cos(theta) + self.centre.X
-        y = self.radius * sin(theta) + self.centre.Y
-        return(x,y)
-
     def commonChord(self, circle):
-        pass
         """Calculate common chord with another circle.""" 
         from Drawables.Point import Point
-        c1 = Point.fromPoint(self.centre)
-        (tx, ty) = (c1.X, c1.Y)
-        c1._translate(-tx, -ty)
-        c2 = Point.fromPoint(circle.centre)
-        c2._translate(-tx, -ty)
-        angle = c1.angleFromPoints(c2, Point.fromCoOrdinates(2, 0))
-        c2._rotate(self.centre, angle)
-        R = self.radius
-        R = R ** 2
-        d = c2.X
-        d = d ** 2
-        r = circle.radius
-        r = r ** 2
-        x = (d - r + R) / (2 * d)
-        y = sqrt(R - (x ** 2))
+        (tx, ty) = (self.centre.X, self.centre.Y)
+        origin = Point.fromCoOrdinates(0, 0)
+        p1 = origin
+        p2 = Point.fromPoint(circle.centre)
+        p2._translate(-tx, -ty)
+        angle = self.centre.angleTo(circle.centre)
+        p2._rotate(self.centre, -angle)
+        R1 = self.radius ** 2
+        X2 = p2.X
+        R2 = circle.radius ** 2
+        x = ((X2 ** 2) - R2 + R1) / (2 * X2)
+        y = sqrt(R1 - (x ** 2))
+        print(p2.X , p1.distanceTo(p2), p2.Y, end="\n\n")
         p1 = Point.fromCoOrdinates(x, y)
         p2 = Point.fromCoOrdinates(x,-y)
-        angle *= -1
-        p1._rotate(self.centre, angle)
-        p2._rotate(self.centre, angle)
+        p1._rotate(origin, angle)
+        p2._rotate(origin, angle)
         p1._translate(tx, ty)
         p2._translate(tx, ty)
         from Drawables.Line import Line
         return(Line.fromPoints(p1, p2))
 
 
-    # Helpers
-
-
-
-
     # Output interface
     def __str__(self) -> str:
         """Text return."""
-        return(f"{self.__name__} has centre {self.centre} and radius {self.radius}")
-
-    def draw(self, axes):
-        """Draw a circle."""
-        x,y = self.circlePlot()
-        axes.plot(x,y)
+        return(f"{Circle.__name__} has centre {self.centre} and radius {self.radius}")

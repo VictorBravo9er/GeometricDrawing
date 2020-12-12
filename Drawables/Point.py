@@ -7,7 +7,6 @@ from math import radians, atan, degrees, sqrt, cos, sin, inf, pi
 class Point(Drawable):
     """Description of class."""
 
-    __name__ = "Point"
     def __init__(self):
         """Construct new Point."""
         super().__init__()

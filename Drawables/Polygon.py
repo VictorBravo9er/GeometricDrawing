@@ -1,27 +1,22 @@
 from Drawables.Drawable import Drawable
 
 class Polygon(Drawable):
+    """Polygon base class."""
 
-    __name__ = "Polygon"
     def __init__(self):
+        """Initialize base class."""
         super().__init__()
         self.vertices:list
-        self.edges:list
-        self.order:int
+        self.size:int
 
 
     def setPolygon(self, pointList):
         from Drawables.Line import Line
         vertices = list()
-        edges = list()
-        prevPoint = pointList[-1]
         for curPoint in pointList:
             vertices.append(curPoint)
-            edges.append(Line.fromPoints(prevPoint, curPoint))
-            prevPoint = curPoint
         self.vertices = vertices
-        self.edges = edges
-        self.order = len(vertices)
+        self.size = len(vertices)
 
     @classmethod
     def fromPolygon(cls, polygon):
