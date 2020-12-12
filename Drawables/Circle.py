@@ -92,6 +92,13 @@ class Circle(Arc):
     def commonChord(self, circle):
         """Calculate common chord with another circle.""" 
         from Drawables.Point import Point
+        X2 = Point.distanceTo(circle.centre, self.centre)
+        R1 = self.radius
+        R2 = circle.radius
+        if R1 + R2 < X2 or\
+            R1 - X2 > R2 or\
+            R2 - X2 > R1:
+            raise Exception("Circles not intersecting.")
         (tx, ty) = (self.centre.X, self.centre.Y)
         origin = Point.fromCoOrdinates(0, 0)
         p1 = origin
@@ -99,10 +106,10 @@ class Circle(Arc):
         p2._translate(-tx, -ty)
         angle = self.centre.angleTo(circle.centre)
         p2._rotate(self.centre, -angle)
-        R1 = self.radius ** 2
-        X2 = p2.X
-        R2 = circle.radius ** 2
+        R1 = R1 ** 2
+        R2 = R2 ** 2
         x = ((X2 ** 2) - R2 + R1) / (2 * X2)
+        print(f"(0,0)->{R1**0.5}, ({X2},0)->{R2**0.5}  +. {x}")
         y = sqrt(R1 - (x ** 2))
         p1 = Point.fromCoOrdinates(x, y)
         p2 = Point.fromCoOrdinates(x,-y)
