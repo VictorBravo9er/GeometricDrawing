@@ -13,7 +13,7 @@ def repeater(i:int, r:Random):
     
     p1 = Point.fromCoOrdinates(0,0)
     drawables.append(p1)
-    d = {"angle":r.random() % (2*pi), "distance":1 + r.random() % 2, "point":p1}
+    d = {"angle":radians(r.randint(0,360)) % (2*pi), "distance":1 + r.random() % 2, "point":p1}
     p2 = Point.fromMetrics(**d)
     drawables.append(p2)
     """ 

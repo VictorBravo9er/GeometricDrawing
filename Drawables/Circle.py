@@ -104,7 +104,6 @@ class Circle(Arc):
         R2 = circle.radius ** 2
         x = ((X2 ** 2) - R2 + R1) / (2 * X2)
         y = sqrt(R1 - (x ** 2))
-        print(p2.X , p1.distanceTo(p2), p2.Y, end="\n\n")
         p1 = Point.fromCoOrdinates(x, y)
         p2 = Point.fromCoOrdinates(x,-y)
         p1._rotate(origin, angle)
