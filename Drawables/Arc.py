@@ -21,8 +21,9 @@ class Arc(Drawable):
     @classmethod
     def copy(cls, self):
         """Make a copy of an arc."""
+        from Drawables.Point import Point
         new = cls(
-                self.centre, self.radius,
+                Point.fromPoint(self.centre), self.radius,
                 self.__start, self.__end
             )
         return new
@@ -71,25 +72,25 @@ class Arc(Drawable):
         from Drawables.Point import Point
         if not isinstance(angle, (float, int)):
             raise Exception("Invalid Arguement(s).")
-        self.centre._rotate(centre, angle)
+        Point._rotate(self.centre, centre, angle)
         self.__start += angle
         self.__end += angle
 
     def _reflectPoint(self, point):
         self.centre._reflectPoint(point)
         angle = self.centre.angleTo(point)
-        angle -= pi
-        self.__start += angle
-        self.__end  += angle
+        angle += pi
+        self.__start = angle - self.__start
+        self.__end   = angle - self.__end
 
     def _reflectLine(self, line):
         point = self.centre.projectionOn(line)
         self.centre._reflectPoint(point)
         angle = self.centre.angleTo(point)
-        angle += pi
-        self.__start = angle - self.__start
-        self.__end = angle - self.__end
-    
+        angle -= pi
+        self.__start += angle
+        self.__end += angle
+
     def __ne__(self, o) -> bool:
         """'!=' operator overload."""
         return not self == o
@@ -107,6 +108,12 @@ class Arc(Drawable):
 
 
     # Output interface
+    def __str__(self) -> str:
+        """Text return."""
+        return(
+            f"Centre {self.centre}, radius {self.radius}, arc from {self.__start} to {self.__end} radians"
+            )
+
     def draw(self, axes):
         """Draw a circle."""
         x,y = self.plotPoints()

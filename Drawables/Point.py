@@ -219,7 +219,7 @@ class Point(Drawable):
             return
         homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
         newCoord = np.dot(self.scaleMatrix(sx,sy), homoCoord)
-        (self.X, self.Y) = [float(x) for x in newCoord.reshape(-1)[0:2]]#np.round(newCoord[0:2]).astype(int)
+        (self.X, self.Y) = [float(x) for x in np.reshape(newCoord, -1)[0:2]]
 
     def _normalize(self):
         """Convert everything to int representation."""
@@ -232,7 +232,7 @@ class Point(Drawable):
             return
         homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
         newCoord = np.dot(self.translateMatrix(tx,ty), homoCoord)
-        (self.X, self.Y) = [float(x) for x in newCoord.reshape(-1)[0:2]]#np.round(newCoord[0:2]).astype(int)
+        (self.X, self.Y) = [float(x) for x in np.reshape(newCoord, -1)[0:2]]
 
     def _rotate(self, centre=None,angle:float=0):
         """Rotate the point around a centre."""
@@ -241,11 +241,11 @@ class Point(Drawable):
                 return
             if centre is None:
                 centre = Point()
-            self._translate(centre.X, centre.Y)
+            self._translate(-centre.X, -centre.Y)
             homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
             newCoord = np.dot(self.rotateMatrix(angle), homoCoord)
-            (self.X, self.Y) = [float(x) for x in newCoord.reshape(-1)[0:2]]#np.round(newCoord[0:2]).astype(int)
-            self._translate(-centre.X, -centre.Y)
+            (self.X, self.Y) = [float(x) for x in np.reshape(newCoord, -1)[0:2]]
+            self._translate(centre.X, centre.Y)
         except:
             raise Exception("Invalid Arguement(s).")
 
@@ -259,7 +259,7 @@ class Point(Drawable):
         slope, intercept = line.getMetrics()
         homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
         newCoord = np.dot(self.reftectionMatrix(slope,intercept), homoCoord)
-        (self.X, self.Y) = [float(x) for x in newCoord.reshape(-1)[0:2]]#np.round(newCoord[0:2]).astype(int)
+        (self.X, self.Y) = [float(x) for x in np.reshape(newCoord, -1)[0:2]]
 
 
     # Output interface

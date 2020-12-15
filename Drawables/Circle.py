@@ -144,4 +144,4 @@ class Circle(Arc):
     # Output interface
     def __str__(self) -> str:
         """Text return."""
-        return(f"{Circle.__name__} has centre {self.centre} and radius {self.radius}")
+        return(f"Centre {self.centre}, radius {self.radius}")

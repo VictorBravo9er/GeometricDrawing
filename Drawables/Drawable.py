@@ -6,19 +6,6 @@ import matplotlib.pyplot as plt
 class Drawable(object):
     """Description of class."""
 
-    @staticmethod
-    def orientation(pointA, pointB, target):
-        """Orientation test. 0 - go for it, 1 - decide, -1 - no go, next please. O(1)."""
-        if target in (pointA, pointB):
-            return -1
-        buf = np.array([1, pointA.X, pointA.Y, 1, pointB.X, pointB.Y, 1, target.X, target.Y]).reshape(3,-1)
-        buf = np.linalg.det(buf)
-        if buf < 0:
-            return -1
-        if buf == 0:
-            return 0
-        return 1
-
     comparisonLimit = 0.00000001
     def __init__(self):
         """Build Base constructor."""
@@ -66,30 +53,12 @@ class Drawable(object):
         else:
             trans = (0, -intercept)
             trans_ = (0, intercept)
-        refMat = self.translateMatrix(*trans)
         slope = atan(slope)
+        refMat = self.translateMatrix(*trans)
         refMat = np.dot(self.rotateMatrix(-slope), refMat)
         refMat = np.dot(self.scaleMatrix(1, -1), refMat)
         refMat = np.dot(self.rotateMatrix(slope), refMat)
         refMat = np.dot(self.translateMatrix(*trans_), refMat)
-        """if slope == inf:
-            refMat[0][0] = -1
-        else:
-            refMat[1][1] = -1
-            if slope != 0:
-                refMat[1][1] = -1
-                theta = atan(slope)
-                refMat = np.dot(self.rotateMatrix(theta), refMat)
-                refMat = np.dot(refMat, self.rotateMatrix(-theta))
-        if intercept == 0:
-            return refMat
-        elif slope ==inf:
-            refMat = np.dot(self.translateMatrix(intercept), refMat)
-            refMat = np.dot(refMat, self.translateMatrix(-intercept))
-        else:
-            refMat = np.dot(self.translateMatrix(0, intercept), refMat)
-            refMat = np.dot(refMat, self.translateMatrix(0, -intercept))"""
-        
         return refMat
 
     def getIdentityMatrix(self):
@@ -97,7 +66,21 @@ class Drawable(object):
         return np.identity(3, dtype="float")
 
     @staticmethod
-    def processData(data:tuple):
+    def orientation(pointA, pointB, target):
+        """Orientation test. 0 - go for it, 1 - decide, -1 - no go, next please. O(1)."""
+        if target in (pointA, pointB):
+            return -1
+        buf = np.array([1, pointA.X, pointA.Y, 1, pointB.X, pointB.Y, 1, target.X, target.Y]).reshape(3,-1)
+        buf = np.linalg.det(buf)
+        if buf < 0:
+            return -1
+        if buf == 0:
+            return 0
+        return 1
+
+    @staticmethod
+    def processPrintableData(data:tuple):
+        """To process printable data, like area, etc."""
         try:
             msg, value = data
         except Exception as e:
@@ -116,13 +99,14 @@ class Drawable(object):
             elif t == tuple:
                 # process values other than drawable figures
                 try:
-                    Drawable.processData(drawable)
+                    Drawable.processPrintableData(drawable)
                 except Exception as e:
                     print(e.args[0])
             else:
                 print("Error with object:",drawable)
         if store:
-            fig.savefig(f"data/save{num}.png")
+            # fig.savefig()
+            plt.savefig(f"data/cache{num}.png")
             plt.close()
         else:
             plt.show()

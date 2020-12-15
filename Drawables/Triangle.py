@@ -1,5 +1,4 @@
 """Module for Point."""
-from Drawables.Circle import Circle
 from numpy import sqrt
 from Drawables.Polygon import Polygon
 
@@ -14,13 +13,19 @@ class Triangle(Polygon):
     def fromLine(cls, line, point):
         new = cls()
         points = [point, line.start, line.end]
-        new.setPolygon(points)
+        new.setPolygon(vertexList=points)
         return(new)
+
+    @classmethod
+    def fromLines(cls, lineList: list):
+        new = cls()
+        new.setPolygon(edgeList=lineList)
+        return new
 
     @classmethod
     def fromPoints(cls, pointList: list):
         new = cls()
-        new.setPolygon(pointList)
+        new.setPolygon(vertexList=pointList)
         return new
 
     @classmethod
@@ -60,14 +65,13 @@ class Triangle(Polygon):
         pass
 
     def incircle(self):
-        try:
-            centre = self._incentre
-        except: 
-            centre = self.incenter()
+        """Draw incircle of triangle."""
+        centre = self.incenter()
         from Drawables.Line import Line
         distance = Line.fromPoints(
                 self.vertices[0], self.vertices[1]
             ).distanceFrom(centre)
+        from Drawables.Circle import Circle
         circ = Circle.fromMetrics(centre, distance)
         return circ
 
@@ -85,10 +89,11 @@ class Triangle(Polygon):
             self._incentre = p
             return p
 
-    def medianFromPoint(self, point):
+    def medianFromPoint(self, point=None, idx=None):
         """Draw a median from a specified point."""
-        if isinstance(point, int):
-            point = self.vertices[point]
+        if isinstance(idx, int):
+            point = self.vertices[idx]
+        from Drawables.Point import Point
         if isinstance(point, Point):
             if point not in self.vertices:
                 raise ValueError("Point not in Triangle.")
@@ -99,10 +104,11 @@ class Triangle(Polygon):
             return median
         raise TypeError("Unsupported Type. Support: int,Point")
 
-    def perpendicularFromPoint(self, point):
+    def perpendicularFromPoint(self, point=None, idx=None):
         """Draw a perpendicular from a specified point."""
-        if isinstance(point, int):
-            point = self.vertices[point]
+        if isinstance(idx, int):
+            point = self.vertices[idx]
+        from Drawables.Point import Point
         if isinstance(point, Point):
             if point not in self.vertices:
                 raise ValueError("Point not in Triangle.")
@@ -120,11 +126,3 @@ class Triangle(Polygon):
             centre = Point()
         for point in self.vertices:
             point._rotate(centre, angle)
-
-    def draw(self, axes):
-        """Draw Triangle."""
-        x = [p.X for p in self.vertices]
-        x.append(x[0])
-        y = [p.Y for p in self.vertices]
-        y.append(y[0])
-        axes.plot(x,y)
