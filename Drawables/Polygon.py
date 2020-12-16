@@ -1,3 +1,4 @@
+"""Module for Polygons."""
 from math import pi
 from Drawables.Drawable import Drawable
 
@@ -17,30 +18,38 @@ class Polygon(Drawable):
     def fromPolygon(cls, polygon):
         """Copy a polygon."""
         new = cls()
-        new.setPolygon(Polygon.newVertices(polygon.vertices))
+        new.setPolygon(cls.newVertices(polygon.vertices))
         return new
 
     @classmethod
     def fromPoints(cls, pointList:list):
         """Draw polygon from points."""
-        if len(pointList) == 4:
+        l = len(pointList)
+        if l == 4:
             pass
-        if len(pointList) == 3:
-            pass
-        new = cls()
-        new.setPolygon(vertexList=pointList)
-        return new
+        if l == 3:
+            from Drawables.Triangle import Triangle
+            return Triangle.fromPoints(pointList)
+        if l > 4:
+            new = cls()
+            new.setPolygon(vertexList=pointList)
+            return new
+        raise ValueError(f"Expected 3 or more points, received {l}")
 
     @classmethod
     def fromLines(cls, lineList:list):
         """Draw polygon from lines."""
-        if len(lineList) == 4:
+        l = len(lineList)
+        if l == 4:
             pass
-        if len(lineList) == 3:
-            pass
-        new = cls()
-        new.setPolygon(edgeList=lineList)
-        return new
+        if l == 3:
+            from Drawables.Triangle import Triangle
+            return Triangle.fromLines(lineList)
+        if l > 4:
+            new = cls()
+            new.setPolygon(edgeList=lineList)
+            return new
+        
 
 
     # Getters and Setters
@@ -69,16 +78,44 @@ class Polygon(Drawable):
     # Methods
     def area(self):
         """Area of polygon."""
-        return abs(Polygon.signedArea(self.vertices))
+        return abs(self.signedArea())
 
     def centroid(self):
-        pass
+        """Calculate centroid."""
+        from Drawables.Point import Point
+        A = 0.0
+        (x, y) = (0.0, 0.0)
+        prev = self.vertices[-1]
+        for cur in self.vertices:
+            det = (prev.X * cur.Y - cur.X * prev.Y)
+            x += ((prev.X + cur.X) * det)
+            y += ((prev.Y + cur.Y) * det)
+            A += det
+            prev = cur
+        A = 1 / (6 * A * 0.5)
+        (x, y) = (A * x, A * y)
+        return Point.fromCoOrdinates(x, y)
 
-    def internAngle(self, point=None, idx=None):
-        pass
+    def internAngle(self, point=..., idx:int=...):
+        """Calculate Internal angle at a vertex."""
+        from Drawables.Point import Point
+        (point, idx) = self.resolvePoint(point=point, idx=idx)
+        angle = Point.angleFromPoints(
+            point, self.vertices[idx - 1],
+            self.vertices[(idx + 1) % len(self.vertices)]
+            )
+        if self.clockwise:
+            return angle
+        return (2 * pi) - angle
 
-    def externAngle(self, point=None, idx=None):
-        pass
+    def angleBisector(self, point=..., idx:int=...):
+        """Angle bisector."""
+        from Drawables.Point import Point
+        (point, idx) = self.resolvePoint(point=point, idx=idx)
+        return Point.bisectAnglePoints(
+            self=point, point1=self.vertices[idx - 1],
+            point2=self.vertices[(idx + 1) % len(self.vertices)]
+            )
 
     def vertexCentroid(self):
         """Return centroid of vertices."""
@@ -94,19 +131,21 @@ class Polygon(Drawable):
     @staticmethod
     def newVertices(points):
         """Provide new vertices in order to form a new polygon."""
-        from Drawables.Point import Point
-        new = []
-        for i in range(len(points)):
-            new.append(Point.fromPoint(points[i]))
-        return new
+        if isinstance(points, list):
+            from Drawables.Point import Point
+            new:list = []
+            for point in points:
+                new.append(Point.fromPoint(point))
+            return new
+        raise TypeError(f"Expected list of points, received {type(points).__name__}.")
 
-    @staticmethod
-    def signedArea(vertexList):
+    def signedArea(self):
         """Signed area for nonintersecting Polygon using shielace formula."""
         area = 0
-        prev = vertexList[-1]
-        for cur in vertexList:
+        prev = self.vertices[-1]
+        for cur in self.vertices:
             area += (prev.X * cur.Y - cur.X * prev.Y)
+            prev = cur
         return area * 0.5
 
     def circularDirection(self):
@@ -130,7 +169,6 @@ class Polygon(Drawable):
             self.clockwise = False
             return
         raise Exception("Irregularity in polygon")
-
 
     @staticmethod
     def edgeToVertex(edgeList:list):
@@ -163,6 +201,23 @@ class Polygon(Drawable):
             return edge1.end
         from Drawables.Line import Line
         return Line.intersectionWith(edge1, edge2)
+
+    def resolvePoint(self, point=..., idx:int=...):
+        """Resolve availability of vertex in Polygon or its indexed."""
+        from Drawables.Point import Point
+        if isinstance(idx, int):
+            l = len(self.vertices)
+            if idx >= l or idx < 0:
+                raise ValueError(f"Point index out of range. Must've be in range: 0 - {l}")
+            p:Point = self.vertices[idx]
+            return (p, idx)
+        if isinstance(point, Point):
+            try:
+                idx = self.vertices.index(point)
+            except:
+                raise ValueError("Point not in Triangle.")
+            return (point, idx)
+        raise TypeError("Unsupported Type. Expected: int or Point")
 
 
     # Output interface

@@ -1,6 +1,6 @@
 """Module Line."""
 from Drawables.Drawable import Drawable
-from math import inf, pi, atan, cos
+from math import inf, pi, atan, cos, sin
 
 
 class Line(Drawable):
@@ -13,6 +13,8 @@ class Line(Drawable):
         # Drawable.__init__(self)
         self.start:Point
         self.end:Point
+        self.__extend:float = 0
+        self.extend__:float = 0
 
 
     # Constructors
@@ -84,7 +86,6 @@ class Line(Drawable):
         if isinstance(o, Line):
             (m1, c1) = self.getMetrics()
             (m2, c2) = o.getMetrics()
-            print(m1, m2)
             if abs(m1 - m2) > self.comparisonLimit:
                 raise Exception(
                     f"Lines intersect at{self.intersectionWith(o)}"
@@ -187,6 +188,29 @@ class Line(Drawable):
 
 
     # Helpers
+    def extend(self, point=..., extension=...):
+        """Extend the ends of line as displayed when drawn."""
+        if isinstance(extension, tuple) and len(extension) == 2:
+            (self.__extend, self.extend__) = extension
+            return
+        from Drawables.Point import Point
+        if isinstance(point, Point):
+            if Drawable.orientation(
+                    self.start, self.end, point
+                ) != 0:
+                raise Exception("Point is non coliniar.")
+            _x, x_, l = (
+                    Point.distanceSquared(point, self.start),
+                    Point.distanceSquared(point, self.end),
+                    Point.distanceSquared(self.start, self.end)
+                )
+            if abs(_x + x_ - l) < Drawable.comparisonLimit:
+                self.__extend, self.extend__ =  0, 0
+            elif _x < x_:
+                self.__extend, self.extend__ = _x, 0
+            else:
+                self.__extend, self.extend__ = 0, x_
+
     def getMetrics(self):
         """Return slope and y-intercept of Line segment."""
         #y = mx + c
@@ -246,6 +270,8 @@ class Line(Drawable):
 
     def draw(self, axes):
         """Draw plots."""
-        x = self.start.X, self.end.X
-        y = self.start.Y, self.end.Y
+        a = self.angle()
+        c, s = cos(a), sin(a)
+        x = (self.start.X - c * self.__extend, self.end.X + c * self.extend__)
+        y = (self.start.Y - s * self.__extend, self.end.Y + s * self.extend__)
         axes.plot(x,y)

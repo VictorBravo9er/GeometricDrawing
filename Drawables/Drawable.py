@@ -67,15 +67,15 @@ class Drawable(object):
 
     @staticmethod
     def orientation(pointA, pointB, target):
-        """Orientation test. 0 - go for it, 1 - decide, -1 - no go, next please. O(1)."""
+        """Orientation test. 0 - coliniar for it, 1 - left, -1 - right."""
         if target in (pointA, pointB):
             return -1
         buf = np.array([1, pointA.X, pointA.Y, 1, pointB.X, pointB.Y, 1, target.X, target.Y]).reshape(3,-1)
         buf = np.linalg.det(buf)
+        if abs(buf) < Drawable.comparisonLimit:
+            return 0
         if buf < 0:
             return -1
-        if buf == 0:
-            return 0
         return 1
 
     @staticmethod

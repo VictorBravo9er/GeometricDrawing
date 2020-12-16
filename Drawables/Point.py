@@ -1,4 +1,5 @@
 """Module for Point."""
+from typing import Type
 from Drawables.Drawable import Drawable
 import numpy as np
 from math import inf, pi, atan, sqrt, cos, sin
@@ -18,18 +19,19 @@ class Point(Drawable):
     @classmethod
     def fromSection(cls, point1, point2, m:float=1, n:float=1):
         """Point sector using ratio m:n, and points point1 and point2."""
-        from Drawables.Line import Line
         tot = m + n
         x = (n * point1.X + m * point2.X) / tot
         y = (n * point1.Y + m * point2.Y) / tot
-        return Point.fromCoOrdinates(x, y)
+        return cls.fromCoOrdinates(x, y)
 
     @classmethod
     def fromPoint(cls, point):
         """Construct new point from existing Point."""
         new = cls()
-        new.setPoint(point.X, point.Y)
-        return(new)
+        if isinstance(point, cls):
+            new.setPoint(point.X, point.Y)
+            return(new)
+        raise TypeError(f"Expected {cls.__name__}, received {type(point).__name__}.")
 
     @classmethod
     def fromCoOrdinates(cls, x:float, y:float):
@@ -105,28 +107,22 @@ class Point(Drawable):
 
     def bisect(self, point):
         """Draws perpendicular bisector between two points."""
-        """
-        distance = self.distanceTo(point) / 2
-        slope = atan(-1 / point.slopeTo(self))
-        point = Point.middlePoint(self, point)
-        p2 = Point.fromMetrics(slope,-distance, point)
-        point = Point.fromMetrics(slope, distance, point)
-        """
         from Drawables.Line import Line
         return Line.perpendicularBisector(
             Line.fromPoints(self, point)
             )
 
-    def bisectAnglePoints(self, point1, point2):
+    def bisectAnglePoints(self, point1, point2, bidirectional:bool=False):
         """Bisector of angle AXB."""
         from Drawables.Line import Line
         vLen = (self.distanceTo(point1) + self.distanceTo(point2)) / 2
         angle = (( self.angleTo(point1) + self.angleTo(point2) ) / 2) % (2 * pi)
-
-        end = Point.fromMetrics(angle, vLen, self)
-        if Point.orientation(point1, self, end) < 0:
-            return Line.fromPoints(self, end)
+        start = Point.fromMetrics(angle, vLen, self)
         end = Point.fromMetrics(angle, -vLen, self)
+        if bidirectional:
+            return Line.fromPoints(start, end)
+        if Point.orientation(point1, self, start) < 0:
+            return Line.fromPoints(self, start)
         return Line.fromPoints(self, end)
 
     def bisectAngleLine(self, line):

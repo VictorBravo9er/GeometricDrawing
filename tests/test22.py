@@ -1,6 +1,6 @@
 import __init__
 from Drawables.Circle import Circle
-from math import degrees, radians
+from math import degrees, pi, radians
 from Drawables.Drawable import Drawable
 import math
 from Drawables.Point import Point
@@ -25,6 +25,9 @@ drawables.append(t)
 p = t.incenter()
 drawables.append(p)
 
+t = Triangle.fromTriangle(t)
+t._rotate(p1, pi)
+drawables.append(t)
 
 d1 = p.distanceSquared(t.vertices[0])
 d2 = p.distanceSquared(t.vertices[1])
