@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 fig, ax = plt.subplots(1)
 a = Drawable()
 
-r = a.reftectionMatrix(inf, 2)
+r = a.reftectionLineMatrix(inf, 2)
 
 print(r)
 

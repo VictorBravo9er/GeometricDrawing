@@ -1,4 +1,5 @@
 """Module Line."""
+import numpy as np
 from Drawables.Drawable import Drawable
 from math import inf, pi, atan, cos, sin
 
@@ -159,10 +160,10 @@ class Line(Drawable):
         from Drawables.Triangle import Triangle
         return Triangle.fromLine(self, point)
 
-    def circleAround(self, chordDistance:float=None, tangentPoint=None, chordPoint=None):
+    def circleAround(self, chordDistance:float=None, tangentCentre=None, chordCentre=None):
         """Draw circle with line as diameter, chord or tangent."""
         from Drawables.Point import Point
-        if chordPoint is None and tangentPoint is None and chordDistance is None:
+        if chordCentre is None and tangentCentre is None and chordDistance is None:
             mid = self.bisector()
             radius = self.length() / 2
             return mid.circle(radius)
@@ -174,10 +175,10 @@ class Line(Drawable):
                     self.bisector()
                 )
             return Circle.fromMetrics(centre, centre.distanceTo(self.end))
-        elif isinstance(tangentPoint, Point):
-            return Point.circleFrom(tangentPoint, tangent=self)
-        elif isinstance(chordPoint, Point):
-            return Point.circleFrom(chordPoint, chord=self)
+        elif isinstance(tangentCentre, Point):
+            return Point.circleFrom(tangentCentre, tangent=self)
+        elif isinstance(chordCentre, Point):
+            return Point.circleFrom(chordCentre, chord=self)
         raise Exception("invalid arguements.")
 
     def square(self, direction:str="up"):
@@ -229,28 +230,46 @@ class Line(Drawable):
             self._lengthL1 = self.start.distanceL1(self.end)
             return self.start.distanceL1(self.end)
 
-    def _scale(self, sx:float=1, sy:float=1):
-        self.start._scale(sx, sy)
-        self.end._scale(sx, sy)
+    def _scale(self, sx:float=1, sy:float=1, point=...):
+        if sx == 1 and sy == 1:
+            return
+        transform = self.scaleMatrix(sx, sy, point)
+        self._applyTransform(transform)
 
     def _translate(self, tx:float=0, ty:float=0):
-        self.start._translate(tx, ty)
-        self.end._translate(tx, ty)
+        if tx == 0 and ty == 0:
+            return
+        transform = self.translateMatrix(tx, ty)
+        self._applyTransform(transform)
 
-    def _rotate(self, centre=None,angle:float=0):
-        from Drawables.Point import Point
-        if not isinstance(centre, Point):
-            centre = Point()
-        self.start._rotate(centre, angle)
-        self.end._rotate(centre, angle)
+    def _rotate(self, centre=...,angle:float=0):
+        if angle == 0:
+            return
+        transform = self.rotateMatrix(angle, centre)
+        self._applyTransform(transform)
 
     def _reflectPoint(self, point):
-        self.start._reflectPoint(point)
-        self.end._reflectPoint(point)
+        transform = self.reflectionPointmatrix(point)
+        self._applyTransform(transform)
 
     def _reflectLine(self, line):
-        self.start._reflectLine(line)
-        self.end._reflectLine(line)
+        transform = self.reftectionLineMatrix(*Line.getMetrics(line))
+        self._applyTransform(transform)
+
+    def _applyTransform(self, transform):
+        homoCoord = np.array(
+            [
+                [self.start.X, self.end.X,],
+                [self.start.Y, self.end.Y,],
+                [1, 1]
+            ]
+        )
+        homoCoord = np.array(homoCoord)
+        homoCoord = np.reshape(
+            np.dot(transform, homoCoord), (3, -1)
+            ).T
+        (self.start.X, self.start.Y) = [float(x) for x in homoCoord[0][0:2]]
+        (self.end.X  , self.end.Y  ) = [float(x) for x in homoCoord[1][0:2]]
 
     def __ne__(self, o) -> bool:
         """'!=' operator overload."""

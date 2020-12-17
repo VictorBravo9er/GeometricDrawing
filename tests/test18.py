@@ -17,7 +17,7 @@ drawables.append(p3)
 
 t = Triangle.fromPoints([p1,p2,p3])
 drawables.append(t)
-l = t.medianFromPoint(0)
+l = t.medianFromPoint(idx = 0)
 drawables.append(l)
 l2 = t.perpendicularFromPoint(p1)
 drawables.append(l2)

@@ -5,32 +5,36 @@ lineADT = {
     "new":{
         (Point,):{
             args:("pointList"),
-            trgt:Polygon.fromPoints,
+            trgt:Triangle.fromPoints,
         },
         (Line,):{
             args:("lineList",),
-            trgt:Polygon.fromLines,
+            trgt:Triangle.fromLines,
         },
-        ret:Polygon
+        (Line, Point):{
+            args:("line", "point"),
+            trgt:Triangle.fromLine
+        },
+        ret:Triangle
     },
     "copy":{
         tuple():{
             args:tuple(),
-            trgt:Polygon.fromPolygon
+            trgt:Triangle.fromTriangle
         },
         ret:Circle
     },
     "area":{
         tuple():{
             args:tuple(),
-            trgt:Polygon.area
+            trgt:Triangle.area
         },
         ret:float
     },
     "centroid":{
         tuple():{
             args:tuple(),
-            trgt:Polygon.centroid
+            trgt:Triangle.centroid
         },
         ret:Point
     },

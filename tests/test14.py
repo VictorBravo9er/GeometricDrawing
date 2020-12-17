@@ -25,6 +25,8 @@ y = l2.bisector()
 x = l1.intersectionWith(l2)
 drawables.append(x)
 drawables.append(y)
+
+
 dist2 = l1.distanceFrom(l2)
 assert y.distanceTo(p3) == y.distanceTo(p4)
 

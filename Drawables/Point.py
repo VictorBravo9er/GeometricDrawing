@@ -64,8 +64,8 @@ class Point(Drawable):
     # Methods
     def slopeTo(self, point):
         """Find slope(directionless) to another point w.r.t. X-axis. -ve allowed."""
-        num = (self.Y - point.Y)
-        den = (self.X - point.X)
+        num:float = (self.Y - point.Y)
+        den:float = (self.X - point.X)
         if den == 0:
             if num == 0:
                 return 0
@@ -193,6 +193,10 @@ class Point(Drawable):
         new = Point.fromCoOrdinates(self.X + other.X, self.Y + other.Y)
         return new
 
+    def __sub__(self, other):
+        """'+' operator overload."""
+        return Point.fromCoOrdinates(self.X - other.X, self.Y - other.Y)
+
     def __ne__(self, point):
         """'!=' operator overload."""
         return not self.__eq__(point)
@@ -209,53 +213,47 @@ class Point(Drawable):
             return True
         return False
 
-    def _scale(self, sx:float=1, sy:float=1):
-        """Scale the point. Has no effect on point itself, but affects the coorginates."""
-        if sx == 1 and sy == 1:
-            return
-        homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
-        newCoord = np.dot(self.scaleMatrix(sx,sy), homoCoord)
-        (self.X, self.Y) = [float(x) for x in np.reshape(newCoord, -1)[0:2]]
-
     def _normalize(self):
         """Convert everything to int representation."""
         self.X = float(self.X)
         self.Y = float(self.Y)
 
+    def _scale(self, sx:float=1, sy:float=1, point=...):
+        """Scale the point. Has no effect on point itself, but affects the coorginates."""
+        if sx == 1 and sy == 1:
+            return
+        transform = self.scaleMatrix(sx, sy, point)
+        self._applyTransform(transform)
+
     def _translate(self, tx:float=0, ty:float=0):
         """Move the point around.""" 
         if tx == 0 and ty == 0:
             return
-        homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
-        newCoord = np.dot(self.translateMatrix(tx,ty), homoCoord)
-        (self.X, self.Y) = [float(x) for x in np.reshape(newCoord, -1)[0:2]]
+        transform = self.translateMatrix(tx,ty)
+        self._applyTransform(transform)
 
-    def _rotate(self, centre=None,angle:float=0):
+    def _rotate(self, centre=...,angle:float=0):
         """Rotate the point around a centre."""
-        try:
-            if angle == 0:
-                return
-            if centre is None:
-                centre = Point()
-            self._translate(-centre.X, -centre.Y)
-            homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
-            newCoord = np.dot(self.rotateMatrix(angle), homoCoord)
-            (self.X, self.Y) = [float(x) for x in np.reshape(newCoord, -1)[0:2]]
-            self._translate(centre.X, centre.Y)
-        except:
-            raise Exception("Invalid Arguement(s).")
+        if angle == 0:
+            return
+        transform = self.rotateMatrix(angle, centre)
+        self._applyTransform(transform)
 
     def _reflectPoint(self, point):
         """Reflect point about another point."""
-        self.X = 2 * point.X - self.X
-        self.Y = 2 * point.Y - self.Y
+        transform = self.reflectionPointmatrix(point)
+        self._applyTransform(transform)
 
     def _reflectLine(self, line):
         """Reflect point about a line."""
         slope, intercept = line.getMetrics()
+        transform = self.reftectionLineMatrix(slope,intercept)
+        self._applyTransform(transform)
+
+    def _applyTransform(self, transform):
         homoCoord = np.array((self.X, self.Y, 1)).reshape(3,1)
-        newCoord = np.dot(self.reftectionMatrix(slope,intercept), homoCoord)
-        (self.X, self.Y) = [float(x) for x in np.reshape(newCoord, -1)[0:2]]
+        homoCoord = np.dot(transform, homoCoord)
+        (self.X, self.Y) = [float(x) for x in np.reshape(homoCoord, -1)[0:2]]
 
 
     # Output interface

@@ -22,10 +22,10 @@ l = Line.fromPoints(p1, p2)
 t = l.circleAround()
 drawables.append(t)
 drawables.append(l)
-t = l.circleAround(tangentPoint=p3)
+t = l.circleAround(tangentCentre=p3)
 drawables.append(t)
 try:
-    t = l.circleAround(chordPoint=p4)
+    t = l.circleAround(chordCentre=p4)
     drawables.append(t)
 except Exception as e:
     print(e)

@@ -40,6 +40,8 @@ class Triangle(Polygon):
         new.setPolygon(vertexList=Triangle.newVertices(triangle.vertices))
         return new
 
+
+    # Methods
     def area(self):
         """Heron's Formula."""
         try:
@@ -136,13 +138,8 @@ class Triangle(Polygon):
             return self.perpendicularFromPoint(point=self.pointOppLine(line))
         raise ValueError(f"Expected: {Line.__name__}, received {type(line).__name__}")
 
-    def _rotate(self, centre=None,angle:float=0):
-        from Drawables.Point import Point
-        if not isinstance(centre, Point):
-            centre = Point()
-        for point in self.vertices:
-            point._rotate(centre, angle)
 
+    # Helpers.
     def lineOppPoint(self, point=..., idx:int=...):
         """Determine line opposite to a point."""
         from Drawables.Line import Line
@@ -168,5 +165,4 @@ class Triangle(Polygon):
             point:Point = x[0]
             return point
         raise ValueError("Line doesn't constitute the triangle.")
-
 

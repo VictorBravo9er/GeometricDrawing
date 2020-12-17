@@ -62,8 +62,11 @@ class Arc(Drawable):
         y = self.radius * sin(theta) + self.centre.Y
         return(x,y)
 
-    def _scale(self, scale:float):
+    def _scale(self, scale:float=1, point=...):
+        if scale == 1:
+            return
         self.radius *= scale
+        self.centre._scale(sx=scale, sy=scale, point=point)
 
     def _translate(self, tx:float=0, ty:float=0):
         self.centre._translate(tx, ty)

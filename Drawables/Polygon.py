@@ -1,4 +1,5 @@
 """Module for Polygons."""
+import numpy as np
 from math import pi
 from Drawables.Drawable import Drawable
 
@@ -49,7 +50,7 @@ class Polygon(Drawable):
             new = cls()
             new.setPolygon(edgeList=lineList)
             return new
-        
+        raise ValueError(f"Expected 3 or more lines, received {l}")
 
 
     # Getters and Setters
@@ -76,12 +77,16 @@ class Polygon(Drawable):
 
 
     # Methods
-    def area(self):
+    def area(self, vectotized:bool=True):
         """Area of polygon."""
+        if vectotized:
+            return abs(self.signedAreaVectorized())
         return abs(self.signedArea())
 
-    def centroid(self):
+    def centroid(self, vectorized:bool=True):
         """Calculate centroid."""
+        if vectorized:
+            return self.centroidVectorized()
         from Drawables.Point import Point
         A = 0.0
         (x, y) = (0.0, 0.0)
@@ -150,6 +155,22 @@ class Polygon(Drawable):
             prev = cur
         return area * 0.5
 
+    def signedAreaVectorized(self):
+        """Vectorized implementation of signed area(Shoelace formula)."""
+        (X, Y, X_, Y_) = self.vectorize(self.vertices, shiftArray=True)
+        return float(np.sum(X * Y_ - Y * X_) * 0.5)
+
+    def centroidVectorized(self):
+        """Vectorized implementation of centroid(Shoelace formula)."""
+        from Drawables.Point import Point
+        (X, Y, X_, Y_) = self.vectorize(self.vertices, shiftArray=True)
+        R = (X * Y_ - Y * X_)
+        A = 1 / float(np.sum(R) * 3)
+        X = A * float(np.sum((X + X_) * R))
+        Y = A * float(np.sum((Y + Y_) * R))
+        return Point.fromCoOrdinates(X, Y)
+
+
     def circularDirection(self):
         """Check for circular direction of vertices."""
         (prevVertex ,curVertex) = self.vertices[-2:]
@@ -191,6 +212,23 @@ class Polygon(Drawable):
         return vertexList
 
     @staticmethod
+    def vectorize(pointList:list, shiftArray=False):
+        """Vectorize the vertex List."""
+        X = []
+        Y = []
+        (X_, Y_) = (..., ...)
+        for point in pointList:
+            X.append(point.X)
+            Y.append(point.Y)
+        if shiftArray:
+            X_= np.reshape(X[1:] + X[0:1], (1, -1))
+            Y_= np.reshape(Y[1:] + Y[0:1], (1, -1))
+        X = np.reshape(X, (1, -1))
+        Y = np.reshape(Y, (1, -1))
+        return (X, Y, X_, Y_)
+
+
+    @staticmethod
     def compareEdgeEnds(edge1, edge2):
         """Compare endpoints of two edges, else compute intersection."""
         if edge1.start == edge2.start:
@@ -221,17 +259,48 @@ class Polygon(Drawable):
             return (point, idx)
         raise TypeError("Unsupported Type. Expected: int or Point")
 
+    def _scale(self, sx:float=1, sy:float=1, point=...):
+        if sx == 1 and sy == 1:
+            return
+        transform = self.scaleMatrix(sx, sy, point)
+        self._applyTransform(transform)
+
+    def _translate(self, tx:float=0, ty:float=0):
+        if tx == 0 and ty == 0:
+            return
+        transform = self.translateMatrix(tx, ty)
+        self._applyTransform(transform)
+
+    def _rotate(self, centre=...,angle:float=0):
+        if angle == 0:
+            return
+        transform = self.rotateMatrix(angle, centre)
+        self._applyTransform(transform)
+
+    def _applyTransform(self, transform):
+        homoCoord = []
+        for point in self.vertices:
+            homoCoord.append([point.X, point.Y, 1])
+        homoCoord = np.array(homoCoord).T
+        homoCoord = np.dot(transform, homoCoord)
+        homoCoord = np.reshape(homoCoord, (3, -1)).T
+        i = 0
+        for point in self.vertices:
+            (point.X, point.Y) = [float(x) for x in homoCoord[i][0:2]]
+            i += 1
+
 
     # Output interface
     def __str__(self) -> str:
         """Strngify object."""
         s = list()
-        s.append(f"It has {self.size} sides. It's vertices are:")
+        s.append(f"{type(self).__name__} has {self.size} sides.")
+        s.append("It's vertices are:")
         i = 1
         for vertex in self.vertices:
-            s.append(f"\n{i}.\t{vertex}")
+            s.append(f"{i}.\t{vertex}")
             i += 1
-        return("".join(s))
+        return("\n".join(s))
 
     def draw(self, axes):
         """Draw Polygon."""
