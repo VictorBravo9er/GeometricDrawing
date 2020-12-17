@@ -1,7 +1,7 @@
 """Point Structure."""
 from rules.drawable import *
-lineADT = {
-    "is_a":None,
+polygonADT = {
+    is_a:None,
     "new":{
         (Point,):{
             args:("pointList"),

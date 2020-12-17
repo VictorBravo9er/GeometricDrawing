@@ -1,7 +1,7 @@
 """Point Structure."""
 from rules.drawable import *
 lineADT = {
-    "is_a":None,
+    is_a:None,
     "new":{
         (Point,Point,):{
             args:("point1","point2"),
@@ -142,13 +142,13 @@ lineADT = {
             args:("direction"),
             trgt:Line.square
         },
-        ret:pass
-    },
+        ret:None
+    },#TODO
     "rectangle":{
         (float, str,):{
             args:("sideLength", "direction"),
             trgt:Line.rectangle
         },
-        ret:pass
-    }
+        ret:None
+    }#TODO
 }

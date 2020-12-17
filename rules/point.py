@@ -1,7 +1,7 @@
 """Point Structure."""
 from rules.drawable import *
 pointADT = {
-    "is_a":None,
+    is_a:None,
     "new":{
         (float, float,):{
             args:("x", "y",),

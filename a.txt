@@ -1,0 +1,653 @@
+Point
+    is_a
+        None
+    new
+        (float float )
+            arguements
+                ('x', 'y')
+            target
+                fromCoOrdinates
+        (Point Point float float )
+            arguements
+                ('point1', 'point2', 'm', 'n')
+            target
+                fromSection
+        (float float Point )
+            arguements
+                ('angle', 'distance', 'point')
+            target
+                fromMetrics
+        return
+            Point
+    copy
+        ()
+            arguements
+                ()
+            target
+                fromPoint
+        return
+            Point
+    slopeTo
+        (Point )
+            arguements
+                ('point',)
+            target
+                slopeTo
+        return
+            float
+    angleTo
+        (Point )
+            arguements
+                ('point',)
+            target
+                angleTo
+        return
+            float
+    angleFrom
+        (Point Point )
+            arguements
+                ('point1', 'point2')
+            target
+                angleFromPoints
+        (Line )
+            arguements
+                ('line',)
+            target
+                angleFromLine
+        return
+            float
+    distanceTo
+        (Point )
+            arguements
+                ('point',)
+            target
+                distanceTo
+        (Line )
+            arguements
+                ('line',)
+            target
+                distanceTo
+        return
+            float
+    midPoint
+        (Point )
+            arguements
+                ('point',)
+            target
+                middlePoint
+        return
+            Point
+    projection
+        (Line )
+            arguements
+                ('line',)
+            target
+                projectionOn
+        return
+            Point
+    bisector
+        (Point )
+            arguements
+                ('point',)
+            target
+                bisect
+        return
+            Line
+    angleBisector
+        (Line )
+            arguements
+                ('line',)
+            target
+                bisectAngleLine
+        (Point Point )
+            arguements
+                ('point1', 'point2')
+            target
+                bisectAnglePoints
+        return
+            Line
+    lineTo
+        (Point )
+            arguements
+                ('point',)
+            target
+                lineToPoint
+        (float float )
+            arguements
+                ('angle', 'distance')
+            target
+                lineTo
+        return
+            Line
+    triangle
+        (Line )
+            arguements
+                ('line',)
+            target
+                triangleTo
+        return
+            Triangle
+    circle
+        (float )
+            arguements
+                ('radius',)
+            target
+                circle
+        return
+            Circle
+    tangentCircle
+        (Line )
+            arguements
+                ('tangent',)
+            target
+                circleFrom
+        return
+            Circle
+    chordCircle
+        (Line )
+            arguements
+                ('chord',)
+            target
+                circleFrom
+        return
+            Circle
+Line
+    is_a
+        None
+    new
+        (Point Point )
+            arguements
+                ('point1', 'point2')
+            target
+                fromPoints
+        (float float Point )
+            arguements
+                ('angle', 'length', 'point')
+            target
+                fromMetrics
+        return
+            Point
+    copy
+        ()
+            arguements
+                ()
+            target
+                fromLine
+        return
+            Line
+    angle
+        ()
+            arguements
+                ()
+            target
+                angle
+        return
+            float
+    length
+        ()
+            arguements
+                ()
+            target
+                length
+        return
+            float
+    distanceFrom
+        (Line )
+            arguements
+                ('line',)
+            target
+                distanceFrom
+        (Point )
+            arguements
+                ('point',)
+            target
+                distanceFrom
+        return
+            float
+    bisector
+        ()
+            arguements
+                ()
+            target
+                bisector
+        return
+            Point
+    sector
+        (float float )
+            arguements
+                ('m', 'n')
+            target
+                sector
+        return
+            Point
+    intersect
+        (Line )
+            arguements
+                ('line',)
+            target
+                intersectionWith
+        return
+            Point
+    parallelLine
+        (Point )
+            arguements
+                ('point',)
+            target
+                parallelLine
+        (float )
+            arguements
+                ('distance',)
+            target
+                parallelLine
+        return
+            Point
+    projectionOf
+        (Point )
+            arguements
+                ('point',)
+            target
+                projectionOf
+        return
+            Point
+    perpendicularFrom
+        (Point )
+            arguements
+                ('point',)
+            target
+                perpendicularFrom
+        return
+            Line
+    perpendicularAt
+        (Point )
+            arguements
+                ('var',)
+            target
+                perpendicularAt
+        (float )
+            arguements
+                ('var',)
+            target
+                perpendicularAt
+        return
+            Line
+    perpendicularBisector
+        ()
+            arguements
+                ()
+            target
+                perpendicularBisector
+        return
+            Line
+    triangle
+        (Point )
+            arguements
+                ('point',)
+            target
+                triangleTo
+        return
+            Triangle
+    circle
+        ()
+            arguements
+                ()
+            target
+                circleAround
+        return
+            Circle
+    tangentCircle
+        (Point )
+            arguements
+                tangentPoint
+            target
+                circleAround
+        return
+            Circle
+    chordCircle
+        (Point )
+            arguements
+                chordPoint
+            target
+                circleAround
+        return
+            Circle
+    quad
+        (str )
+            arguements
+                direction
+            target
+                square
+        return
+            None
+    rectangle
+        (float str )
+            arguements
+                ('sideLength', 'direction')
+            target
+                rectangle
+        return
+            None
+Arc
+    is_a
+        None
+    new
+        (Point float float float )
+            arguements
+                ('centre', 'radius', 'startAngle', 'endAngle')
+            target
+                formArc
+        (Point Point float )
+            arguements
+                ('centre', 'point', 'angle')
+            target
+                formArc
+        return
+            Arc
+    copy
+        ()
+            arguements
+                ()
+            target
+                copy
+        return
+            Arc
+Circle
+    is_a
+        Arc
+    new
+        (Point float )
+            arguements
+                ('centre', 'radius')
+            target
+                fromMetrics
+        (Line )
+            arguements
+                ('diameter',)
+            target
+                fromDiameter
+        return
+            Circle
+    copy
+        ()
+            arguements
+                ()
+            target
+                fromCircle
+        return
+            Circle
+    radius
+        ()
+            arguements
+                ()
+            target
+                getRadius
+        return
+            float
+    centre
+        ()
+            arguements
+                ()
+            target
+                getCentre
+        return
+            float
+    area
+        ()
+            arguements
+                ()
+            target
+                area
+        return
+            float
+    diameter
+        (float )
+            arguements
+                ('angle',)
+            target
+                diameterAlongSlope
+        (Point )
+            arguements
+                ('point',)
+            target
+                diameterAlongPoint
+        return
+            Line
+    commonChord
+        (Line )
+            arguements
+                ('circle',)
+            target
+                commonChord
+        return
+            Line
+    tangent
+        (Point )
+            arguements
+                ('point',)
+            target
+                tangentAt
+        (float )
+            arguements
+                ('angle',)
+            target
+                tangentAt
+        return
+            Point
+Polygon
+    is_a
+        None
+    new
+        (Point )
+            arguements
+                pointList
+            target
+                fromPoints
+        (Line )
+            arguements
+                ('lineList',)
+            target
+                fromLines
+        return
+            Polygon
+    copy
+        ()
+            arguements
+                ()
+            target
+                fromPolygon
+        return
+            Circle
+    area
+        ()
+            arguements
+                ()
+            target
+                area
+        return
+            float
+    signedArea
+        ()
+            arguements
+                tuple
+            target
+                signedArea
+    centroid
+        ()
+            arguements
+                ()
+            target
+                centroid
+        return
+            Point
+    vertexCentroid
+        ()
+            arguements
+                ()
+            target
+                vertexCentroid
+        return
+            Point
+    internalAngle
+        (int )
+            arguements
+                ('idx',)
+            target
+                internAngle
+        (Point )
+            arguements
+                ('point',)
+            target
+                internAngle
+        return
+            float
+    angleBisector
+        (int )
+            arguements
+                ('idx',)
+            target
+                angleBisector
+        (Point )
+            arguements
+                ('point',)
+            target
+                angleBisector
+        return
+            Line
+Triangle
+    is_a
+        Polygon
+    new
+        (Point )
+            arguements
+                pointList
+            target
+                fromPoints
+        (Line )
+            arguements
+                ('lineList',)
+            target
+                fromLines
+        (Line Point )
+            arguements
+                ('line', 'point')
+            target
+                fromLine
+        return
+            Triangle
+    copy
+        ()
+            arguements
+                ()
+            target
+                fromTriangle
+        return
+            Circle
+    area
+        ()
+            arguements
+                ()
+            target
+                area
+        return
+            float
+    centroid
+        ()
+            arguements
+                ()
+            target
+                centroid
+        return
+            Point
+    orthocentre
+        ()
+            arguements
+                ()
+            target
+                orthocentre
+        return
+            Point
+    incenter
+        ()
+            arguements
+                ()
+            target
+                incenter
+        return
+            Point
+    circumcenter
+        ()
+            arguements
+                ()
+            target
+                circumcenter
+        return
+            Point
+    incircle
+        ()
+            arguements
+                ()
+            target
+                incircle
+        return
+            Circle
+    circumcircle
+        ()
+            arguements
+                ()
+            target
+                circumcircle
+        return
+            Circle
+    median
+        (Point )
+            arguements
+                ('point',)
+            target
+                medianFromPoint
+        (int )
+            arguements
+                ('idx',)
+            target
+                medianFromPoint
+        (Line )
+            arguements
+                ('line',)
+            target
+                medianOnLine
+        return
+            Line
+    perpendicular
+        (Point )
+            arguements
+                ('point',)
+            target
+                perpendicularFromPoint
+        (int )
+            arguements
+                ('idx',)
+            target
+                perpendicularFromPoint
+        (Line )
+            arguements
+                ('line',)
+            target
+                perpendicularOnLine
+        return
+            Line
+    angleBisector
+        (int )
+            arguements
+                ('idx',)
+            target
+                angleBisector
+        (Point )
+            arguements
+                ('point',)
+            target
+                angleBisector
+        (Line )
+            arguements
+                ('line',)
+            target
+                angleBisectorOnLine
+        return
+            Line

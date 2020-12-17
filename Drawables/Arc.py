@@ -28,8 +28,6 @@ class Arc(Drawable):
             )
         return new
 
-
-    # Method
     @classmethod
     def formArc(
         cls, centre, point=None, angle=None,

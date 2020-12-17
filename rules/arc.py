@@ -1,7 +1,7 @@
 """Point Structure."""
 from rules.drawable import *
-lineADT = {
-    "is_a":None,
+arcADT = {
+    is_a:None,
     "new":{
         (Point, float, float, float,):{
             args:("centre", "radius", "startAngle", "endAngle"),

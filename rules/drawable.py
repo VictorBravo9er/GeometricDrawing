@@ -8,9 +8,11 @@ from Drawables.Circle import Circle
 from Drawables.Triangle import Triangle
 from Drawables.Arc import Arc
 
+is_a:str = "is_a"
 args:str = "arguements"
 trgt:str = "target"
 ret:str = "return"
+tagstr:str = "tag"
 
 initOrder = (
     Point, Line, Arc, Circle, Polygon, Triangle,
