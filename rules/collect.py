@@ -1,6 +1,5 @@
 """Collect Everything."""
 from io import TextIOWrapper
-from typing import TextIO
 import __init__
 from rules.drawable import *
 from rules.point import pointADT
@@ -12,12 +11,18 @@ from rules.triangle import triangleADT
 
 
 class Collector:
+    """Collector exists is to combine all class together."""
 
     def __init__(self) -> None:
+        """Initialize method."""
         super().__init__()
         self.ADT = {}
         self.collect()
         self.processSuper()
+
+    def getDS(self):
+        """Provide the Data Structure constructed."""
+        return self.ADT
 
     def processSuper(self):
         """Inherit any remaining methods from base class."""
@@ -45,7 +50,7 @@ class Collector:
         Collector.printDST(self.ADT, output=output, toPrint=toPrint)
 
     @staticmethod
-    def printDST(DST:dict, gap:str="", output:TextIOWrapper=..., toPrint:bool=False):
+    def printDST(DST, gap:str="", output:TextIOWrapper=..., toPrint:bool=False):
         """Reccursive printing."""
         try:
             if not isinstance(DST, dict):

@@ -651,3 +651,30 @@ Triangle
                 angleBisectorOnLine
         return
             Line
+    signedArea
+        ()
+            arguements
+                tuple
+            target
+                signedArea
+    vertexCentroid
+        ()
+            arguements
+                ()
+            target
+                vertexCentroid
+        return
+            Point
+    internalAngle
+        (int )
+            arguements
+                ('idx',)
+            target
+                internAngle
+        (Point )
+            arguements
+                ('point',)
+            target
+                internAngle
+        return
+            float
