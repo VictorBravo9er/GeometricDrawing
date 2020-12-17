@@ -18,8 +18,8 @@ pointADT = {
         ret:Point
     },
     "copy":{
-        (Point,):{
-            args:("point",),
+        tuple():{
+            args:tuple(),
             trgt:Point.fromPoint
         },
         ret:Point

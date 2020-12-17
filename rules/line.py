@@ -14,8 +14,8 @@ lineADT = {
         ret:Point
     },
     "copy":{
-        (Line,):{
-            args:("line",),
+        tuple():{
+            args:tuple(),
             trgt:Line.fromLine
         },
         ret:Line

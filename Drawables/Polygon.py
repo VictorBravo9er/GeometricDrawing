@@ -120,11 +120,13 @@ class Polygon(Drawable):
     def vertexCentroid(self):
         """Return centroid of vertices."""
         from Drawables.Point import Point
-        centroid = Point()
+        (x, y) = (0, 0)
         for point in self.vertices:
-            centroid += point
-        self._vertexCentroid = centroid
-        return centroid
+            x += point.X
+            y += point.Y
+        x = x / self.size
+        y = y / self.size
+        return Point.fromCoOrdinates(x, y)
 
 
     # Helpers
