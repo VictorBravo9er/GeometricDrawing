@@ -27,6 +27,12 @@ lineADT = {
         },
         ret:float
     },
+    "signedArea":{
+        tuple():{
+            args:tuple,
+            trgt:Polygon.signedArea
+        }
+    },
     "centroid":{
         tuple():{
             args:tuple(),

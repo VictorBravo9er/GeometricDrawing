@@ -20,7 +20,7 @@ print(l1)
 print(l2)
 drawables.append(l2)
 assert abs(l1.slope() - l2.slope()) < Drawable.comparisonLimit
-dist2 = l1.distanceFrom(l2)
+dist2 = l1.distanceFrom(line=l2)
 print(dist2)
 assert abs(dist2 - dist) < Drawable.comparisonLimit
 

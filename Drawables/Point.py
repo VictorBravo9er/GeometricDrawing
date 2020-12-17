@@ -93,9 +93,11 @@ class Point(Drawable):
         """Find angle(radian) subtended on self from endpoints of a line. -ve allowed."""
         return(self.angleFromPoints(line.start, line.end))
 
-    def distanceTo(self, obj):
+    def distanceTo(self, line=..., point=...):
         """Distance to/from a Line or a point. Expected arguements: [line], [point]."""
-        return sqrt(self.distanceSquared(obj))
+        return sqrt(
+            self.distanceSquared(line=line, point=point)
+            )
 
     def middlePoint(self, point):
         """Return midPoint of 2 points."""
@@ -115,7 +117,7 @@ class Point(Drawable):
     def bisectAnglePoints(self, point1, point2, bidirectional:bool=False):
         """Bisector of angle AXB."""
         from Drawables.Line import Line
-        vLen = (self.distanceTo(point1) + self.distanceTo(point2)) / 2
+        vLen = (self.distanceTo(point=point1) + self.distanceTo(point=point2)) / 2
         angle = (( self.angleTo(point1) + self.angleTo(point2) ) / 2) % (2 * pi)
         start = Point.fromMetrics(angle, vLen, self)
         end = Point.fromMetrics(angle, -vLen, self)
@@ -154,7 +156,7 @@ class Point(Drawable):
         from Drawables.Line import Line
         if isinstance(tangent, Line):
             from Drawables.Circle import Circle
-            return Circle.fromMetrics(self, self.distanceTo(tangent))
+            return Circle.fromMetrics(self, self.distanceTo(line=tangent))
         if isinstance(chord, Line):
             from Drawables.Circle import Circle
             e = self.distanceSquared(chord.start)
@@ -170,22 +172,24 @@ class Point(Drawable):
 
 
     # Helpers
-    def distanceSquared(self, o):
+    def distanceSquared(self, line=..., point=...):
         """Return square of pythagorean distance."""
         from Drawables.Line import Line
-        if isinstance(o, Line):
-            o = o.projectionOf(self)
-        if isinstance(o,Point):
-            return float(((self.Y - o.Y) ** 2) + ((self.X - o.X) ** 2))
+        if isinstance(line, Line):
+            point = line.projectionOf(self)
+        if isinstance(point, Point):
+            return float(
+                ((self.Y - point.Y) ** 2) + ((self.X - point.X) ** 2)
+                )
         raise Exception("Invalid Arguement.")
 
-    def distanceL1(self, o):
+    def distanceL1(self, line=...,point=...):
         """L1 distance."""
         from Drawables.Line import Line
-        if isinstance(o, Line):
-            o = o.projectionOf(self)
-        if isinstance(o, Point):
-            return( abs(self.Y - o.Y) + abs(self.X - o.X) )
+        if isinstance(line, Line):
+            point = line.projectionOf(self)
+        if isinstance(point, Point):
+            return( abs(self.Y - point.Y) + abs(self.X - point.X) )
         raise Exception("Invalid Arguement.")
 
     def __add__(self, other):

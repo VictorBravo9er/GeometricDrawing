@@ -32,7 +32,7 @@ d3 = p.distanceSquared(t.vertices[2])
 c = t.incircle()
 
 drawables.append(c)
-c2 = Circle.fromMetrics(p1, p1.distanceTo(p3))
+c2 = Circle.fromMetrics(p1, p1.distanceTo(point=p3))
 c3 = Circle.fromMetrics(p1, 1)
 
 drawables.append(c2)

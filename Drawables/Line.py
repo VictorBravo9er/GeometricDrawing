@@ -57,9 +57,13 @@ class Line(Drawable):
         """Getter Method."""
         return (self.start, self.end)
 
-    def setLine(self, start, end):
+    def setLine(self, start=..., end=...):
         """Setter Method."""
-        (self.start, self.end) = (start, end)
+        from Drawables.Point import Point
+        if isinstance(start, Point):
+            self.start = start
+        if isinstance(end, Point):
+            self.end = end
 
 
     # Methods
@@ -76,20 +80,20 @@ class Line(Drawable):
         try:
             return self._length
         except(Exception):
-            self._length = self.start.distanceTo(self.end)
+            self._length = self.start.distanceTo(point=self.end)
             return(self._length)
 
-    def distanceFrom(self, o):
+    def distanceFrom(self, line=..., point=...):
         """Distance from point or line."""
         from Drawables.Point import Point
-        if isinstance(o, Point):
-            return o.distanceTo(self.projectionOf(o))
-        if isinstance(o, Line):
+        if isinstance(point, Point):
+            return point.distanceTo(point=self.projectionOf(point))
+        if isinstance(line, Line):
             (m1, c1) = self.getMetrics()
-            (m2, c2) = o.getMetrics()
+            (m2, c2) = line.getMetrics()
             if abs(m1 - m2) > self.comparisonLimit:
                 raise Exception(
-                    f"Lines intersect at{self.intersectionWith(o)}"
+                    f"Lines intersect at{self.intersectionWith(line)}"
                     )
             angle_rad = atan(abs(m1))
             return abs(c1 - c2) * cos(angle_rad)
@@ -119,16 +123,16 @@ class Line(Drawable):
         """Draw a parallel Line."""
         from Drawables.Point import Point
         if isinstance(point, Point):
-            distance = point.distanceTo(self)
+            distance = point.distanceTo(line=self)
         if isinstance(distance, float) or isinstance(distance, int):
             return Line.fromLine(line=self, distance=distance)
         raise Exception("Invalid parameter(s).")
 
     def projectionOf(self, point):
         """Point projection."""
-        l  = self.start.distanceTo(self.end)
-        l1 = self.start.distanceTo(point)
-        l2 = self.end.distanceTo(point)
+        l  = self.start.distanceTo(point=self.end)
+        l1 = self.start.distanceTo(point=point)
+        l2 = self.end.distanceTo(point=point)
         n = ((l ** 2) + (l2 ** 2) - (l1 ** 2)) / (2 * l)
         m = l - n
         return self.sector(m, n)
@@ -174,7 +178,7 @@ class Line(Drawable):
                     chordDistance,
                     self.bisector()
                 )
-            return Circle.fromMetrics(centre, centre.distanceTo(self.end))
+            return Circle.fromMetrics(centre, centre.distanceTo(point=self.end))
         elif isinstance(tangentCentre, Point):
             return Point.circleFrom(tangentCentre, tangent=self)
         elif isinstance(chordCentre, Point):
@@ -227,8 +231,8 @@ class Line(Drawable):
         try:
             return self._length
         except(Exception):
-            self._lengthL1 = self.start.distanceL1(self.end)
-            return self.start.distanceL1(self.end)
+            self._lengthL1 = self.start.distanceL1(point=self.end)
+            return self.start.distanceL1(point=self.end)
 
     def _scale(self, sx:float=1, sy:float=1, point=...):
         if sx == 1 and sy == 1:

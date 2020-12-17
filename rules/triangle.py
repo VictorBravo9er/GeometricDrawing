@@ -1,7 +1,7 @@
 """Point Structure."""
 from rules.drawable import *
 lineADT = {
-    "is_a":None,
+    "is_a":Polygon,
     "new":{
         (Point,):{
             args:("pointList"),
@@ -38,32 +38,83 @@ lineADT = {
         },
         ret:Point
     },
-    "vertexCentroid":{
+    "orthocentre":{
         tuple():{
             args:tuple(),
-            trgt:Polygon.vertexCentroid
+            trgt:Triangle.orthocentre
         },
         ret:Point
     },
-    "internalAngle":{
-        (int,):{
-            args:("idx",),
-            trgt:Polygon.internAngle
+    "incenter":{
+        tuple():{
+            args:tuple(),
+            trgt:Triangle.incenter
         },
+        ret:Point
+    },
+    "circumcenter":{
+        tuple():{
+            args:tuple(),
+            trgt:Triangle.circumcenter
+        },
+        ret:Point
+    },
+    "incircle":{
+        tuple():{
+            args:tuple(),
+            trgt:Triangle.incircle
+        },
+        ret:Circle
+    },
+    "circumcircle":{
+        tuple():{
+            args:tuple(),
+            trgt:Triangle.circumcircle
+        },
+        ret:Circle
+    },
+    "median":{
         (Point,):{
             args:("point",),
-            trgt:Polygon.internAngle
+            trgt:Triangle.medianFromPoint
         },
-        ret:float
+        (int,):{
+            args:("idx",),
+            trgt:Triangle.medianFromPoint
+        },
+        (Line,):{
+            args:("line",),
+            trgt:Triangle.medianOnLine
+        },
+        ret:Line
+    },
+    "perpendicular":{
+        (Point,):{
+            args:("point",),
+            trgt:Triangle.perpendicularFromPoint
+        },
+        (int,):{
+            args:("idx",),
+            trgt:Triangle.perpendicularFromPoint
+        },
+        (Line,):{
+            args:("line",),
+            trgt:Triangle.perpendicularOnLine
+        },
+        ret:Line
     },
     "angleBisector":{
         (int,):{
             args:("idx",),
-            trgt:Polygon.angleBisector
+            trgt:Triangle.angleBisector
         },
         (Point,):{
             args:("point",),
-            trgt:Polygon.angleBisector
+            trgt:Triangle.angleBisector
+        },
+        (Line,):{
+            args:("line",),
+            trgt:Triangle.angleBisectorOnLine
         },
         ret:Line
     }

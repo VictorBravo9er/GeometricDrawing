@@ -75,7 +75,7 @@ class Circle(Arc):
         """Return a diameter along the direction of a certain point."""
         from Drawables.Point import Point
         from Drawables.Line import Line
-        if self.radius != Point.distanceTo(self.centre, point):
+        if self.radius != Point.distanceTo(self.centre, point=point):
             point = Point.fromMetrics(
                     Point.angleTo(self.centre, point),
                     self.radius, self.centre
@@ -96,7 +96,7 @@ class Circle(Arc):
     def commonChord(self, circle):
         """Calculate common chord with another circle.""" 
         from Drawables.Point import Point
-        X2 = Point.distanceTo(circle.centre, self.centre)
+        X2 = Point.distanceTo(circle.centre, point=self.centre)
         R1 = self.radius
         R2 = circle.radius
         if R1 + R2 < X2 or\
@@ -131,7 +131,7 @@ class Circle(Arc):
         from Drawables.Line import Line
         status = True
         if isinstance(point, Point):
-            status = Point.distanceTo(self.centre, point) != self.radius
+            status = Point.distanceTo(self.centre, point=point) != self.radius
             angle = 0
             if status:
                 angle = self.centre.angleTo(point)

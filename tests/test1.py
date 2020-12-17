@@ -20,12 +20,12 @@ l = Line.fromMetrics(radians(135), 3, o)
 print(p)
 print(l)
 
-d = o.distanceTo(l)
+d = o.distanceTo(line=l)
 print(d)
 l3 = Line.fromMetrics(radians(180), 3, p)
 l2 = Line.fromPoints(a,b)
 print(o,a,b,l2)
-d = o.distanceTo(l2)
+d = o.distanceTo(line=l2)
 print(d)
 
 

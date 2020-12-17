@@ -40,7 +40,7 @@ class Arc(Drawable):
         try:
             if isinstance(point, Point):
                 assert isinstance(angle, (int, float))
-                radius = Point.distanceTo(centre, point)
+                radius = Point.distanceTo(centre, point=point)
                 startAngle = Point.angleTo(centre, point)
                 endAngle = startAngle + angle
             else:

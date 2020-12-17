@@ -27,8 +27,8 @@ drawables.append(x)
 drawables.append(y)
 
 
-dist2 = l1.distanceFrom(l2)
-assert y.distanceTo(p3) == y.distanceTo(p4)
+dist2 = l1.distanceFrom(line=l2)
+assert y.distanceTo(point=p3) == y.distanceTo(point=p4)
 
 Drawable.draw(drawables)
 

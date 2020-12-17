@@ -1,14 +1,14 @@
 """Module for Point."""
+import numpy as np
 from Drawables.Drawable import Drawable
-from numpy import sqrt
+from math import sqrt
 from Drawables.Polygon import Polygon
 
 class Triangle(Polygon):
     """Triangle class."""
     
-    __name__ = "Triangle"
     def __init__(self):
-        """Initializer method."""
+        """Initialize method."""
         super().__init__()
 
     @classmethod
@@ -44,38 +44,52 @@ class Triangle(Polygon):
     # Methods
     def area(self):
         """Heron's Formula."""
-        try:
-            return self._area
-        except(Exception):
-            from Drawables.Point import Point
-            lengths = list()
-            s = 0
-            prev = self.vertices[-1]
-            for cur in self.vertices:
-                l = Point.distanceTo(prev, cur)
-                lengths.append(l)
-                s += l
-                prev = cur
-            A = s / 2
-            s = A
-            for length in lengths:
-                A = A * (s - length)
-            A = sqrt(A)
-            self._area = A
-            return A
+        from Drawables.Point import Point
+        lengths = list()
+        prev = self.vertices[-1]
+        for cur in self.vertices:
+            l = Point.distanceTo(prev, point=cur)
+            lengths.append(l)
+            prev = cur
+        lengths = np.array(lengths)
+        s = np.sum(lengths) / 2
+        A = s * np.prod(s - lengths)
+        return float(A ** 0.5)
 
     def centroid(self):
-        pass
+        """Find centroid of triangle."""
+        l1 = self.angleBisector(idx=0)
+        l2 = self.angleBisector(idx=1)
+        return l1.intersectionWith(l2) 
 
     def orthocentre(self):
-        try:
-            return self._orthocentre
-        except(Exception):
-            pass
-            self._orthocentre = None
+        """Find orthocentre of triangle."""
+        l1 = self.perpendicularFromPoint(idx=0)
+        l2 = self.perpendicularFromPoint(idx=1)
+        return l1.intersectionWith(l2)
 
     def circumcenter(self):
-        pass
+        """Find circumcentre of triangle."""
+        from Drawables.Line import Line
+        from Drawables.Point import Point
+        a,b,c = self.vertices[0:3]
+        l1 = Point.bisect(a, b)
+        l2 = Point.bisect(a, c)
+        return Line.intersectionWith(l1, l2)
+
+    def circumcircle(self):
+        """Draw circumcircle of triangle."""
+        from Drawables.Circle import Circle
+        x = self.circumcenter()
+        return Circle.fromMetrics(x, x.distanceTo(point=self.vertices[0]))
+
+    def incenter(self):
+        """Find incentre of triangle."""
+        from Drawables.Line import Line
+        a,b,c = self.vertices[0:3]
+        l1 = a.bisectAnglePoints(c,b)
+        l2 = b.bisectAnglePoints(a,c)
+        return Line.intersectionWith(l1, l2)
 
     def incircle(self):
         """Draw incircle of triangle."""
@@ -83,34 +97,18 @@ class Triangle(Polygon):
         from Drawables.Line import Line
         distance = Line.fromPoints(
                 self.vertices[0], self.vertices[1]
-            ).distanceFrom(centre)
+            ).distanceFrom(point=centre)
         from Drawables.Circle import Circle
-        circ = Circle.fromMetrics(centre, distance)
-        return circ
+        return Circle.fromMetrics(centre, distance)
 
-    def incenter(self):
-        """Find incentre of triangle."""
-        try:
-            return self._incentre
-        except:            
-            from Drawables.Line import Line
-            from Drawables.Point import Point
-            a,b,c = self.vertices[0:3]
-            l1 = a.bisectAnglePoints(c,b)
-            l2 = b.bisectAnglePoints(a,c)
-            p:Point = l1.intersectionWith(l2)
-            self._incentre = p
-            return p
-
-    def medianFromPoint(self, point=None, idx=None):
+    def medianFromPoint(self, point=None, idx:int=None):
         """Draw a median from a specified point."""
         from Drawables.Point import Point
         from Drawables.Line import Line
-        (point, idx) = self.resolvePoint(point=point, idx=idx)
-        other = [x for x in self.vertices if x != point]
+        (a, point, c) = self.resolvePoint(point=point, idx=idx)
         median = Line.fromPoints(
             point,
-            Point.middlePoint(other[0], other[1])
+            Point.middlePoint(a, c)
             )
         return median
 
@@ -121,13 +119,33 @@ class Triangle(Polygon):
             return self.medianFromPoint(point=self.pointOppLine(line))
         raise ValueError(f"Expected: {Line.__name__}, received {type(line).__name__}")
 
-    def perpendicularFromPoint(self, point=None, idx=None):
-        """Draw a perpendicular from a specified point."""
-        (point, idx) = self.resolvePoint(point=point, idx=idx)
+    def angleBisector(self, point=..., idx:int=...):
+        """Angle Bisector from a certain point."""
         from Drawables.Line import Line
-        other = [x for x in self.vertices if x != point]
+        bisector = super().angleBisector(point=point, idx=idx)
+        bisector.setLine(
+            end=bisector.intersectionWith(
+                Line.fromPoints(
+                    self.vertices[idx-1],
+                    self.vertices[(idx + 1) % 3]
+                    )
+                )
+            )
+        return bisector
+
+    def angleBisectorOnLine(self, line):
+        """Angle Bisector on a certain line."""
+        from Drawables.Line import Line
+        if isinstance(line, Line):
+            return self.angleBisector(point=self.pointOppLine(line))
+        raise ValueError(f"Expected: {Line.__name__}, received {type(line).__name__}")
+
+    def perpendicularFromPoint(self, point=None, idx:int=None):
+        """Draw a perpendicular from a specified point."""
+        from Drawables.Line import Line
+        (a, point, c) = self.resolvePoint(point=point, idx=idx)
         perpendicular = Line.fromPoints(
-                        other[0], other[1]
+                        a, c
                     ).perpendicularFrom(point)
         return perpendicular
 
@@ -166,3 +184,11 @@ class Triangle(Polygon):
             return point
         raise ValueError("Line doesn't constitute the triangle.")
 
+    def resolvePoint(self, point, idx: int):
+        """Resolve availability of vertex in Triangle."""
+        point, idx =  super().resolvePoint(point=point, idx=idx)
+        a, c = (
+            self.vertices[idx - 1], 
+            self.vertices[(idx + 1) % 3]
+            )
+        return a, point, c

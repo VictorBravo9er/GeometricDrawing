@@ -13,7 +13,7 @@ trgt:str = "target"
 ret:str = "return"
 
 initOrder = (
-    Point, Line, Circle, Polygon, Triangle,
+    Point, Line, Arc, Circle, Polygon, Triangle,
     
     )
 
@@ -29,7 +29,3 @@ objectADT = {
     "polygon":Polygon,
     "triangle":Triangle
 }
-
-def isfloatOrBool(trgt:str):
-    """Don't know what it does yet.""" 
-    pass

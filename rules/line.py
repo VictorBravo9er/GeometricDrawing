@@ -36,12 +36,12 @@ lineADT = {
     },
     "distanceFrom":{
         (Line,):{
-            args:("obj",),
-            trgt:Point.distanceTo
+            args:("line",),
+            trgt:Line.distanceFrom
         },
         (Point,):{
-            args:("obj",),
-            trgt:Point.distanceTo
+            args:("point",),
+            trgt:Line.distanceFrom
         },
         ret:float
     },

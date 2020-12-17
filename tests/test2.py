@@ -37,7 +37,7 @@ print(p4)
 drawables.append(p4)
 
 a = p1.distanceSquared(p2)
-b = p1.distanceTo(p2)
+b = p1.distanceTo(point=p2)
 print(a,b)
 
 Drawable.draw(drawables)

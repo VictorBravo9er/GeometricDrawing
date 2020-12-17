@@ -79,9 +79,18 @@ class Polygon(Drawable):
     # Methods
     def area(self, vectotized:bool=True):
         """Area of polygon."""
-        if vectotized:
-            return abs(self.signedAreaVectorized())
-        return abs(self.signedArea())
+        return abs(self.signedArea(vectotized))
+
+    def signedArea(self, vectorized:bool=True):
+        """Signed area for nonintersecting Polygon using shielace formula."""
+        if vectorized:
+            return self.signedAreaVectorized()
+        area = 0
+        prev = self.vertices[-1]
+        for cur in self.vertices:
+            area += (prev.X * cur.Y - cur.X * prev.Y)
+            prev = cur
+        return float(area * 0.5)
 
     def centroid(self, vectorized:bool=True):
         """Calculate centroid."""
@@ -97,8 +106,19 @@ class Polygon(Drawable):
             y += ((prev.Y + cur.Y) * det)
             A += det
             prev = cur
-        A = 1 / (6 * A * 0.5)
+        A = 1 / (3 * A)
         (x, y) = (A * x, A * y)
+        return Point.fromCoOrdinates(x, y)
+
+    def vertexCentroid(self):
+        """Return centroid of vertices."""
+        from Drawables.Point import Point
+        (x, y) = (0.0, 0.0)
+        for point in self.vertices:
+            x += point.X
+            y += point.Y
+        x = x / self.size
+        y = y / self.size
         return Point.fromCoOrdinates(x, y)
 
     def internAngle(self, point=..., idx:int=...):
@@ -116,22 +136,15 @@ class Polygon(Drawable):
     def angleBisector(self, point=..., idx:int=...):
         """Angle bisector."""
         from Drawables.Point import Point
-        (point, idx) = self.resolvePoint(point=point, idx=idx)
+        (point, idx) = Polygon.resolvePoint(self, point=point, idx=idx)
+        point1=self.vertices[idx - 1]
+        point2=self.vertices[(idx + 1) % len(self.vertices)]
+        if not self.clockwise:
+            point1, point2 = point2, point1
         return Point.bisectAnglePoints(
-            self=point, point1=self.vertices[idx - 1],
-            point2=self.vertices[(idx + 1) % len(self.vertices)]
+            self=point, point1=point1,
+            point2=point2
             )
-
-    def vertexCentroid(self):
-        """Return centroid of vertices."""
-        from Drawables.Point import Point
-        (x, y) = (0, 0)
-        for point in self.vertices:
-            x += point.X
-            y += point.Y
-        x = x / self.size
-        y = y / self.size
-        return Point.fromCoOrdinates(x, y)
 
 
     # Helpers
@@ -145,15 +158,6 @@ class Polygon(Drawable):
                 new.append(Point.fromPoint(point))
             return new
         raise TypeError(f"Expected list of points, received {type(points).__name__}.")
-
-    def signedArea(self):
-        """Signed area for nonintersecting Polygon using shielace formula."""
-        area = 0
-        prev = self.vertices[-1]
-        for cur in self.vertices:
-            area += (prev.X * cur.Y - cur.X * prev.Y)
-            prev = cur
-        return area * 0.5
 
     def signedAreaVectorized(self):
         """Vectorized implementation of signed area(Shoelace formula)."""
@@ -169,7 +173,6 @@ class Polygon(Drawable):
         X = A * float(np.sum((X + X_) * R))
         Y = A * float(np.sum((Y + Y_) * R))
         return Point.fromCoOrdinates(X, Y)
-
 
     def circularDirection(self):
         """Check for circular direction of vertices."""
@@ -226,7 +229,6 @@ class Polygon(Drawable):
         X = np.reshape(X, (1, -1))
         Y = np.reshape(Y, (1, -1))
         return (X, Y, X_, Y_)
-
 
     @staticmethod
     def compareEdgeEnds(edge1, edge2):
