@@ -1,6 +1,5 @@
 """Parser Module."""
 import __init__
-import re
 from Parser.collect import *
 
 class Parser:
@@ -168,9 +167,10 @@ class Parser:
 
     def tokenChecker(self, fileName:str):
         """Start point of operations."""
+        from re import match
         for (line, instruction) in self.inputTokenizer(fileName):
             _id:str = instruction[self._objId]
-            if re.match('^[A-Za-z_]\w*$', _id) == None:
+            if match('^[A-Za-z_]\w*$', _id) == None:
                 print(
                     f"Line {line}. \tIDError:",
                     "\tIdentifier doesn't follow naming convension."
