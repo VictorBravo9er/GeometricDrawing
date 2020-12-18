@@ -130,6 +130,7 @@ class Parser:
         types, values = self.resolveParameters(param, forConstructor=True)
         try:
             target = constructorDict[types]
+            print(target[args])
         except:
             raise ValueError(
                 f"ValueError:\tParameter list: {param} of "+
@@ -138,6 +139,7 @@ class Parser:
             )
         param = dict(zip(target[args], values))
         target = target[trgt]
+        #print(f"{param}\n\n{target.__name__}")
         return {
             self._type   :constructorDict[ret],
             self._desc   :f"{constr} {target.__name__} with parameters"+

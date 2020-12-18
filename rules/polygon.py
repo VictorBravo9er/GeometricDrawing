@@ -4,7 +4,7 @@ polygonADT = {
     is_a:None,
     "new":{
         (list, Point,):{
-            args:("listOfPoints"),
+            args:("listOfPoints",),
             trgt:Polygon.fromPoints,
         },
         (list, Line,):{

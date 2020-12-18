@@ -4,15 +4,15 @@ triangleADT = {
     is_a:Polygon,
     "new":{
         (Point,):{
-            args:("listOfPoint"),
+            args:("listOfPoint",),
             trgt:Triangle.fromPoints,
         },
         (Line,):{
             args:("listOfLine",),
             trgt:Triangle.fromLines,
         },
-        (Line, Point):{
-            args:("line", "point"),
+        (Line, Point,):{
+            args:("line", "point",),
             trgt:Triangle.fromLine
         },
         ret:Triangle
