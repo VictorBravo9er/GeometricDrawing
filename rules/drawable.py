@@ -12,21 +12,21 @@ is_a:str = "is_a"
 args:str = "arguements"
 trgt:str = "target"
 ret:str = "return"
-tagstr:str = "tag"
 
 initOrder = (
     Point, Line, Arc, Circle, Polygon, Triangle,
-    
+
     )
 
 objectADT = {
     "int":int,
     "float":float,
     "boolean":bool,
+    "str":str,
     "drawable":Drawable,
-    "arc":Arc,
     "point":Point,
     "line":Line,
+    "arc":Arc,
     "circle":Circle,
     "polygon":Polygon,
     "triangle":Triangle

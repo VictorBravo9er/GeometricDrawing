@@ -3,12 +3,12 @@ from rules.drawable import *
 polygonADT = {
     is_a:None,
     "new":{
-        (Point,):{
-            args:("pointList"),
+        (list, Point,):{
+            args:("listOfPoints"),
             trgt:Polygon.fromPoints,
         },
-        (Line,):{
-            args:("lineList",),
+        (list, Line,):{
+            args:("listOfLine",),
             trgt:Polygon.fromLines,
         },
         ret:Polygon
@@ -48,7 +48,7 @@ polygonADT = {
         ret:Point
     },
     "internalAngle":{
-        (int,):{
+        (float,):{
             args:("idx",),
             trgt:Polygon.internAngle
         },
@@ -59,7 +59,7 @@ polygonADT = {
         ret:float
     },
     "angleBisector":{
-        (int,):{
+        (float,):{
             args:("idx",),
             trgt:Polygon.angleBisector
         },

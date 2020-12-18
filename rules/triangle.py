@@ -4,11 +4,11 @@ triangleADT = {
     is_a:Polygon,
     "new":{
         (Point,):{
-            args:("pointList"),
+            args:("listOfPoint"),
             trgt:Triangle.fromPoints,
         },
         (Line,):{
-            args:("lineList",),
+            args:("listOfLine",),
             trgt:Triangle.fromLines,
         },
         (Line, Point):{
@@ -78,7 +78,7 @@ triangleADT = {
             args:("point",),
             trgt:Triangle.medianFromPoint
         },
-        (int,):{
+        (float,):{
             args:("idx",),
             trgt:Triangle.medianFromPoint
         },
@@ -93,7 +93,7 @@ triangleADT = {
             args:("point",),
             trgt:Triangle.perpendicularFromPoint
         },
-        (int,):{
+        (float,):{
             args:("idx",),
             trgt:Triangle.perpendicularFromPoint
         },
@@ -104,7 +104,7 @@ triangleADT = {
         ret:Line
     },
     "angleBisector":{
-        (int,):{
+        (float,):{
             args:("idx",),
             trgt:Triangle.angleBisector
         },

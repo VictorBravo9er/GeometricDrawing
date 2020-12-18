@@ -20,17 +20,27 @@ class Triangle(Polygon):
         return(new)
 
     @classmethod
-    def fromLines(cls, lineList: list):
+    def fromLines(cls, listOfLine:list):
         """Draw Triangle from list of lines."""
+        l = len(listOfLine)
+        if l != 3:
+            raise ValueError(
+                f"ValueError:\tExpected 3 lines, received {l}."
+            )
         new = cls()
-        new.setPolygon(edgeList=lineList)
+        new.setPolygon(edgeList=listOfLine)
         return new
 
     @classmethod
-    def fromPoints(cls, pointList: list):
+    def fromPoints(cls, listOfPoint:list):
         """Draw Triangle list of points."""
+        l = len(listOfPoint)
+        if l != 3:
+            raise ValueError(
+                f"ValueError:\tExpected 3 lines, received {l}."
+            )
         new = cls()
-        new.setPolygon(vertexList=pointList)
+        new.setPolygon(vertexList=listOfPoint)
         return new
 
     @classmethod
@@ -101,7 +111,7 @@ class Triangle(Polygon):
         from Drawables.Circle import Circle
         return Circle.fromMetrics(centre, distance)
 
-    def medianFromPoint(self, point=None, idx:int=None):
+    def medianFromPoint(self, point=..., idx:int=...):
         """Draw a median from a specified point."""
         from Drawables.Point import Point
         from Drawables.Line import Line
@@ -122,13 +132,11 @@ class Triangle(Polygon):
     def angleBisector(self, point=..., idx:int=...):
         """Angle Bisector from a certain point."""
         from Drawables.Line import Line
-        bisector = super().angleBisector(point=point, idx=idx)
+        a, point, b = self.resolvePoint(point=point, idx=idx)
+        bisector = super().angleBisector(point=point)
         bisector.setLine(
             end=bisector.intersectionWith(
-                Line.fromPoints(
-                    self.vertices[idx-1],
-                    self.vertices[(idx + 1) % 3]
-                    )
+                Line.fromPoints(a, b)
                 )
             )
         return bisector
@@ -140,7 +148,7 @@ class Triangle(Polygon):
             return self.angleBisector(point=self.pointOppLine(line))
         raise ValueError(f"Expected: {Line.__name__}, received {type(line).__name__}")
 
-    def perpendicularFromPoint(self, point=None, idx:int=None):
+    def perpendicularFromPoint(self, point=..., idx:int=...):
         """Draw a perpendicular from a specified point."""
         from Drawables.Line import Line
         (a, point, c) = self.resolvePoint(point=point, idx=idx)
@@ -161,11 +169,8 @@ class Triangle(Polygon):
     def lineOppPoint(self, point=..., idx:int=...):
         """Determine line opposite to a point."""
         from Drawables.Line import Line
-        point, idx = self.resolvePoint(point=point, idx=idx)
-        return Line.fromPoints(
-                self.vertices[idx - 1],
-                self.vertices[(idx + 1) % 3]
-            )
+        a, point, b = self.resolvePoint(point=point, idx=idx)
+        return Line.fromPoints(a, b)
 
     def pointOppLine(self, line):
         """Determine point opposite to a line."""
@@ -184,10 +189,10 @@ class Triangle(Polygon):
             return point
         raise ValueError("Line doesn't constitute the triangle.")
 
-    def resolvePoint(self, point, idx: int):
+    def resolvePoint(self, point, idx:int):
         """Resolve availability of vertex in Triangle."""
         point, idx =  super().resolvePoint(point=point, idx=idx)
-        a, c = (
+        (a, c) = (
             self.vertices[idx - 1], 
             self.vertices[(idx + 1) % 3]
             )

@@ -23,32 +23,32 @@ class Polygon(Drawable):
         return new
 
     @classmethod
-    def fromPoints(cls, pointList:list):
+    def fromPoints(cls, listOfPoint:list):
         """Draw polygon from points."""
-        l = len(pointList)
+        l = len(listOfPoint)
         if l == 4:
             pass
         if l == 3:
             from Drawables.Triangle import Triangle
-            return Triangle.fromPoints(pointList)
+            return Triangle.fromPoints(listOfPoint)
         if l > 4:
             new = cls()
-            new.setPolygon(vertexList=pointList)
+            new.setPolygon(vertexList=listOfPoint)
             return new
         raise ValueError(f"Expected 3 or more points, received {l}")
 
     @classmethod
-    def fromLines(cls, lineList:list):
+    def fromLines(cls, listOfLine:list):
         """Draw polygon from lines."""
-        l = len(lineList)
+        l = len(listOfLine)
         if l == 4:
             pass
         if l == 3:
             from Drawables.Triangle import Triangle
-            return Triangle.fromLines(lineList)
+            return Triangle.fromLines(listOfLine)
         if l > 4:
             new = cls()
-            new.setPolygon(edgeList=lineList)
+            new.setPolygon(edgeList=listOfLine)
             return new
         raise ValueError(f"Expected 3 or more lines, received {l}")
 
@@ -124,7 +124,7 @@ class Polygon(Drawable):
     def internAngle(self, point=..., idx:int=...):
         """Calculate Internal angle at a vertex."""
         from Drawables.Point import Point
-        (point, idx) = self.resolvePoint(point=point, idx=idx)
+        (point, idx) = Polygon.resolvePoint(self, point=point, idx=idx)
         angle = Point.angleFromPoints(
             point, self.vertices[idx - 1],
             self.vertices[(idx + 1) % len(self.vertices)]
@@ -247,10 +247,13 @@ class Polygon(Drawable):
     def resolvePoint(self, point=..., idx:int=...):
         """Resolve availability of vertex in Polygon or its indexed."""
         from Drawables.Point import Point
-        if isinstance(idx, int):
-            l = len(self.vertices)
-            if idx >= l or idx < 0:
-                raise ValueError(f"Point index out of range. Must've be in range: 0 - {l}")
+        if isinstance(idx, (int,float)):
+            idx = round(idx)
+            if idx >= self.size or idx < 0:
+                raise ValueError(
+                    f"Point index out of range. "
+                    +"Must've be in range: 0 - {self.size}"
+                )
             p:Point = self.vertices[idx]
             return (p, idx)
         if isinstance(point, Point):
