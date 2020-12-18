@@ -1,0 +1,7 @@
+a new point 1 2
+b new point 3 6
+
+l a lineTo b
+g l parallelLine 2
+c new arc b 2 60 180 
+d l bisector

@@ -12,7 +12,7 @@ p._rotate(180)
 print(p)
 p._rotate(180)
 print(p)
-p._reflectLine(math.inf, 20)
+p._reflectLine(math.inf)
 
 print(p)
 
