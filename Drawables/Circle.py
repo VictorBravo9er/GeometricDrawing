@@ -129,7 +129,7 @@ class Circle(Arc):
         R2 = R2 ** 2
         x = ((X2 ** 2) - R2 + R1) / (2 * X2)
         y = sqrt(R1 - (x ** 2))
-        if y < Drawable.comparisonLimit:
+        if y < Drawable._comparisonLimit:
             y = (X2) * 0.5
         p1 = Point.fromCoOrdinates(x, y)
         p2 = Point.fromCoOrdinates(x,-y)

@@ -246,9 +246,9 @@ class Point(Drawable):
             raise TypeError(f"TypeError:\tExpected: Point, received: {type(point).__name__}")
         if abs(
             self.X - point.X
-        ) < Drawable.comparisonLimit and abs(
+        ) < Drawable._comparisonLimit and abs(
             self.Y - point.Y
-        ) < Drawable.comparisonLimit:
+        ) < Drawable._comparisonLimit:
             return True
         return False
 

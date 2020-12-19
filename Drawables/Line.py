@@ -96,7 +96,7 @@ class Line(Drawable):
         if isinstance(line, Line):
             (m1, c1) = self.getMetrics()
             (m2, c2) = line.getMetrics()
-            if abs(m1 - m2) > self.comparisonLimit:
+            if abs(m1 - m2) > self._comparisonLimit:
                 raise ValueError(
                     f"ValueError:\tLines intersect at{self.intersectionWith(line)}"
                 )
@@ -234,7 +234,7 @@ class Line(Drawable):
                 Point.distanceSquared(point, self.end),
                 Point.distanceSquared(self.start, self.end)
             )
-            if abs(_x + x_ - l) < Drawable.comparisonLimit:
+            if abs(_x + x_ - l) < Drawable._comparisonLimit:
                 return
             if _x < x_:
                 if self.__extend < _x:

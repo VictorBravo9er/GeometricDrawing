@@ -1,7 +1,4 @@
 """Parser Module."""
-from time import time
-a = time()
-
 import __init__
 from Parser.collect import *
 
@@ -15,7 +12,7 @@ class Parser:
 
     _new:str = "new"
 
-    _type:str = "type"
+    #_type:str = "type"
     _desc:str = "description"
     _val:str = "value"
 
@@ -27,10 +24,14 @@ class Parser:
         self.symtab = {}
 
     @staticmethod
-    def parse(arg):
-        if "-h" == arg:
-            pass
-        
+    def parse(
+        fileName:str=..., inputList:list=...,
+        _show:bool=False, _store:bool=True,
+        _storageName:str="./data/store"
+    ):
+        ops = Parser()
+        ops.tokenChecker(fileName, inputList)
+        ops.draw(_show, _store, _storageName)
 
     def inputTokenizer(self, fileName:str):
         """Read in file and tokenizes it."""
@@ -63,7 +64,9 @@ class Parser:
                 continue
             yield (line, content)
 
-    def processConstruction(self, _ref:str, _constr:str, _id:str, _param:list):
+    def processConstruction(
+        self, _ref:str, _constr:str, _id:str, _param:list
+    ):
         """Deals with construction per instruction."""
         if _ref == self._new:
             try:
@@ -80,12 +83,12 @@ class Parser:
                 f" received {obj.__name__}"
             )
         try:
-            obj = self.symtab[_ref]
+            obj = self.symtab[_ref][self._val]
         except:
             raise Exception(
                 f"ValueError:\tObject {_ref} not declared before."
             )
-        tp, obj = obj[self._type], obj[self._val]
+        tp = type(obj)
         if issubclass(tp, initOrder):
             try:
                 methodDict:dict = self.rules[tp][_constr]
@@ -99,14 +102,16 @@ class Parser:
             f" received {tp.__name__}"
         )
 
-    def resolveParameters(self, paramList:list, forConstructor:bool=False):
+    def resolveParameters(
+        self, paramList:list, forConstructor:bool=False
+    ):
         """Resolve parameters according to types."""
         paramValue = list()
         paramType  = list()
         for item in paramList:
             try:
                 val = self.symtab[item][self._val ]
-                tp  = self.symtab[item][self._type]
+                tp  = type(val)
             except:
                 try:
                     val = float(item)
@@ -129,7 +134,10 @@ class Parser:
                 return (paramType, paramValue)
         return (tuple(paramType), tuple(paramValue))
 
-    def newConstruction(self, constr:str, constructorDict:dict, _id:str, param):
+    def newConstruction(
+        self, constr:str, constructorDict:dict,
+        _id:str, param:list
+    ):
         """Construct brand 'new' Drawable object."""
         types, values = self.resolveParameters(param, forConstructor=True)
         try:
@@ -144,13 +152,16 @@ class Parser:
         target = target[trgt]
         types = constructorDict[ret]
         return {
-            self._type  :types,
+            #self._type  :types,
             self._desc  :f"{_id} is {types.__name__} using {target.__name__}"+
                          f" with parameters {param}",
             self._val   :target(**values)
         }
 
-    def objectConstruction(self, ref, constr, methodDict:dict, _id:str, _refid:str, param:list):
+    def objectConstruction(
+        self, ref, constr, methodDict:dict,
+        _id:str, _refid:str, param:list
+    ):
         """Construct object from existing Drawable object or perform some computation."""
         types, values = self.resolveParameters(param)
         try:
@@ -165,16 +176,26 @@ class Parser:
         target = target[trgt]
         types = methodDict[ret]
         return {
-            self._type  :types,
+            #self._type  :types,
             self._desc  :f"{_id} is {types.__name__} {target.__name__}"+
                          f" on {_refid} with parameters {param}",
             self._val   :target(ref, **values)
         }
 
-    def tokenChecker(self, fileName:str):
+    def tokenChecker(self, fileName:str=..., inputList:list=...):
         """Start point of operations."""
         from re import match
-        for (line, instruction) in self.inputTokenizer(fileName):
+        g = ...
+        if isinstance(inputList, list):
+            l = len(input())
+            g= zip(range(1, l+1), inputList)
+        elif isinstance(fileName, str):
+            g = self.inputTokenizer(fileName)
+        else:
+            raise ValueError(
+                "FATAL ERROR - No acceptable input detected."
+            )
+        for (line, instruction) in g:
             _id:str = instruction[self._objId]
             if match(self._idLexicon, _id) == None:
                 print(
@@ -201,27 +222,49 @@ class Parser:
                     e.args[0]
                 )
 
-    def draw(self, _storageName="./data/store.png", _store=True, _show=False):
+    def print(self, _print:bool = True):
+        drawableList = []
+        for x in self.symtab.values():
+            desc, x = x[self._desc], x[self._val]
+            if issubclass(type(x), initOrder):
+                drawableList.append(desc)
+                if _print:
+                    print(desc)
+                continue
+            x = f"{desc}, value: {x}"
+            drawableList.append(x)
+            if _print:
+                print(x)
+        return drawableList
+
+    def draw(
+        self, _show:bool=False, _store:bool=True,
+        _storageName:str="./data/store", _print:bool=False
+
+    ):
         """Stage DS to be drawable under Drawable library specification."""
         drawableList = []
         for x in self.symtab.values():
-            if issubclass(x[self._type], Drawable):
-                drawableList.append(x[self._val])
+            desc, x = x[self._desc], x[self._val]
+            if issubclass(type(x), initOrder):
+                drawableList.append(x)
                 continue
-            drawableList.append((x[self._desc], x[self._val]))
+            drawableList.append((desc, x))
         figure = Drawable.draw(
             drawables=drawableList, _storageName=_storageName,
-            _store=_store, _show=_show
+            _store=_store, _show=_show, _print=_print
         )
         return (drawableList, figure)
 
-if __name__ == "__main__":
-    # a = processConstruction(_new, "point", ["12", "0.9"])
-    from sys import argv
+
+def main(_draw:bool=True):
     p = Parser()
-    p.tokenChecker(argv[1])
-    p.draw()
-    for item in p.symtab.values():
-        print(item[p._desc])
+    p.tokenChecker("inp.file")
+    
+    li, fi = p.draw(_show=_draw,_store=False)
+    
+    p.print()
 
 
+if __name__ == "__main__":
+    main()

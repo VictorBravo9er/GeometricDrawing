@@ -207,14 +207,14 @@ class Polygon(Drawable):
             curVertex, prevVertex = nextVertex, curVertex
         (n, p) = (n - p, n + p)
         if (
-            abs(intAngle - n) < Polygon.comparisonLimit and
-            abs(extAngle - p) < Polygon.comparisonLimit
+            abs(intAngle - n) < Polygon._comparisonLimit and
+            abs(extAngle - p) < Polygon._comparisonLimit
         ):
             self.clockwise = True
             return
         elif (
-            abs(intAngle - p) < Polygon.comparisonLimit and
-            abs(extAngle - n) < Polygon.comparisonLimit
+            abs(intAngle - p) < Polygon._comparisonLimit and
+            abs(extAngle - n) < Polygon._comparisonLimit
         ):
             self.clockwise = False
             return
@@ -288,7 +288,7 @@ class Polygon(Drawable):
         if isinstance(idx, (int,float)):
             point = idx
             idx = round(idx)
-            if abs(point - idx) < self.comparisonLimit:
+            if abs(point - idx) < self._comparisonLimit:
                 raise ValueError(
                     "ValueError:\tExpected an integral index."
                 )
