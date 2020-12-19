@@ -6,7 +6,7 @@ from Drawables.Polygon import Polygon
 
 class Triangle(Polygon):
     """Triangle class."""
-    
+
     def __init__(self):
         """Initialize method."""
         super().__init__()
@@ -14,7 +14,14 @@ class Triangle(Polygon):
     @classmethod
     def fromLine(cls, line, point):
         """Draw Triangle from a line and a point."""
+        from Drawables.Point import Point
+        from Drawables.Line import Line
         new = cls()
+        if isinstance(point, Point) and isinstance(line, Line):
+            raise TypeError(
+                "TypeError:\tExpected: (Line, Point), received"+
+                f": ({type(line).__name__}, {type(point).__name__})"
+            )
         points = [point, line.start, line.end]
         new.setPolygon(vertexList=points)
         return(new)
@@ -47,8 +54,12 @@ class Triangle(Polygon):
     def fromTriangle(cls, triangle):
         """Draw Triangle copied from another triangle."""
         new = cls()
-        new.setPolygon(vertexList=Triangle.newVertices(triangle.vertices))
-        return new
+        if isinstance(triangle, Triangle):
+            new.setPolygon(vertexList=Triangle.newVertices(triangle.vertices))
+            return new
+        raise TypeError(
+            f"TypeError:\tExpected: Triangle, received: {type(triangle).__name__}."
+        )
 
 
     # Methods
@@ -82,7 +93,7 @@ class Triangle(Polygon):
         """Find circumcentre of triangle."""
         from Drawables.Line import Line
         from Drawables.Point import Point
-        a,b,c = self.vertices[0:3]
+        (a, b, c) = self.vertices[0:3]
         l1 = Point.bisect(a, b)
         l2 = Point.bisect(a, c)
         return Line.intersectionWith(l1, l2)
@@ -106,8 +117,8 @@ class Triangle(Polygon):
         centre = self.incenter()
         from Drawables.Line import Line
         distance = Line.fromPoints(
-                self.vertices[0], self.vertices[1]
-            ).distanceFrom(point=centre)
+            self.vertices[0], self.vertices[1]
+        ).distanceFrom(point=centre)
         from Drawables.Circle import Circle
         return Circle.fromMetrics(centre, distance)
 
@@ -119,7 +130,7 @@ class Triangle(Polygon):
         median = Line.fromPoints(
             point,
             Point.middlePoint(a, c)
-            )
+        )
         return median
 
     def medianOnLine(self, line):
@@ -127,18 +138,21 @@ class Triangle(Polygon):
         from Drawables.Line import Line
         if isinstance(line, Line):
             return self.medianFromPoint(point=self.pointOppLine(line))
-        raise ValueError(f"Expected: {Line.__name__}, received {type(line).__name__}")
+        raise ValueError(
+            f"TypeError:\tExpected {Line.__name__},"+
+            f" received {type(line).__name__}"
+        )
 
     def angleBisector(self, point=..., idx:int=...):
         """Angle Bisector from a certain point."""
         from Drawables.Line import Line
-        a, point, b = self.resolvePoint(point=point, idx=idx)
+        (a, point, b) = self.resolvePoint(point=point, idx=idx)
         bisector = super().angleBisector(point=point)
         bisector.setLine(
             end=bisector.intersectionWith(
                 Line.fromPoints(a, b)
-                )
             )
+        )
         return bisector
 
     def angleBisectorOnLine(self, line):
@@ -146,15 +160,18 @@ class Triangle(Polygon):
         from Drawables.Line import Line
         if isinstance(line, Line):
             return self.angleBisector(point=self.pointOppLine(line))
-        raise ValueError(f"Expected: {Line.__name__}, received {type(line).__name__}")
+        raise ValueError(
+            f"TypeError:\tExpected: {Line.__name__},"+
+            f" received {type(line).__name__}"
+        )
 
     def perpendicularFromPoint(self, point=..., idx:int=...):
         """Draw a perpendicular from a specified point."""
         from Drawables.Line import Line
         (a, point, c) = self.resolvePoint(point=point, idx=idx)
         perpendicular = Line.fromPoints(
-                        a, c
-                    ).perpendicularFrom(point)
+            a, c
+        ).perpendicularFrom(point)
         return perpendicular
 
     def perpendicularOnLine(self, line):
@@ -162,14 +179,17 @@ class Triangle(Polygon):
         from Drawables.Line import Line
         if isinstance(line, Line):
             return self.perpendicularFromPoint(point=self.pointOppLine(line))
-        raise ValueError(f"Expected: {Line.__name__}, received {type(line).__name__}")
+        raise ValueError(
+            f"TypeError:\tExpected: {Line.__name__}, "+
+            f"received {type(line).__name__}"
+        )
 
 
     # Helpers.
     def lineOppPoint(self, point=..., idx:int=...):
         """Determine line opposite to a point."""
         from Drawables.Line import Line
-        a, point, b = self.resolvePoint(point=point, idx=idx)
+        (a, point, b) = self.resolvePoint(point=point, idx=idx)
         return Line.fromPoints(a, b)
 
     def pointOppLine(self, line):
@@ -180,20 +200,22 @@ class Triangle(Polygon):
         for point in self.vertices:
             if Drawable.orientation(
                 line.start, line.end, point
-                ) == 0:
+            ) == 0:
                 count += 1
                 continue
             x.append(point)
         if count == 2 and len(x) == 1:
             point:Point = x[0]
             return point
-        raise ValueError("Line doesn't constitute the triangle.")
+        raise ValueError(
+            "ValueError:\tProvided line doesn't allign "+
+            "with any of the sides of the triangle."
+        )
 
     def resolvePoint(self, point, idx:int):
         """Resolve availability of vertex in Triangle."""
+        from Drawables.Point import Point
         point, idx =  super().resolvePoint(point=point, idx=idx)
-        (a, c) = (
-            self.vertices[idx - 1], 
-            self.vertices[(idx + 1) % 3]
-            )
+        a:Point = self.vertices[idx - 1]
+        c:Point = self.vertices[(idx + 1) % 3]
         return a, point, c

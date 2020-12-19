@@ -1,8 +1,12 @@
 a new point 1 2
 b new point 3 6
 c new point -1 4
+
 l a lineTo b
+
 g l parallelLine 2
+k l parallelLine -2
+
 e new arc b 2 60 180 
 d l bisector
 t new triangle a b c

@@ -1,4 +1,7 @@
 """Parser Module."""
+from time import time
+a = time()
+
 import __init__
 from Parser.collect import *
 
@@ -16,6 +19,7 @@ class Parser:
     _desc:str = "description"
     _val:str = "value"
 
+    _idLexicon:str = "^[A-Za-z_]\\w*$"
     def __init__(self) -> None:
         """Construct default configuration. Initializes components."""
         super().__init__()
@@ -59,37 +63,37 @@ class Parser:
                 continue
             yield (line, content)
 
-    def processConstruction(self, ref:str, constr:str, param:list):
+    def processConstruction(self, _ref:str, _constr:str, _id:str, _param:list):
         """Deals with construction per instruction."""
-        if ref == self._new:
+        if _ref == self._new:
             try:
-                obj = objectADT[constr]
+                obj = objectADT[_constr]
             except:
                 raise Exception(
                     f"TypeError:\tExpected a subclass of Drawable,"+
-                    f" received {constr}"
+                    f" received {_constr}"
                 )
             if issubclass(obj, initOrder):
-                return self.newConstruction(constr, self.rules[obj][self._new], param)
+                return self.newConstruction(_constr, self.rules[obj][self._new],_id, _param)
             raise Exception(
                 f"TypeError:\tExpected a subclass of Drawable,"+
                 f" received {obj.__name__}"
             )
         try:
-            obj = self.symtab[ref]
+            obj = self.symtab[_ref]
         except:
             raise Exception(
-                f"ValueError:\tObject {ref} not declared before."
+                f"ValueError:\tObject {_ref} not declared before."
             )
         tp, obj = obj[self._type], obj[self._val]
         if issubclass(tp, initOrder):
             try:
-                methodDict:dict = self.rules[tp][constr]
+                methodDict:dict = self.rules[tp][_constr]
             except:
                 raise Exception(
-                    f"OpsError:\tOperation {tp.__name__}->{constr} not available."
+                    f"OpsError:\tOperation {tp.__name__}->{_constr} not available."
                 )
-            return self.objectConstruction(obj, constr, methodDict, param)
+            return self.objectConstruction(obj, _constr, methodDict, _id, _ref, _param)
         raise Exception(
             f"TypeError:\tExpected a subclass of Drawable,"+
             f" received {tp.__name__}"
@@ -125,12 +129,11 @@ class Parser:
                 return (paramType, paramValue)
         return (tuple(paramType), tuple(paramValue))
 
-    def newConstruction(self, constr:str, constructorDict:dict, param):
+    def newConstruction(self, constr:str, constructorDict:dict, _id:str, param):
         """Construct brand 'new' Drawable object."""
         types, values = self.resolveParameters(param, forConstructor=True)
         try:
             target = constructorDict[types]
-            print(target[args])
         except:
             raise ValueError(
                 f"ValueError:\tParameter list: {param} of "+
@@ -139,15 +142,15 @@ class Parser:
             )
         param = dict(zip(target[args], values))
         target = target[trgt]
-        #print(f"{param}\n\n{target.__name__}")
+        types = constructorDict[ret]
         return {
-            self._type   :constructorDict[ret],
-            self._desc   :f"{constr} {target.__name__} with parameters"+
-                    " {values}",
+            self._type   :types,
+            self._desc   :f"{types.__name__} {target.__name__} with parameters"+
+                    f" {values}",
             self._val    :target(**param)
         }
 
-    def objectConstruction(self, ref, constr, methodDict:dict, param):
+    def objectConstruction(self, ref, constr, methodDict:dict, _id, _refid:str, param):
         """Construct object from existing Drawable object or perform some computation."""
         types, values = self.resolveParameters(param)
         try:
@@ -158,13 +161,14 @@ class Parser:
                 f"types: {types} doesn't match with any "+
                 f"parameter list for construction of {constr}"
             )
-        param = dict(zip(target[args], values))
+        values = dict(zip(target[args], values))
         target = target[trgt]
+        types = methodDict[ret]
         return {
-            self._type   :methodDict[ret],
-            self._desc   :f"{type(ref).__name__} {target.__name__} with parameters"+
-                    " {values}",
-            self._val    :target(ref, **param)
+            self._type   :types,
+            self._desc   :f"{_id} is {types.__name__} {target.__name__}"+
+                    f" from {_refid} with parameters {param}",
+            self._val    :target(ref, **values)
         }
 
     def tokenChecker(self, fileName:str):
@@ -172,7 +176,7 @@ class Parser:
         from re import match
         for (line, instruction) in self.inputTokenizer(fileName):
             _id:str = instruction[self._objId]
-            if match('^[A-Za-z_]\w*$', _id) == None:
+            if match(self._idLexicon, _id) == None:
                 print(
                     f"Line {line}. \tIDError:",
                     "\tIdentifier doesn't follow naming convension."
@@ -188,6 +192,7 @@ class Parser:
                 self.symtab[_id] = self.processConstruction(
                     instruction[self._refObj  ],
                     instruction[self._constr  ],
+                    _id,
                     instruction[self._paramLst]
                 )
             except Exception as e:
@@ -212,4 +217,7 @@ if __name__ == "__main__":
     p = Parser()
     p.tokenChecker(argv[1])
     p.draw()
+    for item in p.symtab.values():
+        print(item[p._desc])
+
 

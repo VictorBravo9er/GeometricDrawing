@@ -1,5 +1,4 @@
 """Module for Point."""
-from typing import Type
 from Drawables.Drawable import Drawable
 import numpy as np
 from math import inf, pi, atan, sqrt, cos, sin
@@ -31,7 +30,9 @@ class Point(Drawable):
         if isinstance(point, cls):
             new.setPoint(point.X, point.Y)
             return(new)
-        raise TypeError(f"Expected {cls.__name__}, received {type(point).__name__}.")
+        raise TypeError(
+            f"TypeError:\tExpected {cls.__name__}, received {type(point).__name__}."
+        )
 
     @classmethod
     def fromCoOrdinates(cls, x:float, y:float):
@@ -45,16 +46,26 @@ class Point(Drawable):
         """Construct point using some Metrics. Angle in radians."""
         new = cls.fromPoint(point)
         if distance != 0:
-            new._translate(distance * cos(angle), distance * sin(angle))
-        #new._translate(distance, 0)
-        #new._rotate(point, angle)
+            try:
+                new._translate(distance * cos(angle), distance * sin(angle))
+            except:
+                raise TypeError(
+                    "TypeError:\tExpected int, received "+
+                    f"{type(angle).__name__} and {type(distance).__name__}"
+                )
         return new
 
 
     # Getters and Setters
     def setPoint(self, x:float, y:float):
         """Set x and y."""
-        (self.X, self.Y) = (x, y)
+        if isinstance(x,float) and isinstance(y,float):
+            (self.X, self.Y) = (x, y)
+        else:
+            raise TypeError(
+                "TypeError:\tExpected: (float, float), "+
+                f"received: ({type(x).__name__}, {type(y).__name__})"
+            )
 
     def getPoint(self):
         """Return point coordinates as a tuple."""
@@ -68,12 +79,16 @@ class Point(Drawable):
         den:float = (self.X - point.X)
         if den == 0:
             if num == 0:
-                return 0
+                return 0.0
             return inf
         return(num / den)
 
     def angleTo(self, point):
         """Find angle(radians) to another point w.r.t. X-axis. -ve allowed."""
+        if not isinstance(point, Point):
+            raise TypeError(
+                f"TypeError:\tExpected: Point, received: {type(point).__name__}"
+            )
         slope = self.slopeTo(point)
         angle = atan(slope)
         if self.X < point.X:
@@ -114,7 +129,10 @@ class Point(Drawable):
             Line.fromPoints(self, point)
             )
 
-    def bisectAnglePoints(self, point1, point2, bidirectional:bool=False):
+    def bisectAnglePoints(
+        self, point1, point2,
+        bidirectional:bool=False
+    ):
         """Bisector of angle AXB."""
         from Drawables.Line import Line
         vLen = (self.distanceTo(point=point1) + self.distanceTo(point=point2)) / 2
@@ -133,7 +151,8 @@ class Point(Drawable):
 
     def perpendicularTo(self, line):
         """Return a perpendicular from self to a line provided."""
-        return line.perpendicularTo(self)
+        from Drawables.Line import Line
+        return Line.perpendicularFrom(line, self)
 
     def lineToPoint(self, point):
         """Return a line from current point to another point."""
@@ -163,7 +182,10 @@ class Point(Drawable):
             if e != self.distanceSquared(chord.end):
                 raise Exception("Can not be constructed")
             return(Circle.fromMetrics(self, sqrt(e)))
-        raise Exception("Invalid arguements.")
+        raise TypeError(
+            "TypeError:\tExpected: Line, received: "+
+            f"{type(chord).__name__} and {type(tangent).__name__}"
+        )
 
     def circle(self, radius:float):
         """Create a circle using a centre and a radius."""
@@ -181,7 +203,10 @@ class Point(Drawable):
             return float(
                 ((self.Y - point.Y) ** 2) + ((self.X - point.X) ** 2)
                 )
-        raise Exception("Invalid Arguement.")
+        raise TypeError(
+            "TypeError:\tExpected: Line or Point, received: "+
+            f"{type(line).__name__} or {type(point).__name__}"
+        )
 
     def distanceL1(self, line=...,point=...):
         """L1 distance."""
@@ -190,16 +215,26 @@ class Point(Drawable):
             point = line.projectionOf(self)
         if isinstance(point, Point):
             return( abs(self.Y - point.Y) + abs(self.X - point.X) )
-        raise Exception("Invalid Arguement.")
+        raise TypeError(
+            "TypeError:\tExpected: Line or Point, received: "+
+            f"{type(line).__name__} or {type(point).__name__}"
+        )
 
     def __add__(self, other):
         """'+' operator overload."""
-        new = Point.fromCoOrdinates(self.X + other.X, self.Y + other.Y)
-        return new
+        if isinstance(other, Point):
+            return Point.fromCoOrdinates(self.X + other.X, self.Y + other.Y)
+        raise TypeError(
+            f"TypeError:\tExpected: Point, received: {type(other).__name__}"
+        )
 
     def __sub__(self, other):
         """'+' operator overload."""
-        return Point.fromCoOrdinates(self.X - other.X, self.Y - other.Y)
+        if isinstance(other, Point):
+            return Point.fromCoOrdinates(self.X - other.X, self.Y - other.Y)
+        raise TypeError(
+            f"TypeError:\tExpected: Point, received: {type(other).__name__}"
+        )
 
     def __ne__(self, point):
         """'!=' operator overload."""
@@ -207,13 +242,13 @@ class Point(Drawable):
 
     def __eq__(self, point):
         """'==' operator overload."""
-        if not isinstance(point, self.__class__):
-            raise TypeError(f"Uncomparable Types. Can't compare {Point} with {type(point)}")
+        if not isinstance(point, Point):
+            raise TypeError(f"TypeError:\tExpected: Point, received: {type(point).__name__}")
         if abs(
-                self.X - point.X
-            ) < Drawable.comparisonLimit and abs(
-                self.Y - point.Y
-            ) < Drawable.comparisonLimit:
+            self.X - point.X
+        ) < Drawable.comparisonLimit and abs(
+            self.Y - point.Y
+        ) < Drawable.comparisonLimit:
             return True
         return False
 

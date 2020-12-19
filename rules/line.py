@@ -93,11 +93,11 @@ lineADT = {
     },
     "perpendicularAt":{
         (Point,):{
-            args:("var",),
+            args:("point",),
             trgt:Line.perpendicularAt
         },
         (float,):{
-            args:("var",),
+            args:("ratio",),
             trgt:Line.perpendicularAt
         },
         ret:Line

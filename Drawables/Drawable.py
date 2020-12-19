@@ -136,8 +136,6 @@ class Drawable(object):
             plt.close()
         else:
             plt.show()
-        
-
 
     def __str__(self):
         """Text maker."""

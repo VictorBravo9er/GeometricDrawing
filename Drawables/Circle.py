@@ -1,8 +1,7 @@
 """Module for Circle."""
-from math import pi
+from math import pi, sqrt
 from Drawables.Drawable import Drawable
 from Drawables.Arc import Arc
-from numpy import sqrt
 
 class Circle(Arc):
     """Description of class."""
@@ -31,27 +30,44 @@ class Circle(Arc):
             new.setCentre(Point.middlePoint(diameter.start, diameter.end))
             new.setRadius(Line.length(diameter) / 2)
             return new
-        raise Exception("Invalid arguement.")
+        raise TypeError(
+            "TypeError:\tExpected: Line, received: "+
+            f"{type(diameter).__name__}"
+        )
 
     @classmethod
-    def fromCircle(cls, self):
+    def fromCircle(cls, circle):
         """Copy another circle."""
         from Drawables.Point import Point
         new = cls.fromMetrics(
-            Point.fromPoint(self.centre),
-            self.radius+0
-            )
+            Point.fromPoint(circle.centre),
+            circle.radius+0
+        )
         return new
 
 
     # Getters and Setters
     def setCentre(self, point):
         """Set centre."""
-        self.centre = point
+        from Drawables.Point import Point
+        if isinstance(point, Point):
+            self.centre = point
+            return
+        raise TypeError(
+            "TypeError:\tExpected: Point, received: "+
+            f"{type(point).__name__}"
+        )
+
 
     def setRadius(self, radius:float):
         """Set radius."""
-        self.radius = radius
+        if isinstance(radius, (float, int)):
+            self.radius = radius
+            return
+        raise TypeError(
+            "TypeError:\tExpected: float, received: "+
+            f"{type(radius).__name__}"
+        )
 
     def getRadius(self):
         """Get radius."""
@@ -65,7 +81,7 @@ class Circle(Arc):
     # Methods
     def area(self):
         """Calculate area."""
-        return pi * (self.radius) ** 2
+        return pi * ((self.radius) ** 2)
 
     def diameterLength(self):
         """Diameter is twice the radius."""
@@ -77,21 +93,20 @@ class Circle(Arc):
         from Drawables.Line import Line
         if self.radius != Point.distanceTo(self.centre, point=point):
             point = Point.fromMetrics(
-                    Point.angleTo(self.centre, point),
-                    self.radius, self.centre
-                )
-        newPoint = Point.fromMetrics(
                 Point.angleTo(self.centre, point),
-                -self.radius, self.centre
+                self.radius, self.centre
             )
+        newPoint = Point.fromMetrics(
+            Point.angleTo(self.centre, point),
+            -self.radius, self.centre
+        )
         return Line.fromPoints(point, newPoint)
 
     def diameterAlongSlope(self, angle:float):
         """Return a diameter along a certain direction."""
         from Drawables.Point import Point
         point = Point.fromMetrics(angle, self.radius, self.centre)
-        diameter = self.diameterAlongPoint(point)
-        return diameter
+        return self.diameterAlongPoint(point)
 
     def commonChord(self, circle):
         """Calculate common chord with another circle.""" 
@@ -125,7 +140,7 @@ class Circle(Arc):
         from Drawables.Line import Line
         return(Line.fromPoints(p1, p2))
 
-    def tangentAt(self, point=None, angle:float=None):
+    def tangentAt(self, point=..., angle:float=...):
         """Draw a tangent on circle, with radius along a point, or an angle. Expected arguements: [point], [angle]."""
         from Drawables.Point import Point
         from Drawables.Line import Line
@@ -135,10 +150,14 @@ class Circle(Arc):
             angle = 0
             if status:
                 angle = self.centre.angleTo(point)
-        if isinstance(angle, float) or isinstance(angle, int):
+        if isinstance(angle, (float, int)):
             if status:
                 point = Point.fromMetrics(angle, self.radius, self.centre)
-            return Line.fromPoints(self.centre, point).perpendicularAt(point)
+            return Line.fromPoints(self.centre, point).perpendicularAt(point=point)
+        raise TypeError(
+            "TypeError:\tExpected a Point or float, received "+
+            f"{type(point).__name__} and {type(angle).__name__}."
+        )
 
 
     # Output interface
