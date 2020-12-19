@@ -140,17 +140,17 @@ class Parser:
                 f"types: {types} doesn't match with any "+
                 f"parameter list for construction of {constr}"
             )
-        param = dict(zip(target[args], values))
+        values = dict(zip(target[args], values))
         target = target[trgt]
         types = constructorDict[ret]
         return {
-            self._type   :types,
-            self._desc   :f"{types.__name__} {target.__name__} with parameters"+
-                    f" {values}",
-            self._val    :target(**param)
+            self._type  :types,
+            self._desc  :f"{_id} is {types.__name__} using {target.__name__}"+
+                         f" with parameters {param}",
+            self._val   :target(**values)
         }
 
-    def objectConstruction(self, ref, constr, methodDict:dict, _id, _refid:str, param):
+    def objectConstruction(self, ref, constr, methodDict:dict, _id:str, _refid:str, param:list):
         """Construct object from existing Drawable object or perform some computation."""
         types, values = self.resolveParameters(param)
         try:
@@ -165,10 +165,10 @@ class Parser:
         target = target[trgt]
         types = methodDict[ret]
         return {
-            self._type   :types,
-            self._desc   :f"{_id} is {types.__name__} {target.__name__}"+
-                    f" from {_refid} with parameters {param}",
-            self._val    :target(ref, **values)
+            self._type  :types,
+            self._desc  :f"{_id} is {types.__name__} {target.__name__}"+
+                         f" on {_refid} with parameters {param}",
+            self._val   :target(ref, **values)
         }
 
     def tokenChecker(self, fileName:str):
@@ -201,15 +201,19 @@ class Parser:
                     e.args[0]
                 )
 
-    def draw(self):
+    def draw(self, _storageName="./data/store.png", _store=True, _show=False):
         """Stage DS to be drawable under Drawable library specification."""
-        draw = []
+        drawableList = []
         for x in self.symtab.values():
             if issubclass(x[self._type], Drawable):
-                draw.append(x[self._val])
+                drawableList.append(x[self._val])
                 continue
-            draw.append((x[self._desc], x[self._val]))
-        Drawable.draw(draw)
+            drawableList.append((x[self._desc], x[self._val]))
+        figure = Drawable.draw(
+            drawables=drawableList, _storageName=_storageName,
+            _store=_store, _show=_show
+        )
+        return (drawableList, figure)
 
 if __name__ == "__main__":
     # a = processConstruction(_new, "point", ["12", "0.9"])

@@ -29,7 +29,7 @@ def repeater(i:int, r:Random):
         drawables.append(t)
     except Exception as e:
         print(e)
-    Drawable.draw(drawables, str(i+1), store=True)
+    Drawable.draw(drawables, f"data/cache{i+1}", _store=True)
 r = Random()
 r.seed(1)
 for i in range(50):

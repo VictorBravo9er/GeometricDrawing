@@ -111,18 +111,18 @@ class Drawable(object):
             msg, value = data
         except Exception as e:
             raise Exception(f"Expected 2 items, got {len(data)} items")
-        print(f"{msg}\nValue{value}")
+        print(f"{msg}\n\tValue: {value}")
 
     @staticmethod
-    def draw(drawables:list, num:str="", store:bool=False):
+    def draw(drawables:list, _storageName:str="", _store:bool=False, _show:bool=True):
         """Draw call."""
         fig, ax = plt.subplots(1)
         ax.set_aspect(1)
+        from Parser.collect import initOrder as acceptable
         for drawable in drawables:
-            t = type(drawable)
-            if issubclass(t, Drawable):
+            if isinstance(drawable, acceptable):
                 drawable.draw(ax)
-            elif t == tuple:
+            elif isinstance(drawable, tuple):
                 # process values other than drawable figures
                 try:
                     Drawable.processPrintableData(drawable)
@@ -130,12 +130,13 @@ class Drawable(object):
                     print(e.args[0])
             else:
                 print("Error with object:",drawable)
-        if store:
+        if _store:
             # fig.savefig()
-            plt.savefig(f"data/cache{num}.png")
+            plt.savefig(f"{_storageName}.png")
             plt.close()
-        else:
+        if _show:
             plt.show()
+        return fig
 
     def __str__(self):
         """Text maker."""
