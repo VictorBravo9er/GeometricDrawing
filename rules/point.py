@@ -15,28 +15,28 @@ pointADT = {
             args:("angle", "distance", "point",),
             trgt:Point.fromMetrics
         },
-        ret:Point
+        retVal:Point
     },
     "copy":{
         tuple():{
             args:tuple(),
             trgt:Point.fromPoint
         },
-        ret:Point
+        retVal:Point
     },
     "slopeTo":{
         (Point,):{
             args:("point",),
             trgt:Point.slopeTo
         },
-        ret:float
+        retVal:float
     },
     "angleTo":{
         (Point,):{
             args:("point",),
             trgt:Point.angleTo
         },
-        ret:float
+        retVal:float
     },
     "angleFrom":{
         (Point, Point,):{
@@ -47,7 +47,7 @@ pointADT = {
             args:("line",),
             trgt:Point.angleFromLine
         },
-        ret:float
+        retVal:float
     },
     "distanceTo":{
         (Point,):{
@@ -58,28 +58,28 @@ pointADT = {
             args:("line",),
             trgt:Point.distanceTo
         },
-        ret:float
+        retVal:float
     },
     "midPoint":{
         (Point,):{
             args:("point",),
             trgt:Point.middlePoint
         },
-        ret:Point
+        retVal:Point
     },
     "projection":{
         (Line,):{
             args:("line",),
             trgt:Point.projectionOn
         },
-        ret:Point
+        retVal:Point
     },
     "bisector":{
         (Point,):{
             args:("point",),
             trgt:Point.bisect
         },
-        ret:Line
+        retVal:Line
     },
     "angleBisector":{
         (Line,):{
@@ -90,7 +90,7 @@ pointADT = {
             args:("point1", "point2",),
             trgt:Point.bisectAnglePoints
         },
-        ret:Line
+        retVal:Line
     },
     "lineTo":{
         (Point,):{
@@ -101,34 +101,34 @@ pointADT = {
             args:("angle", "distance",),
             trgt:Point.lineTo
         },
-        ret:Line
+        retVal:Line
     },
     "triangle":{
         (Line,):{
             args:("line",),
             trgt:Point.triangleTo
         },
-        ret:Triangle
+        retVal:Triangle
     },
     "circle":{
         (float,):{
             args:("radius",),
             trgt:Point.circle
         },
-        ret:Circle
+        retVal:Circle
     },
     "tangentCircle":{
         (Line,):{
             args:("tangent",),
             trgt:Point.circleFrom
         },
-        ret:Circle
+        retVal:Circle
     },
     "chordCircle":{
         (Line,):{
             args:("chord",),
             trgt:Point.circleFrom
         },
-        ret:Circle
+        retVal:Circle
     }
 }

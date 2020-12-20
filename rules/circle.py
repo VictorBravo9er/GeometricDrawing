@@ -11,35 +11,35 @@ circleADT = {
             args:("diameter",),
             trgt:Circle.fromDiameter,
         },
-        ret:Circle
+        retVal:Circle
     },
     "copy":{
         tuple():{
             args:tuple(),
             trgt:Circle.fromCircle
         },
-        ret:Circle
+        retVal:Circle
     },
     "radius":{
         tuple():{
             args:tuple(),
             trgt:Circle.getRadius
         },
-        ret:float
+        retVal:float
     },
     "centre":{
         tuple():{
             args:tuple(),
             trgt:Circle.getCentre
         },
-        ret:float
+        retVal:float
     },
     "area":{
         tuple():{
             args:tuple(),
             trgt:Circle.area
         },
-        ret:float
+        retVal:float
     },
     "diameter":{
         (float,):{
@@ -50,14 +50,14 @@ circleADT = {
             args:("point",),
             trgt:Circle.diameterAlongPoint
         },
-        ret:Line
+        retVal:Line
     },
     "commonChord":{
         (Line,):{
             args:("circle",),
             trgt:Circle.commonChord
         },
-        ret:Line
+        retVal:Line
     },
     "tangent":{
         (Point,):{
@@ -68,6 +68,6 @@ circleADT = {
             args:("angle",),
             trgt:Circle.tangentAt
         },
-        ret:Point
+        retVal:Point
     }
 }

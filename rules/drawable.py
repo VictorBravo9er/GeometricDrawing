@@ -11,7 +11,7 @@ from Drawables.Arc import Arc
 is_a:str = "is_a"
 args:str = "arguements"
 trgt:str = "target"
-ret:str = "return"
+retVal:str = "return"
 
 initOrder = (
     Point, Line, Arc, Circle, Polygon, Triangle,

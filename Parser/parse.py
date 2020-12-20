@@ -24,14 +24,53 @@ class Parser:
         self.symtab = {}
 
     @staticmethod
+    def help(var:list=[], rules:dict=...):
+        if len(var) != 0:
+            return "\n".join(var)
+        if not isinstance(rules, dict):
+            rules = Collector().getDS()
+        for obj, content in rules.items():
+            var.append(f"{obj.__name__}")
+            for ops, content in content.items():
+                try:
+                    var.append(f"\t{ops}\t: returns {content[retVal].__name__}")
+                except:
+                    print(obj)
+                    print(ops)
+                    print(content)
+                for argTypes, content in content.items():
+                    if argTypes == retVal:
+                        continue
+                    target   = content[trgt]
+                    argList  = content[args]
+                    try:
+                        if len(argList) == 0:
+                            argTypes = "None"
+                        else:
+                            argTypes = tuple([x.__name__ for x in argTypes])
+                    except:
+                        print(obj.__name__)
+                        print(ops)
+                        print(target.__name__)
+                        print(argList)
+                    var.append(
+                        f"\t\t{target.__name__}: {target.__doc__}.\n"+
+                        f"\t\t\tExpected args: {argList}\n"+
+                        f"\t\t\tOf Types: {argTypes}"
+                    )
+        return "\n".join(var)
+
+    @staticmethod
     def parse(
         fileName:str=..., inputList:list=...,
         _show:bool=False, _store:bool=True,
         _storageName:str="./data/store"
     ):
+        """Standalone parsing Operation. Returns Descrpition"""
         ops = Parser()
         ops.tokenChecker(fileName, inputList)
         ops.draw(_show, _store, _storageName)
+        return ops.print(_show)
 
     def inputTokenizer(self, fileName:str):
         """Read in file and tokenizes it."""
@@ -150,7 +189,7 @@ class Parser:
             )
         values = dict(zip(target[args], values))
         target = target[trgt]
-        types = constructorDict[ret]
+        types = constructorDict[retVal]
         return {
             #self._type  :types,
             self._desc  :f"{_id} is {types.__name__} using {target.__name__}"+
@@ -174,7 +213,7 @@ class Parser:
             )
         values = dict(zip(target[args], values))
         target = target[trgt]
-        types = methodDict[ret]
+        types = methodDict[retVal]
         return {
             #self._type  :types,
             self._desc  :f"{_id} is {types.__name__} {target.__name__}"+
