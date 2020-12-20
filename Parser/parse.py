@@ -12,7 +12,6 @@ class Parser:
 
     _new:str = "new"
 
-    #_type:str = "type"
     _desc:str = "description"
     _val:str = "value"
 
@@ -24,16 +23,20 @@ class Parser:
         self.symtab = {}
 
     @staticmethod
-    def help(var:list=[], rules:dict=...):
+    def help(var:list=[], rules:dict=..., _print:bool=True):
+        """Provide documentation of Library."""
         if len(var) != 0:
             return "\n".join(var)
+        _tab = " " * 4
         if not isinstance(rules, dict):
             rules = Collector().getDS()
         for obj, content in rules.items():
             var.append(f"{obj.__name__}")
             for ops, content in content.items():
                 try:
-                    var.append(f"\t{ops}\t: returns {content[retVal].__name__}")
+                    var.append(
+                        f"\n{_tab}{ops}\n{_tab * 2}returns -> {content[retVal].__name__}"
+                    )
                 except:
                     print(obj)
                     print(ops)
@@ -54,11 +57,15 @@ class Parser:
                         print(target.__name__)
                         print(argList)
                     var.append(
-                        f"\t\t{target.__name__}: {target.__doc__}.\n"+
-                        f"\t\t\tExpected args: {argList}\n"+
-                        f"\t\t\tOf Types: {argTypes}"
+                        f"{_tab * 2}{target.__doc__}\n"+
+                        f"{_tab * 3}Expected args{_tab}: {argList}\n"+
+                        f"{_tab * 3}Of Types     {_tab}: {argTypes}"
                     )
-        return "\n".join(var)
+            var.append("\n")
+        printable = "\n".join(var)
+        if _print:
+            print(printable)
+        return printable
 
     @staticmethod
     def parse(
@@ -66,7 +73,7 @@ class Parser:
         _show:bool=False, _store:bool=True,
         _storageName:str="./data/store"
     ):
-        """Standalone parsing Operation. Returns Descrpition"""
+        """Standalone parsing Operation. Returns Descrpition."""
         ops = Parser()
         ops.tokenChecker(fileName, inputList)
         ops.draw(_show, _store, _storageName)
@@ -262,6 +269,7 @@ class Parser:
                 )
 
     def print(self, _print:bool = True):
+        """Print drawable item's list."""
         drawableList = []
         for x in self.symtab.values():
             desc, x = x[self._desc], x[self._val]
@@ -279,7 +287,6 @@ class Parser:
     def draw(
         self, _show:bool=False, _store:bool=True,
         _storageName:str="./data/store", _print:bool=False
-
     ):
         """Stage DS to be drawable under Drawable library specification."""
         drawableList = []
@@ -295,15 +302,3 @@ class Parser:
         )
         return (drawableList, figure)
 
-
-def main(_draw:bool=True):
-    p = Parser()
-    p.tokenChecker("inp.file")
-    
-    li, fi = p.draw(_show=_draw,_store=False)
-    
-    p.print()
-
-
-if __name__ == "__main__":
-    main()

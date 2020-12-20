@@ -1,352 +1,497 @@
 Point
-	new	: returns Point
-		fromCoOrdinates: Construct new Point using point Coordinates..
-			Expected args: ('x', 'y')
-			Of Types: ('float', 'float')
-		fromSection: Point sector using ratio m:n, and points point1 and point2..
-			Expected args: ('point1', 'point2', 'm', 'n')
-			Of Types: ('Point', 'Point', 'float', 'float')
-		fromMetrics: Construct point using some Metrics. Angle in radians..
-			Expected args: ('angle', 'distance', 'point')
-			Of Types: ('float', 'float', 'Point')
-	copy	: returns Point
-		fromPoint: Construct new point from existing Point..
-			Expected args: ()
-			Of Types: None
-	slopeTo	: returns float
-		slopeTo: Find slope(directionless) to another point w.r.t. X-axis. -ve allowed..
-			Expected args: ('point',)
-			Of Types: ('Point',)
-	angleTo	: returns float
-		angleTo: Find angle(radians) to another point w.r.t. X-axis. -ve allowed..
-			Expected args: ('point',)
-			Of Types: ('Point',)
-	angleFrom	: returns float
-		angleFromPoints: Find angle(radian) subtended on self from A and B. -ve allowed..
-			Expected args: ('point1', 'point2')
-			Of Types: ('Point', 'Point')
-		angleFromLine: Find angle(radian) subtended on self from endpoints of a line. -ve allowed..
-			Expected args: ('line',)
-			Of Types: ('Line',)
-	distanceTo	: returns float
-		distanceTo: Distance to/from a Line or a point. Expected arguements: [line], [point]..
-			Expected args: ('point',)
-			Of Types: ('Point',)
-		distanceTo: Distance to/from a Line or a point. Expected arguements: [line], [point]..
-			Expected args: ('line',)
-			Of Types: ('Line',)
-	midPoint	: returns Point
-		middlePoint: Return midPoint of 2 points..
-			Expected args: ('point',)
-			Of Types: ('Point',)
-	projection	: returns Point
-		projectionOn: Return self-projection on a line..
-			Expected args: ('line',)
-			Of Types: ('Line',)
-	bisector	: returns Line
-		bisect: Draws perpendicular bisector between two points..
-			Expected args: ('point',)
-			Of Types: ('Point',)
-	angleBisector	: returns Line
-		bisectAngleLine: Bisector of angle sublended at point from ends of a line..
-			Expected args: ('line',)
-			Of Types: ('Line',)
-		bisectAnglePoints: Bisector of angle AXB..
-			Expected args: ('point1', 'point2')
-			Of Types: ('Point', 'Point')
-	lineTo	: returns Line
-		lineToPoint: Return a line from current point to another point..
-			Expected args: ('point',)
-			Of Types: ('Point',)
-		lineTo: Return a line using certain metrics..
-			Expected args: ('angle', 'distance')
-			Of Types: ('float', 'float')
-	triangle	: returns Triangle
-		triangleTo: Draw a triangle, provided a side of the triangle..
-			Expected args: ('line',)
-			Of Types: ('Line',)
-	circle	: returns Circle
-		circle: Create a circle using a centre and a radius..
-			Expected args: ('radius',)
-			Of Types: ('float',)
-	tangentCircle	: returns Circle
-		circleFrom: Create a circle using a centre and a chord            or a tangent..
-			Expected args: ('tangent',)
-			Of Types: ('Line',)
-	chordCircle	: returns Circle
-		circleFrom: Create a circle using a centre and a chord            or a tangent..
-			Expected args: ('chord',)
-			Of Types: ('Line',)
+
+    new
+        returns -> Point
+        Construct new Point using point Coordinates.
+            Expected args    : ('x', 'y')
+            Of Types         : ('float', 'float')
+        Point sector using ratio m:n, and points point1 and point2.
+            Expected args    : ('point1', 'point2', 'm', 'n')
+            Of Types         : ('Point', 'Point', 'float', 'float')
+        Construct point using some Metrics. Angle in radians.
+            Expected args    : ('angle', 'distance', 'point')
+            Of Types         : ('float', 'float', 'Point')
+
+    copy
+        returns -> Point
+        Construct new point from existing Point.
+            Expected args    : ()
+            Of Types         : None
+
+    slopeTo
+        returns -> float
+        Find slope(directionless) to another point w.r.t. X-axis. -ve allowed.
+            Expected args    : ('point',)
+            Of Types         : ('Point',)
+
+    angleTo
+        returns -> float
+        Find angle(radians) to another point w.r.t. X-axis. -ve allowed.
+            Expected args    : ('point',)
+            Of Types         : ('Point',)
+
+    angleFrom
+        returns -> float
+        Find angle(radian) subtended on self from A and B. -ve allowed.
+            Expected args    : ('point1', 'point2')
+            Of Types         : ('Point', 'Point')
+        Find angle(radian) subtended on self from endpoints of a line. -ve allowed.
+            Expected args    : ('line',)
+            Of Types         : ('Line',)
+
+    distanceTo
+        returns -> float
+        Distance to/from a Line or a point. Expected arguements: [line], [point].
+            Expected args    : ('point',)
+            Of Types         : ('Point',)
+        Distance to/from a Line or a point. Expected arguements: [line], [point].
+            Expected args    : ('line',)
+            Of Types         : ('Line',)
+
+    midPoint
+        returns -> Point
+        Return midPoint of 2 points.
+            Expected args    : ('point',)
+            Of Types         : ('Point',)
+
+    projection
+        returns -> Point
+        Return self-projection on a line.
+            Expected args    : ('line',)
+            Of Types         : ('Line',)
+
+    bisector
+        returns -> Line
+        Draws perpendicular bisector between two points.
+            Expected args    : ('point',)
+            Of Types         : ('Point',)
+
+    angleBisector
+        returns -> Line
+        Bisector of angle sublended at point from ends of a line.
+            Expected args    : ('line',)
+            Of Types         : ('Line',)
+        Bisector of angle AXB.
+            Expected args    : ('point1', 'point2')
+            Of Types         : ('Point', 'Point')
+
+    lineTo
+        returns -> Line
+        Return a line from current point to another point.
+            Expected args    : ('point',)
+            Of Types         : ('Point',)
+        Return a line using certain metrics.
+            Expected args    : ('angle', 'distance')
+            Of Types         : ('float', 'float')
+
+    triangle
+        returns -> Triangle
+        Draw a triangle, provided a side of the triangle.
+            Expected args    : ('line',)
+            Of Types         : ('Line',)
+
+    circle
+        returns -> Circle
+        Create a circle using a centre and a radius.
+            Expected args    : ('radius',)
+            Of Types         : ('float',)
+
+    tangentCircle
+        returns -> Circle
+        Create a circle using a centre and a chord            or a tangent.
+            Expected args    : ('tangent',)
+            Of Types         : ('Line',)
+
+    chordCircle
+        returns -> Circle
+        Create a circle using a centre and a chord            or a tangent.
+            Expected args    : ('chord',)
+            Of Types         : ('Line',)
+
+
 Line
-	new	: returns Point
-		fromPoints: Construct a line provided two end-points are given..
-			Expected args: ('point1', 'point2')
-			Of Types: ('Point', 'Point')
-		fromMetrics: Draw Line using some metrics..
-			Expected args: ('angle', 'length', 'point')
-			Of Types: ('float', 'float', 'Point')
-	copy	: returns Line
-		fromLine: Derive another line from an existing one..
-			Expected args: ()
-			Of Types: None
-	angle	: returns float
-		angle: Angle subtended by line with x-axis..
-			Expected args: ()
-			Of Types: None
-	length	: returns float
-		length: Find length of the Line segment..
-			Expected args: ()
-			Of Types: None
-	distanceFrom	: returns float
-		distanceFrom: Distance from point or line..
-			Expected args: ('line',)
-			Of Types: ('Line',)
-		distanceFrom: Distance from point or line..
-			Expected args: ('point',)
-			Of Types: ('Point',)
-	bisector	: returns Point
-		bisector: Bisector of the line..
-			Expected args: ()
-			Of Types: None
-	sector	: returns Point
-		sector: Sector of line in a ratio of m:n..
-			Expected args: ('m', 'n')
-			Of Types: ('float', 'float')
-	intersect	: returns Point
-		intersectionWith: Point intersection of two lines..
-			Expected args: ('line',)
-			Of Types: ('Line',)
-	parallelLine	: returns Point
-		parallelLine: Draw a parallel Line..
-			Expected args: ('point',)
-			Of Types: ('Point',)
-		parallelLine: Draw a parallel Line..
-			Expected args: ('distance',)
-			Of Types: ('float',)
-	projectionOf	: returns Point
-		projectionOf: Point projection..
-			Expected args: ('point',)
-			Of Types: ('Point',)
-	perpendicularFrom	: returns Line
-		perpendicularFrom: Perpendicular from a point to the line..
-			Expected args: ('point',)
-			Of Types: ('Point',)
-	perpendicularAt	: returns Line
-		perpendicularAt: Perpendicular at a point or ratio on the line..
-			Expected args: ('point',)
-			Of Types: ('Point',)
-		perpendicularAt: Perpendicular at a point or ratio on the line..
-			Expected args: ('ratio',)
-			Of Types: ('float',)
-	perpendicularBisector	: returns Line
-		perpendicularBisector: Perpendicular bisector..
-			Expected args: ()
-			Of Types: None
-	triangle	: returns Triangle
-		triangleTo: Draw a Triangle..
-			Expected args: ('point',)
-			Of Types: ('Point',)
-	circle	: returns Circle
-		circleAround: Draw circle with line as diameter, chord or tangent..
-			Expected args: ()
-			Of Types: None
-	tangentCircle	: returns Circle
-		circleAround: Draw circle with line as diameter, chord or tangent..
-			Expected args: tangentPoint
-			Of Types: ('Point',)
-	chordCircle	: returns Circle
-		circleAround: Draw circle with line as diameter, chord or tangent..
-			Expected args: chordPoint
-			Of Types: ('Point',)
-	quad	: returns int
-		square: None.
-			Expected args: direction
-			Of Types: ('str',)
-	rectangle	: returns int
-		rectangle: None.
-			Expected args: ('sideLength', 'direction')
-			Of Types: ('float', 'str')
+
+    new
+        returns -> Point
+        Construct a line provided two end-points are given.
+            Expected args    : ('point1', 'point2')
+            Of Types         : ('Point', 'Point')
+        Draw Line using some metrics.
+            Expected args    : ('angle', 'length', 'point')
+            Of Types         : ('float', 'float', 'Point')
+
+    copy
+        returns -> Line
+        Derive another line from an existing one.
+            Expected args    : ()
+            Of Types         : None
+
+    angle
+        returns -> float
+        Angle subtended by line with x-axis.
+            Expected args    : ()
+            Of Types         : None
+
+    length
+        returns -> float
+        Find length of the Line segment.
+            Expected args    : ()
+            Of Types         : None
+
+    distanceFrom
+        returns -> float
+        Distance from point or line.
+            Expected args    : ('line',)
+            Of Types         : ('Line',)
+        Distance from point or line.
+            Expected args    : ('point',)
+            Of Types         : ('Point',)
+
+    bisector
+        returns -> Point
+        Bisector of the line.
+            Expected args    : ()
+            Of Types         : None
+
+    sector
+        returns -> Point
+        Sector of line in a ratio of m:n.
+            Expected args    : ('m', 'n')
+            Of Types         : ('float', 'float')
+
+    intersect
+        returns -> Point
+        Point intersection of two lines.
+            Expected args    : ('line',)
+            Of Types         : ('Line',)
+
+    parallelLine
+        returns -> Point
+        Draw a parallel Line.
+            Expected args    : ('point',)
+            Of Types         : ('Point',)
+        Draw a parallel Line.
+            Expected args    : ('distance',)
+            Of Types         : ('float',)
+
+    projectionOf
+        returns -> Point
+        Point projection.
+            Expected args    : ('point',)
+            Of Types         : ('Point',)
+
+    perpendicularFrom
+        returns -> Line
+        Perpendicular from a point to the line.
+            Expected args    : ('point',)
+            Of Types         : ('Point',)
+
+    perpendicularAt
+        returns -> Line
+        Perpendicular at a point or ratio on the line.
+            Expected args    : ('point',)
+            Of Types         : ('Point',)
+        Perpendicular at a point or ratio on the line.
+            Expected args    : ('ratio',)
+            Of Types         : ('float',)
+
+    perpendicularBisector
+        returns -> Line
+        Perpendicular bisector.
+            Expected args    : ()
+            Of Types         : None
+
+    triangle
+        returns -> Triangle
+        Draw a Triangle.
+            Expected args    : ('point',)
+            Of Types         : ('Point',)
+
+    circle
+        returns -> Circle
+        Draw circle with line as diameter, chord or tangent.
+            Expected args    : ()
+            Of Types         : None
+
+    tangentCircle
+        returns -> Circle
+        Draw circle with line as diameter, chord or tangent.
+            Expected args    : tangentPoint
+            Of Types         : ('Point',)
+
+    chordCircle
+        returns -> Circle
+        Draw circle with line as diameter, chord or tangent.
+            Expected args    : chordPoint
+            Of Types         : ('Point',)
+
+    quad
+        returns -> int
+        None
+            Expected args    : direction
+            Of Types         : ('str',)
+
+    rectangle
+        returns -> int
+        None
+            Expected args    : ('sideLength', 'direction')
+            Of Types         : ('float', 'str')
+
+
 Arc
-	new	: returns Arc
-		formArc: Construct the class..
-			Expected args: ('centre', 'radius', 'startAngle', 'endAngle')
-			Of Types: ('Point', 'float', 'float', 'float')
-		formArc: Construct the class..
-			Expected args: ('centre', 'point', 'angle')
-			Of Types: ('Point', 'Point', 'float')
-	copy	: returns Arc
-		copy: Make a copy of an arc..
-			Expected args: ()
-			Of Types: None
+
+    new
+        returns -> Arc
+        Construct the class.
+            Expected args    : ('centre', 'radius', 'startAngle', 'endAngle')
+            Of Types         : ('Point', 'float', 'float', 'float')
+        Construct the class.
+            Expected args    : ('centre', 'point', 'angle')
+            Of Types         : ('Point', 'Point', 'float')
+
+    copy
+        returns -> Arc
+        Make a copy of an arc.
+            Expected args    : ()
+            Of Types         : None
+
+
 Circle
-	new	: returns Circle
-		fromMetrics: Construct a circle using a centre and a radius..
-			Expected args: ('centre', 'radius')
-			Of Types: ('Point', 'float')
-		fromDiameter: Draw Circle around a given diameter..
-			Expected args: ('diameter',)
-			Of Types: ('Line',)
-	copy	: returns Circle
-		fromCircle: Copy another circle..
-			Expected args: ()
-			Of Types: None
-	radius	: returns float
-		getRadius: Get radius..
-			Expected args: ()
-			Of Types: None
-	centre	: returns float
-		getCentre: Get the radius itself..
-			Expected args: ()
-			Of Types: None
-	area	: returns float
-		area: Calculate area..
-			Expected args: ()
-			Of Types: None
-	diameter	: returns Line
-		diameterAlongSlope: Return a diameter along a certain direction..
-			Expected args: ('angle',)
-			Of Types: ('float',)
-		diameterAlongPoint: Return a diameter along the direction of a certain point..
-			Expected args: ('point',)
-			Of Types: ('Point',)
-	commonChord	: returns Line
-		commonChord: Calculate common chord with another circle..
-			Expected args: ('circle',)
-			Of Types: ('Line',)
-	tangent	: returns Point
-		tangentAt: Draw a tangent on circle, with radius along a point, or an angle. Expected arguements: [point], [angle]..
-			Expected args: ('point',)
-			Of Types: ('Point',)
-		tangentAt: Draw a tangent on circle, with radius along a point, or an angle. Expected arguements: [point], [angle]..
-			Expected args: ('angle',)
-			Of Types: ('float',)
+
+    new
+        returns -> Circle
+        Construct a circle using a centre and a radius.
+            Expected args    : ('centre', 'radius')
+            Of Types         : ('Point', 'float')
+        Draw Circle around a given diameter.
+            Expected args    : ('diameter',)
+            Of Types         : ('Line',)
+
+    copy
+        returns -> Circle
+        Copy another circle.
+            Expected args    : ()
+            Of Types         : None
+
+    radius
+        returns -> float
+        Get radius.
+            Expected args    : ()
+            Of Types         : None
+
+    centre
+        returns -> float
+        Get the radius itself.
+            Expected args    : ()
+            Of Types         : None
+
+    area
+        returns -> float
+        Calculate area.
+            Expected args    : ()
+            Of Types         : None
+
+    diameter
+        returns -> Line
+        Return a diameter along a certain direction.
+            Expected args    : ('angle',)
+            Of Types         : ('float',)
+        Return a diameter along the direction of a certain point.
+            Expected args    : ('point',)
+            Of Types         : ('Point',)
+
+    commonChord
+        returns -> Line
+        Calculate common chord with another circle.
+            Expected args    : ('circle',)
+            Of Types         : ('Line',)
+
+    tangent
+        returns -> Point
+        Draw a tangent on circle, with radius along a point, or an angle. Expected arguements: [point], [angle].
+            Expected args    : ('point',)
+            Of Types         : ('Point',)
+        Draw a tangent on circle, with radius along a point, or an angle. Expected arguements: [point], [angle].
+            Expected args    : ('angle',)
+            Of Types         : ('float',)
+
+
 Polygon
-	new	: returns Polygon
-		fromPoints: Draw polygon from points..
-			Expected args: ('listOfPoints',)
-			Of Types: ('list', 'Point')
-		fromLines: Draw polygon from lines..
-			Expected args: ('listOfLine',)
-			Of Types: ('list', 'Line')
-	copy	: returns Circle
-		fromPolygon: Copy a polygon..
-			Expected args: ()
-			Of Types: None
-	area	: returns float
-		area: Area of polygon..
-			Expected args: ()
-			Of Types: None
-	signedArea	: returns float
-		signedArea: Signed area for nonintersecting Polygon using shielace formula..
-			Expected args: ()
-			Of Types: None
-	centroid	: returns Point
-		centroid: Calculate centroid..
-			Expected args: ()
-			Of Types: None
-	vertexCentroid	: returns Point
-		vertexCentroid: Return centroid of vertices..
-			Expected args: ()
-			Of Types: None
-	internalAngle	: returns float
-		internAngle: Calculate Internal angle at a vertex..
-			Expected args: ('idx',)
-			Of Types: ('float',)
-		internAngle: Calculate Internal angle at a vertex..
-			Expected args: ('point',)
-			Of Types: ('Point',)
-	angleBisector	: returns Line
-		angleBisector: Angle bisector..
-			Expected args: ('idx',)
-			Of Types: ('float',)
-		angleBisector: Angle bisector..
-			Expected args: ('point',)
-			Of Types: ('Point',)
+
+    new
+        returns -> Polygon
+        Draw polygon from points.
+            Expected args    : ('listOfPoints',)
+            Of Types         : ('list', 'Point')
+        Draw polygon from lines.
+            Expected args    : ('listOfLine',)
+            Of Types         : ('list', 'Line')
+
+    copy
+        returns -> Circle
+        Copy a polygon.
+            Expected args    : ()
+            Of Types         : None
+
+    area
+        returns -> float
+        Area of polygon.
+            Expected args    : ()
+            Of Types         : None
+
+    signedArea
+        returns -> float
+        Signed area for nonintersecting Polygon using shielace formula.
+            Expected args    : ()
+            Of Types         : None
+
+    centroid
+        returns -> Point
+        Calculate centroid.
+            Expected args    : ()
+            Of Types         : None
+
+    vertexCentroid
+        returns -> Point
+        Return centroid of vertices.
+            Expected args    : ()
+            Of Types         : None
+
+    internalAngle
+        returns -> float
+        Calculate Internal angle at a vertex.
+            Expected args    : ('idx',)
+            Of Types         : ('float',)
+        Calculate Internal angle at a vertex.
+            Expected args    : ('point',)
+            Of Types         : ('Point',)
+
+    angleBisector
+        returns -> Line
+        Angle bisector.
+            Expected args    : ('idx',)
+            Of Types         : ('float',)
+        Angle bisector.
+            Expected args    : ('point',)
+            Of Types         : ('Point',)
+
+
 Triangle
-	new	: returns Triangle
-		fromPoints: Draw Triangle list of points..
-			Expected args: ('listOfPoint',)
-			Of Types: ('Point',)
-		fromLines: Draw Triangle from list of lines..
-			Expected args: ('listOfLine',)
-			Of Types: ('Line',)
-		fromLine: Draw Triangle from a line and a point..
-			Expected args: ('line', 'point')
-			Of Types: ('Line', 'Point')
-	copy	: returns Circle
-		fromTriangle: Draw Triangle copied from another triangle..
-			Expected args: ()
-			Of Types: None
-	area	: returns float
-		area: Heron's Formula..
-			Expected args: ()
-			Of Types: None
-	centroid	: returns Point
-		centroid: Find centroid of triangle..
-			Expected args: ()
-			Of Types: None
-	orthocentre	: returns Point
-		orthocentre: Find orthocentre of triangle..
-			Expected args: ()
-			Of Types: None
-	incenter	: returns Point
-		incenter: Find incentre of triangle..
-			Expected args: ()
-			Of Types: None
-	circumcenter	: returns Point
-		circumcenter: Find circumcentre of triangle..
-			Expected args: ()
-			Of Types: None
-	incircle	: returns Circle
-		incircle: Draw incircle of triangle..
-			Expected args: ()
-			Of Types: None
-	circumcircle	: returns Circle
-		circumcircle: Draw circumcircle of triangle..
-			Expected args: ()
-			Of Types: None
-	median	: returns Line
-		medianFromPoint: Draw a median from a specified point..
-			Expected args: ('point',)
-			Of Types: ('Point',)
-		medianFromPoint: Draw a median from a specified point..
-			Expected args: ('idx',)
-			Of Types: ('float',)
-		medianOnLine: Draw a median on a specified line..
-			Expected args: ('line',)
-			Of Types: ('Line',)
-	perpendicular	: returns Line
-		perpendicularFromPoint: Draw a perpendicular from a specified point..
-			Expected args: ('point',)
-			Of Types: ('Point',)
-		perpendicularFromPoint: Draw a perpendicular from a specified point..
-			Expected args: ('idx',)
-			Of Types: ('float',)
-		perpendicularOnLine: Draw a perpendicular on a specified line..
-			Expected args: ('line',)
-			Of Types: ('Line',)
-	angleBisector	: returns Line
-		angleBisector: Angle Bisector from a certain point..
-			Expected args: ('idx',)
-			Of Types: ('float',)
-		angleBisector: Angle Bisector from a certain point..
-			Expected args: ('point',)
-			Of Types: ('Point',)
-		angleBisectorOnLine: Angle Bisector on a certain line..
-			Expected args: ('line',)
-			Of Types: ('Line',)
-	signedArea	: returns float
-		signedArea: Signed area for nonintersecting Polygon using shielace formula..
-			Expected args: ()
-			Of Types: None
-	vertexCentroid	: returns Point
-		vertexCentroid: Return centroid of vertices..
-			Expected args: ()
-			Of Types: None
-	internalAngle	: returns float
-		internAngle: Calculate Internal angle at a vertex..
-			Expected args: ('idx',)
-			Of Types: ('float',)
-		internAngle: Calculate Internal angle at a vertex..
-			Expected args: ('point',)
-			Of Types: ('Point',)
+
+    new
+        returns -> Triangle
+        Draw Triangle list of points.
+            Expected args    : ('listOfPoint',)
+            Of Types         : ('Point',)
+        Draw Triangle from list of lines.
+            Expected args    : ('listOfLine',)
+            Of Types         : ('Line',)
+        Draw Triangle from a line and a point.
+            Expected args    : ('line', 'point')
+            Of Types         : ('Line', 'Point')
+
+    copy
+        returns -> Circle
+        Draw Triangle copied from another triangle.
+            Expected args    : ()
+            Of Types         : None
+
+    area
+        returns -> float
+        Heron's Formula.
+            Expected args    : ()
+            Of Types         : None
+
+    centroid
+        returns -> Point
+        Find centroid of triangle.
+            Expected args    : ()
+            Of Types         : None
+
+    orthocentre
+        returns -> Point
+        Find orthocentre of triangle.
+            Expected args    : ()
+            Of Types         : None
+
+    incenter
+        returns -> Point
+        Find incentre of triangle.
+            Expected args    : ()
+            Of Types         : None
+
+    circumcenter
+        returns -> Point
+        Find circumcentre of triangle.
+            Expected args    : ()
+            Of Types         : None
+
+    incircle
+        returns -> Circle
+        Draw incircle of triangle.
+            Expected args    : ()
+            Of Types         : None
+
+    circumcircle
+        returns -> Circle
+        Draw circumcircle of triangle.
+            Expected args    : ()
+            Of Types         : None
+
+    median
+        returns -> Line
+        Draw a median from a specified point.
+            Expected args    : ('point',)
+            Of Types         : ('Point',)
+        Draw a median from a specified point.
+            Expected args    : ('idx',)
+            Of Types         : ('float',)
+        Draw a median on a specified line.
+            Expected args    : ('line',)
+            Of Types         : ('Line',)
+
+    perpendicular
+        returns -> Line
+        Draw a perpendicular from a specified point.
+            Expected args    : ('point',)
+            Of Types         : ('Point',)
+        Draw a perpendicular from a specified point.
+            Expected args    : ('idx',)
+            Of Types         : ('float',)
+        Draw a perpendicular on a specified line.
+            Expected args    : ('line',)
+            Of Types         : ('Line',)
+
+    angleBisector
+        returns -> Line
+        Angle Bisector from a certain point.
+            Expected args    : ('idx',)
+            Of Types         : ('float',)
+        Angle Bisector from a certain point.
+            Expected args    : ('point',)
+            Of Types         : ('Point',)
+        Angle Bisector on a certain line.
+            Expected args    : ('line',)
+            Of Types         : ('Line',)
+
+    signedArea
+        returns -> float
+        Signed area for nonintersecting Polygon using shielace formula.
+            Expected args    : ()
+            Of Types         : None
+
+    vertexCentroid
+        returns -> Point
+        Return centroid of vertices.
+            Expected args    : ()
+            Of Types         : None
+
+    internalAngle
+        returns -> float
+        Calculate Internal angle at a vertex.
+            Expected args    : ('idx',)
+            Of Types         : ('float',)
+        Calculate Internal angle at a vertex.
+            Expected args    : ('point',)
+            Of Types         : ('Point',)
+
