@@ -26,11 +26,12 @@ class Collector:
 
     def processSuper(self):
         """Inherit any remaining methods from base class."""
-        for key in self.ADT:
-            CLASS:dict = self.ADT[key]
+        backRef = self.ADT
+        for key, CLASS in backRef.items():
             BASE = CLASS[is_a]
+            del CLASS[is_a]
             if BASE is not None:
-                inheritance = [(x, y) for (x, y) in self.ADT[BASE].items() if x not in CLASS]
+                inheritance = [(x, y) for (x, y) in backRef[BASE].items() if x not in CLASS]
                 for x, y in inheritance:
                     CLASS[x] = y
 

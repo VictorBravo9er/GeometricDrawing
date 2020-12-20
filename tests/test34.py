@@ -1,9 +1,8 @@
 import __init__
 
-from rules.collect import Collector as ctr
+from Parser.collect import Collector as ctr
 
 adt = ctr()
-adt.collect()
 file = None
 with open("a.txt", "w") as file:
     adt.print(file)

@@ -1,4 +1,5 @@
 """Module for Polygons."""
+from Drawables.Line import Line
 import numpy as np
 from math import pi
 from Drawables.Drawable import Drawable
@@ -35,7 +36,10 @@ class Polygon(Drawable):
             new = cls()
             new.setPolygon(vertexList=listOfPoint)
             return new
-        raise ValueError(f"Expected 3 or more points, received {l}")
+        raise ValueError(
+            "ValueError:\tExpected 3 or more "+
+            f"points, received {l}"
+        )
 
     @classmethod
     def fromLines(cls, listOfLine:list):
@@ -50,11 +54,17 @@ class Polygon(Drawable):
             new = cls()
             new.setPolygon(edgeList=listOfLine)
             return new
-        raise ValueError(f"Expected 3 or more lines, received {l}")
+        raise ValueError(
+            "ValueError:\tExpected 3 or more "+
+            f"lines, received {l}"
+        )
 
 
     # Getters and Setters
-    def setPolygon(self, vertexList=None, edgeList=None):
+    def setPolygon(
+        self, vertexList=None, edgeList=None,
+        allowAbnormal:bool=True
+    ):
         """Set Polygon, provided a list of vertices or edes(lines)."""
         vertices = list()
         if isinstance(edgeList, list):
@@ -63,17 +73,23 @@ class Polygon(Drawable):
             from Drawables.Point import Point
             for curPoint in vertexList:
                 if not isinstance(curPoint, Point):
-                    raise Exception(
-                        f"Invalid arguements. Expected a {Point}, received a {type(curPoint)}"
-                        )
+                    raise TypeError(
+                        "TypeError:\tInvalid arguements. Expected"+
+                        f" a {Point}, received a {type(curPoint)}"
+                    )
                 vertices.append(curPoint)
             self.vertices = vertices
             self.size = len(vertices)
-            self.circularDirection()
+            try:
+                self.circularDirection()
+            except Exception as e:
+                if not allowAbnormal:
+                    raise Exception(e.args[0])
         else:
-            raise Exception(
-                "Invalid arguements. Expected either a list of edges or vertices"
-                )
+            raise TypeError(
+                "TypeError:\tInvalid arguements. Expected either a list of edges"+
+                f" or vertices, received {type(vertexList) and {type(edgeList)}}"
+            )
 
 
     # Methods
@@ -144,7 +160,7 @@ class Polygon(Drawable):
         return Point.bisectAnglePoints(
             self=point, point1=point1,
             point2=point2
-            )
+        )
 
 
     # Helpers
@@ -157,7 +173,9 @@ class Polygon(Drawable):
             for point in points:
                 new.append(Point.fromPoint(point))
             return new
-        raise TypeError(f"Expected list of points, received {type(points).__name__}.")
+        raise TypeError(
+            f"TypeError:\tExpected list of points, received {type(points).__name__}."
+        )
 
     def signedAreaVectorized(self):
         """Vectorized implementation of signed area(Shoelace formula)."""
@@ -188,13 +206,22 @@ class Polygon(Drawable):
             extAngle += (p - tmpAngle)
             curVertex, prevVertex = nextVertex, curVertex
         (n, p) = (n - p, n + p)
-        if abs(intAngle - n) < Polygon.comparisonLimit and abs(extAngle - p) < Polygon.comparisonLimit:
+        if (
+            abs(intAngle - n) < Polygon._comparisonLimit and
+            abs(extAngle - p) < Polygon._comparisonLimit
+        ):
             self.clockwise = True
             return
-        elif abs(intAngle - p) < Polygon.comparisonLimit and abs(extAngle - n) < Polygon.comparisonLimit:
+        elif (
+            abs(intAngle - p) < Polygon._comparisonLimit and
+            abs(extAngle - n) < Polygon._comparisonLimit
+        ):
             self.clockwise = False
             return
-        raise Exception("Irregularity in polygon")
+        self.clockwise = False
+        raise TypeError(
+            "TypeError:\tIrregularity in the polygon."
+        )
 
     @staticmethod
     def edgeToVertex(edgeList:list):
@@ -203,15 +230,20 @@ class Polygon(Drawable):
         vertexList = []
         from Drawables.Line import Line
         if not isinstance(prevEdge, Line):
-            raise Exception(
-                f"Invalid arguements. Expected a {Line}, received a {type(prevEdge)}."
-                )
+            raise TypeError(
+                "TypeError:\tInvalid arguements. Expected a "+
+                f"{Line}, received a {type(prevEdge)}."
+            )
         for curEdge in edgeList:
             if not isinstance(curEdge, Line):
-                raise Exception(
-                    f"Invalid arguements. Expected a {Line}, received a {type(curEdge)}."
-                    )
-            vertexList.append(Polygon.compareEdgeEnds(prevEdge, curEdge))
+                raise TypeError(
+                    "TypeError:\tInvalid arguements. Expected a "+
+                    f"{Line}, received a {type(curEdge)}."
+                )
+            vertexList.append(
+                Polygon.compareEdgeEnds(prevEdge, curEdge)
+            )
+            prevEdge = curEdge
         return vertexList
 
     @staticmethod
@@ -233,26 +265,37 @@ class Polygon(Drawable):
     @staticmethod
     def compareEdgeEnds(edge1, edge2):
         """Compare endpoints of two edges, else compute intersection."""
-        if edge1.start == edge2.start:
-            return edge1.start
-        if edge1.start == edge2.end:
-            return edge1.start
-        if edge1.end == edge2.start:
-            return edge1.end
-        if edge1.end == edge2.end:
-            return edge1.end
         from Drawables.Line import Line
-        return Line.intersectionWith(edge1, edge2)
+        if isinstance(edge1, Line) and isinstance(edge2, Line):
+            if edge1.start == edge2.start:
+                return edge1.start
+            if edge1.start == edge2.end:
+                return edge1.start
+            if edge1.end == edge2.start:
+                return edge1.end
+            if edge1.end == edge2.end:
+                return edge1.end
+            from Drawables.Line import Line
+            return Line.intersectionWith(edge1, edge2)
+        raise TypeError(
+            "TypeError:\tExpected: (Point, Point), received: "+
+            f"({type(edge1).__name__}, {type(edge2).__name__})"
+        )
 
     def resolvePoint(self, point=..., idx:int=...):
         """Resolve availability of vertex in Polygon or its indexed."""
         from Drawables.Point import Point
         if isinstance(idx, (int,float)):
+            point = idx
             idx = round(idx)
+            if abs(point - idx) < self._comparisonLimit:
+                raise ValueError(
+                    "ValueError:\tExpected an integral index."
+                )
             if idx >= self.size or idx < 0:
                 raise ValueError(
-                    f"Point index out of range. "
-                    +"Must've be in range: 0 - {self.size}"
+                    "ValueError:\tPoint index out of range. "
+                    +f"Must've be in range: 0 - {self.size}"
                 )
             p:Point = self.vertices[idx]
             return (p, idx)
@@ -260,29 +303,38 @@ class Polygon(Drawable):
             try:
                 idx = self.vertices.index(point)
             except:
-                raise ValueError("Point not in Triangle.")
+                raise ValueError(
+                    f"ValueError:\tPoint not in {type(self).__name__}'s edges."
+                )
             return (point, idx)
-        raise TypeError("Unsupported Type. Expected: int or Point")
+        raise TypeError(
+            "TypeError:\tUnsupported Type. Expected: int or Point, "+
+            f"received: {type(point).__name__} and {type(idx).__name__}"
+        )
 
     def _scale(self, sx:float=1, sy:float=1, point=...):
+        """Scale the polygon."""
         if sx == 1 and sy == 1:
             return
         transform = self.scaleMatrix(sx, sy, point)
         self._applyTransform(transform)
 
     def _translate(self, tx:float=0, ty:float=0):
+        """Translate the polygon."""
         if tx == 0 and ty == 0:
             return
         transform = self.translateMatrix(tx, ty)
         self._applyTransform(transform)
 
     def _rotate(self, centre=...,angle:float=0):
+        """Rotate the polygon."""
         if angle == 0:
             return
         transform = self.rotateMatrix(angle, centre)
         self._applyTransform(transform)
 
     def _applyTransform(self, transform):
+        """Apply the transformation. Matrix multiply."""
         homoCoord = []
         for point in self.vertices:
             homoCoord.append([point.X, point.Y, 1])

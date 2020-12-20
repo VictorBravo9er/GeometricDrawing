@@ -19,10 +19,10 @@ l2 = l1.parallelLine(dist)
 print(l1)
 print(l2)
 drawables.append(l2)
-assert abs(l1.slope() - l2.slope()) < Drawable.comparisonLimit
+assert abs(l1.slope() - l2.slope()) < Drawable._comparisonLimit
 dist2 = l1.distanceFrom(line=l2)
 print(dist2)
-assert abs(dist2 - dist) < Drawable.comparisonLimit
+assert abs(dist2 - dist) < Drawable._comparisonLimit
 
 Drawable.draw(drawables)
 

@@ -4,48 +4,49 @@ polygonADT = {
     is_a:None,
     "new":{
         (list, Point,):{
-            args:("listOfPoints"),
+            args:("listOfPoints",),
             trgt:Polygon.fromPoints,
         },
         (list, Line,):{
             args:("listOfLine",),
             trgt:Polygon.fromLines,
         },
-        ret:Polygon
+        retVal:Polygon
     },
     "copy":{
         tuple():{
             args:tuple(),
             trgt:Polygon.fromPolygon
         },
-        ret:Circle
+        retVal:Circle
     },
     "area":{
         tuple():{
             args:tuple(),
             trgt:Polygon.area
         },
-        ret:float
+        retVal:float
     },
     "signedArea":{
         tuple():{
-            args:tuple,
+            args:tuple(),
             trgt:Polygon.signedArea
-        }
+        },
+        retVal:float
     },
     "centroid":{
         tuple():{
             args:tuple(),
             trgt:Polygon.centroid
         },
-        ret:Point
+        retVal:Point
     },
     "vertexCentroid":{
         tuple():{
             args:tuple(),
             trgt:Polygon.vertexCentroid
         },
-        ret:Point
+        retVal:Point
     },
     "internalAngle":{
         (float,):{
@@ -56,7 +57,7 @@ polygonADT = {
             args:("point",),
             trgt:Polygon.internAngle
         },
-        ret:float
+        retVal:float
     },
     "angleBisector":{
         (float,):{
@@ -67,6 +68,6 @@ polygonADT = {
             args:("point",),
             trgt:Polygon.angleBisector
         },
-        ret:Line
+        retVal:Line
     }
 }

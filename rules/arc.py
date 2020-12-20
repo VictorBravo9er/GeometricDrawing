@@ -11,13 +11,13 @@ arcADT = {
             args:("centre", "point", "angle",),
             trgt:Arc.formArc,
         },
-        ret:Arc
+        retVal:Arc
     },
     "copy":{
         tuple():{
             args:tuple(),
             trgt:Arc.copy
         },
-        ret:Arc
+        retVal:Arc
     }
 }

@@ -11,28 +11,28 @@ lineADT = {
             args:("angle","length","point",),
             trgt:Line.fromMetrics,
         },
-        ret:Point
+        retVal:Point
     },
     "copy":{
         tuple():{
             args:tuple(),
             trgt:Line.fromLine
         },
-        ret:Line
+        retVal:Line
     },
     "angle":{
         tuple():{
             args:tuple(),
             trgt:Line.angle
         },
-        ret:float
+        retVal:float
     },
     "length":{
         tuple():{
             args:tuple(),
             trgt:Line.length
         },
-        ret:float
+        retVal:float
     },
     "distanceFrom":{
         (Line,):{
@@ -43,28 +43,28 @@ lineADT = {
             args:("point",),
             trgt:Line.distanceFrom
         },
-        ret:float
+        retVal:float
     },
     "bisector":{
         tuple():{
             args:tuple(),
             trgt:Line.bisector
         },
-        ret:Point
+        retVal:Point
     },
     "sector":{
         (float, float,):{
             args:("m", "n",),
             trgt:Line.sector
         },
-        ret:Point
+        retVal:Point
     },
     "intersect":{
         (Line,):{
             args:("line",),
             trgt:Line.intersectionWith
         },
-        ret:Point
+        retVal:Point
     },
     "parallelLine":{
         (Point,):{
@@ -75,80 +75,80 @@ lineADT = {
             args:("distance",),
             trgt:Line.parallelLine
         },
-        ret:Point
+        retVal:Point
     },
     "projectionOf":{
         (Point,):{
             args:("point",),
             trgt:Line.projectionOf
         },
-        ret:Point
+        retVal:Point
     },
     "perpendicularFrom":{
         (Point,):{
             args:("point",),
             trgt:Line.perpendicularFrom
         },
-        ret:Line
+        retVal:Line
     },
     "perpendicularAt":{
         (Point,):{
-            args:("var",),
+            args:("point",),
             trgt:Line.perpendicularAt
         },
         (float,):{
-            args:("var",),
+            args:("ratio",),
             trgt:Line.perpendicularAt
         },
-        ret:Line
+        retVal:Line
     },
     "perpendicularBisector":{
         tuple():{
             args:tuple(),
             trgt:Line.perpendicularBisector
         },
-        ret:Line
+        retVal:Line
     },
     "triangle":{
         (Point,):{
             args:("point",),
             trgt:Line.triangleTo
         },
-        ret:Triangle
+        retVal:Triangle
     },
     "circle":{
         tuple():{
             args:tuple(),
             trgt:Line.circleAround
         },
-        ret:Circle
+        retVal:Circle
     },
     "tangentCircle":{
         (Point,):{
             args:("tangentPoint"),
             trgt:Line.circleAround
         },
-        ret:Circle
+        retVal:Circle
     },
     "chordCircle":{
         (Point,):{
             args:("chordPoint"),
             trgt:Line.circleAround
         },
-        ret:Circle
+        retVal:Circle
     },
     "quad":{
         (str,):{
             args:("direction"),
             trgt:Line.square
         },
-        ret:None
+        retVal:int
     },#TODO
     "rectangle":{
         (float, str,):{
             args:("sideLength", "direction"),
             trgt:Line.rectangle
         },
-        ret:None
+        retVal:int
     }#TODO
 }

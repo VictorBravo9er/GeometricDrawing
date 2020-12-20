@@ -26,7 +26,7 @@ def repeater(i:float=0):
         drawables.append(t)
     except Exception as e:
         print(e)
-    Drawable.draw(drawables, str(i+1))
+    Drawable.draw(drawables, f"data/cache{i+1}")
     return drawables[-1]
 
 e = repeater(95 - 180)

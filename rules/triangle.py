@@ -4,74 +4,74 @@ triangleADT = {
     is_a:Polygon,
     "new":{
         (Point,):{
-            args:("listOfPoint"),
+            args:("listOfPoint",),
             trgt:Triangle.fromPoints,
         },
         (Line,):{
             args:("listOfLine",),
             trgt:Triangle.fromLines,
         },
-        (Line, Point):{
-            args:("line", "point"),
+        (Line, Point,):{
+            args:("line", "point",),
             trgt:Triangle.fromLine
         },
-        ret:Triangle
+        retVal:Triangle
     },
     "copy":{
         tuple():{
             args:tuple(),
             trgt:Triangle.fromTriangle
         },
-        ret:Circle
+        retVal:Circle
     },
     "area":{
         tuple():{
             args:tuple(),
             trgt:Triangle.area
         },
-        ret:float
+        retVal:float
     },
     "centroid":{
         tuple():{
             args:tuple(),
             trgt:Triangle.centroid
         },
-        ret:Point
+        retVal:Point
     },
     "orthocentre":{
         tuple():{
             args:tuple(),
             trgt:Triangle.orthocentre
         },
-        ret:Point
+        retVal:Point
     },
     "incenter":{
         tuple():{
             args:tuple(),
             trgt:Triangle.incenter
         },
-        ret:Point
+        retVal:Point
     },
     "circumcenter":{
         tuple():{
             args:tuple(),
             trgt:Triangle.circumcenter
         },
-        ret:Point
+        retVal:Point
     },
     "incircle":{
         tuple():{
             args:tuple(),
             trgt:Triangle.incircle
         },
-        ret:Circle
+        retVal:Circle
     },
     "circumcircle":{
         tuple():{
             args:tuple(),
             trgt:Triangle.circumcircle
         },
-        ret:Circle
+        retVal:Circle
     },
     "median":{
         (Point,):{
@@ -86,7 +86,7 @@ triangleADT = {
             args:("line",),
             trgt:Triangle.medianOnLine
         },
-        ret:Line
+        retVal:Line
     },
     "perpendicular":{
         (Point,):{
@@ -101,7 +101,7 @@ triangleADT = {
             args:("line",),
             trgt:Triangle.perpendicularOnLine
         },
-        ret:Line
+        retVal:Line
     },
     "angleBisector":{
         (float,):{
@@ -116,6 +116,6 @@ triangleADT = {
             args:("line",),
             trgt:Triangle.angleBisectorOnLine
         },
-        ret:Line
+        retVal:Line
     }
 }

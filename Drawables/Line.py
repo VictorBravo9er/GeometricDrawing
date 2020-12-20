@@ -24,7 +24,9 @@ class Line(Drawable):
         """Derive another line from an existing one."""
         from Drawables.Point import Point
         if not isinstance(line, cls):
-            raise TypeError("Type mismatch")
+            raise TypeError(
+                f"TypeError:\tExpected Line, recceived {type(line).__name__}"
+            )
         new = cls()
         angle = line.slope()
         angle = atan(angle) + (pi / 2)
@@ -37,18 +39,25 @@ class Line(Drawable):
     @classmethod
     def fromPoints(cls, point1, point2):
         """Construct a line provided two end-points are given."""
-        new = cls()
-        new.start = point1
-        new.end = point2
-        return new
+        from Drawables.Point import Point
+        if isinstance(point1, Point) and isinstance(point2, Point):
+            new = cls()
+            new.setLine(start=point1, end=point2)
+            return new
+        raise TypeError(
+            "TypeError:\tExpected (Point, Point), received"+
+            f"({type(point1).__name__}, {type(point2).__name__})"
+        )
 
     @classmethod
     def fromMetrics(cls, angle:float, length:float, point):
         """Draw Line using some metrics."""
         from Drawables.Point import Point
         new = cls()
-        new.start = point
-        new.end = Point.fromMetrics(angle, length, point)
+        new.setLine(
+            start=point,
+            end=Point.fromMetrics(angle, length, point)
+        )
         return new
 
 
@@ -77,11 +86,7 @@ class Line(Drawable):
 
     def length(self):
         """Find length of the Line segment."""
-        try:
-            return self._length
-        except(Exception):
-            self._length = self.start.distanceTo(point=self.end)
-            return(self._length)
+        return self.start.distanceTo(point=self.end)
 
     def distanceFrom(self, line=..., point=...):
         """Distance from point or line."""
@@ -91,13 +96,16 @@ class Line(Drawable):
         if isinstance(line, Line):
             (m1, c1) = self.getMetrics()
             (m2, c2) = line.getMetrics()
-            if abs(m1 - m2) > self.comparisonLimit:
-                raise Exception(
-                    f"Lines intersect at{self.intersectionWith(line)}"
-                    )
+            if abs(m1 - m2) > self._comparisonLimit:
+                raise ValueError(
+                    f"ValueError:\tLines intersect at{self.intersectionWith(line)}"
+                )
             angle_rad = atan(abs(m1))
             return abs(c1 - c2) * cos(angle_rad)
-        raise TypeError("Unsupported Type.")
+        raise TypeError(
+            "TypeError:\tExpected: Line or Point, received: "+
+            f"{type(line).__name__} and {type(point).__name__}."
+        )
 
     def bisector(self):
         """Bisector of the line."""
@@ -113,20 +121,27 @@ class Line(Drawable):
     def intersectionWith(self, line):
         """Point intersection of two lines."""
         from Drawables.Point import Point
-        (m1, c1) = self.getMetrics()
-        (m2, c2) = line.getMetrics()
-        x = (c1 - c2) / (m2 - m1)
-        y = m1 * x + c1
-        return(Point.fromCoOrdinates(x, y))
+        if isinstance(line, Line):
+            (m1, c1) = self.getMetrics()
+            (m2, c2) = line.getMetrics()
+            x = (c1 - c2) / (m2 - m1)
+            y = m1 * x + c1
+            return(Point.fromCoOrdinates(x, y))
+        raise TypeError(
+            f"TypeError:\tExpected: Line, received {type(line).__name__}"
+        )
 
     def parallelLine(self, distance:float=None, point=None):
         """Draw a parallel Line."""
         from Drawables.Point import Point
         if isinstance(point, Point):
             distance = point.distanceTo(line=self)
-        if isinstance(distance, float) or isinstance(distance, int):
+        if isinstance(distance, (float, int)):
             return Line.fromLine(line=self, distance=distance)
-        raise Exception("Invalid parameter(s).")
+        raise TypeError(
+            "TypeError:\tExpected: float or Point, received: "+
+            f"{type(distance).__name__} and {type(point).__name__}."
+        )
 
     def projectionOf(self, point):
         """Point projection."""
@@ -141,37 +156,39 @@ class Line(Drawable):
         """Perpendicular from a point to the line."""
         return Line.fromPoints(self.projectionOf(point), point)
 
-    def perpendicularAt(self, var):
+    def perpendicularAt(self, point=..., ratio:float=...):
         """Perpendicular at a point or ratio on the line."""
-        if isinstance(var, float):
-            return(self.perpendicularAt(self.sector(var)))
+        if isinstance(ratio, (float, int)):
+            point = self.sector(m=ratio)
         from Drawables.Point import Point
-        if isinstance(var, Point):
+        if isinstance(point, Point):
             from Drawables.Point import Point
             len_ = self.length() / 2
             angle = atan(-1/self.slope())
-            point1 = Point.fromMetrics( angle, len_, var)
-            point2 = Point.fromMetrics( angle,-len_, var)
+            point1 = Point.fromMetrics( angle, len_, point)
+            point2 = Point.fromMetrics( angle,-len_, point)
             return(Line.fromPoints(point1, point2))
-        raise TypeError("Unsupported Type.")
+        raise TypeError(
+            "TypeError:\tExpected a Point or float, received "+
+            f"{type(point).__name__} and {type(ratio).__name__}."
+        )
 
     def perpendicularBisector(self):
         """Perpendicular bisector."""
-        return(self.perpendicularAt(self.bisector()))
+        return(self.perpendicularAt(point=self.bisector()))
 
     def triangleTo(self, point):
         """Draw a Triangle."""
         from Drawables.Triangle import Triangle
         return Triangle.fromLine(self, point)
 
-    def circleAround(self, chordDistance:float=None, tangentCentre=None, chordCentre=None):
+    def circleAround(
+        self, chordDistance:float=...,
+        tangentCentre=..., chordCentre=...
+    ):
         """Draw circle with line as diameter, chord or tangent."""
         from Drawables.Point import Point
-        if chordCentre is None and tangentCentre is None and chordDistance is None:
-            mid = self.bisector()
-            radius = self.length() / 2
-            return mid.circle(radius)
-        if isinstance(chordDistance, float):
+        if isinstance(chordDistance, (float, int)):
             from Drawables.Circle import Circle
             centre = Point.fromMetrics(
                     (self.angle() + pi / 2) % (2 * pi),
@@ -179,11 +196,19 @@ class Line(Drawable):
                     self.bisector()
                 )
             return Circle.fromMetrics(centre, centre.distanceTo(point=self.end))
-        elif isinstance(tangentCentre, Point):
+        if isinstance(tangentCentre, Point):
             return Point.circleFrom(tangentCentre, tangent=self)
-        elif isinstance(chordCentre, Point):
+        if isinstance(chordCentre, Point):
             return Point.circleFrom(chordCentre, chord=self)
-        raise Exception("invalid arguements.")
+        if chordCentre is ... or tangentCentre is ... and chordCentre is ...:
+            mid = self.bisector()
+            radius = self.length() / 2
+            return mid.circle(radius)
+        raise TypeError(
+            "TypeError:\tExpected a float, Point or Point, received "
+            f"{type(chordDistance).__name__}, {type(tangentCentre).__name__}"+
+            f", and {type(chordCentre).__name__}"
+        )
 
     def square(self, direction:str="up"):
         pass
@@ -201,20 +226,22 @@ class Line(Drawable):
         from Drawables.Point import Point
         if isinstance(point, Point):
             if Drawable.orientation(
-                    self.start, self.end, point
-                ) != 0:
-                raise Exception("Point is non coliniar.")
+                self.start, self.end, point
+            ) != 0:
+                raise ValueError("Point is non coliniar with Line")
             _x, x_, l = (
-                    Point.distanceSquared(point, self.start),
-                    Point.distanceSquared(point, self.end),
-                    Point.distanceSquared(self.start, self.end)
-                )
-            if abs(_x + x_ - l) < Drawable.comparisonLimit:
-                self.__extend, self.extend__ =  0, 0
-            elif _x < x_:
-                self.__extend, self.extend__ = _x, 0
-            else:
-                self.__extend, self.extend__ = 0, x_
+                Point.distanceSquared(point, self.start),
+                Point.distanceSquared(point, self.end),
+                Point.distanceSquared(self.start, self.end)
+            )
+            if abs(_x + x_ - l) < Drawable._comparisonLimit:
+                return
+            if _x < x_:
+                if self.__extend < _x:
+                    self.__extend = _x
+                return
+            if self.extend__ < x_:
+                self.extend__ = x_
 
     def getMetrics(self):
         """Return slope and y-intercept of Line segment."""
@@ -228,11 +255,7 @@ class Line(Drawable):
 
     def lengthl1(self):
         """Find length of the Line segment."""
-        try:
-            return self._length
-        except(Exception):
-            self._lengthL1 = self.start.distanceL1(point=self.end)
-            return self.start.distanceL1(point=self.end)
+        return self.start.distanceL1(point=self.end)
 
     def _scale(self, sx:float=1, sy:float=1, point=...):
         if sx == 1 and sy == 1:
@@ -281,9 +304,11 @@ class Line(Drawable):
 
     def __eq__(self, o) -> bool:
         """'==' operator overload."""
-        if not isinstance(o, self.__class__):
-            raise TypeError(f"Uncomparable Types. Can't compare {self.__class__} with {type(o)}")
-        return(self.start == o.start and self.end == o.end)
+        if isinstance(o, Line):
+            return (self.start == o.start and self.end == o.end)
+        raise TypeError(
+            f"TypeError:\tCan't compare {self.__class__} with {type(o).__name__}"
+        )
 
 
     # Output interface

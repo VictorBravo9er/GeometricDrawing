@@ -17,7 +17,7 @@ drawables.append(p4)
 
 l1 = Line.fromPoints(p2,p1)
 l2 = l1.perpendicularFrom(p3)
-l4 = l1.perpendicularAt(1.5)
+l4 = l1.perpendicularAt(ratio=1.5)
 l3 = l1.perpendicularBisector()
 drawables.append(l1)
 drawables.append(l2)
