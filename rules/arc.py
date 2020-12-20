@@ -4,7 +4,7 @@ arcADT = {
     is_a:None,
     "new":{
         (Point, float, float, float,):{
-            args:("centre", "radius", "startAngle", "endAngle"),
+            args:("centre", "radius", "angleStart", "angleEnd"),
             trgt:Arc.formArc,
         },
         (Point, Point, float,):{

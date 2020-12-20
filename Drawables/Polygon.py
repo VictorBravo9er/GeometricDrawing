@@ -164,6 +164,11 @@ class Polygon(Drawable):
 
 
     # Helpers
+    def extendLimits(self):
+        from Drawables.Point import Point
+        for point in self.vertices:
+            Point.extendLimits(self=point)
+
     @staticmethod
     def newVertices(points):
         """Provide new vertices in order to form a new polygon."""

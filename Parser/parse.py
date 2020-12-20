@@ -1,6 +1,7 @@
 """Parser Module."""
 import __init__
 from Parser.collect import *
+from math import radians
 
 class Parser:
     """Parser Class."""
@@ -78,6 +79,13 @@ class Parser:
         ops.tokenChecker(fileName, inputList)
         ops.draw(_show, _store, _storageName)
         return ops.print(_show)
+
+    @staticmethod
+    def angleConversion(paramDict):
+        """Converts Degrees to radians."""
+        for key in paramDict:
+            if "angle" in key:
+                paramDict[key] = radians(paramDict[key])
 
     def inputTokenizer(self, fileName:str):
         """Read in file and tokenizes it."""
@@ -195,6 +203,7 @@ class Parser:
                 f"parameter list for construction of {constr}"
             )
         values = dict(zip(target[args], values))
+        self.angleConversion(values)
         target = target[trgt]
         types = constructorDict[retVal]
         return {
@@ -219,6 +228,7 @@ class Parser:
                 f"parameter list for construction of {constr}"
             )
         values = dict(zip(target[args], values))
+        self.angleConversion(values)
         target = target[trgt]
         types = methodDict[retVal]
         return {
@@ -256,12 +266,14 @@ class Parser:
                 )
                 continue
             try:
-                self.symtab[_id] = self.processConstruction(
+                retStructure = self.processConstruction(
                     instruction[self._refObj  ],
                     instruction[self._constr  ],
                     _id,
                     instruction[self._paramLst]
                 )
+                self.symtab[_id] = retStructure
+                retStructure[self._val].extendLimits()
             except Exception as e:
                 print(
                     f"Line {line}. \t",

@@ -13,7 +13,7 @@ drawables.append(p2)
 p3 = Point.fromCoOrdinates(0, 2)
 drawables.append(p3)
 
-c = Arc.formArc(centre=p2, radius=3, startAngle=2, endAngle=0)
+c = Arc.formArc(centre=p2, radius=3, angleStart=2, angleEnd=0)
 drawables.append(c)
 
 c2 = Arc.copy(c)

@@ -7,12 +7,19 @@ import matplotlib.pyplot as plt
 class Drawable(object):
     """Description of class."""
 
-    _maxX, _minX, _maxY, _minY = (10,-10,10,-10)
+    _maxX, _minX, _maxY, _minY = (10.0,-10.0,10.0,-10.0)
     _comparisonLimit = 0.00000001
     def __init__(self):
         """Build Base constructor."""
         object.__init__(self)
         # super().__init__()
+
+    @staticmethod
+    def printLimits():
+        print("MinX:",Drawable._minX)
+        print("MaxX:",Drawable._maxX)
+        print("MinY:",Drawable._minY)
+        print("MaxY:",Drawable._maxY)
 
     @staticmethod
     def rotateMatrix(rotation:float=0, centre=...):

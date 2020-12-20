@@ -31,7 +31,7 @@ class Arc(Drawable):
     @classmethod
     def formArc(
         cls, centre, point=None, angle=None,
-        radius:float=None, startAngle:float=None, endAngle:float=None
+        radius:float=None, angleStart:float=None, angleEnd:float=None
     ):
         """Construct the class."""
         from Drawables.Point import Point
@@ -39,20 +39,23 @@ class Arc(Drawable):
             if isinstance(point, Point):
                 assert isinstance(angle, (int, float))
                 radius = Point.distanceTo(centre, point=point)
-                startAngle = Point.angleTo(centre, point)
-                endAngle = startAngle + angle
+                angleStart = Point.angleTo(centre, point)
+                angleEnd = angleStart + angle
             else:
-                assert isinstance(startAngle, (int, float))
-                assert isinstance(endAngle, (int, float))
+                assert isinstance(angleStart, (int, float))
+                assert isinstance(angleEnd, (int, float))
                 assert isinstance(radius, (float, int,))
-                if startAngle > endAngle:
-                    endAngle += (2*pi)
-            return cls(centre, radius, startAngle, endAngle)
+                if angleStart > angleEnd:
+                    angleEnd += (2*pi)
+            return cls(centre, radius, angleStart, angleEnd)
         except:
             raise Exception("Invalid arguement(s).")
 
 
     # Helpers
+    def extendLimits(self):
+        self.centre.extendLimits(self.radius)
+
     def plotPoints(self):
         """Return plottable graph of a an arc."""
         theta = np.linspace(self.__start, self.__end, 1000)

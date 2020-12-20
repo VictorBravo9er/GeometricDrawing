@@ -218,6 +218,10 @@ class Line(Drawable):
 
 
     # Helpers
+    def extendLimits(self):
+        self.start.extendLimits()
+        self.end.extendLimits()
+
     def extend(self, point=..., extension=...):
         """Extend the ends of line as displayed when drawn."""
         if isinstance(extension, tuple) and len(extension) == 2:

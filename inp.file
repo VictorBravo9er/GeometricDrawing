@@ -5,7 +5,7 @@ a new point 3 6
 k a distanceTo b
 l a lineTo b
 
-k l parallelLine 2
+kl l parallelLine 2
 g l parallelLine -2
 
 e new arc b 2 60 180 

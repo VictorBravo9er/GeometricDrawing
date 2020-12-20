@@ -194,6 +194,18 @@ class Point(Drawable):
 
 
     # Helpers
+    def extendLimits(self, bound:float=1):
+        """Redefine boundaries."""
+        (x,y) = self.getPoint()
+        if Drawable._minX > x - bound:
+            Drawable._minX = x - bound
+        if Drawable._maxX < x + bound:
+            Drawable._maxX = x + bound
+        if Drawable._minY > y - bound:
+            Drawable._minY = y - bound
+        if Drawable._maxY < y + bound:
+            Drawable._maxY = y + bound
+
     def distanceSquared(self, line=..., point=...):
         """Return square of pythagorean distance."""
         from Drawables.Line import Line
