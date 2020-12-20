@@ -1,4 +1,3 @@
-from time import sleep
 import __init__
 from Parser.parse import Parser
 
