@@ -1,5 +1,4 @@
 """Base class."""
-from os import stat
 import numpy as np
 from math import sin, cos, inf, atan
 import matplotlib.pyplot as plt

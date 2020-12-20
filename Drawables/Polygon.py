@@ -1,4 +1,5 @@
 """Module for Polygons."""
+from random import randint
 from Drawables.Line import Line
 import numpy as np
 from math import pi
@@ -58,6 +59,12 @@ class Polygon(Drawable):
             "ValueError:\tExpected 3 or more "+
             f"lines, received {l}"
         )
+
+    @classmethod
+    def default(cls, _size:int=...):
+        if not isinstance(_size, int):
+            _size = randint(3,10)
+        pass
 
 
     # Getters and Setters
@@ -165,6 +172,7 @@ class Polygon(Drawable):
 
     # Helpers
     def extendLimits(self):
+        """Extend Drawable extents."""
         from Drawables.Point import Point
         for point in self.vertices:
             Point.extendLimits(self=point)

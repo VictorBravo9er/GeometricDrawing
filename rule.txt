@@ -1,7 +1,9 @@
-Point
+Drawable: Point
 
     new
         returns -> Point
+        Return a random point.
+            Expected args    : None
         Construct new Point using point Coordinates.
             Expected args    : ('x', 'y')
             Of Types         : ('float', 'float')
@@ -15,8 +17,7 @@ Point
     copy
         returns -> Point
         Construct new point from existing Point.
-            Expected args    : ()
-            Of Types         : None
+            Expected args    : None
 
     slopeTo
         returns -> float
@@ -109,10 +110,15 @@ Point
             Of Types         : ('Line',)
 
 
-Line
+Drawable: Line
 
     new
         returns -> Point
+        Construct a random line or axis parallel line(X or Y axis).
+            Expected args    : None
+        Construct a random line or axis parallel line(X or Y axis).
+            Expected args    : ('parallelAxis',)
+            Of Types         : ('str',)
         Construct a line provided two end-points are given.
             Expected args    : ('point1', 'point2')
             Of Types         : ('Point', 'Point')
@@ -123,20 +129,17 @@ Line
     copy
         returns -> Line
         Derive another line from an existing one.
-            Expected args    : ()
-            Of Types         : None
+            Expected args    : None
 
     angle
         returns -> float
         Angle subtended by line with x-axis.
-            Expected args    : ()
-            Of Types         : None
+            Expected args    : None
 
     length
         returns -> float
         Find length of the Line segment.
-            Expected args    : ()
-            Of Types         : None
+            Expected args    : None
 
     distanceFrom
         returns -> float
@@ -150,8 +153,7 @@ Line
     bisector
         returns -> Point
         Bisector of the line.
-            Expected args    : ()
-            Of Types         : None
+            Expected args    : None
 
     sector
         returns -> Point
@@ -198,8 +200,7 @@ Line
     perpendicularBisector
         returns -> Line
         Perpendicular bisector.
-            Expected args    : ()
-            Of Types         : None
+            Expected args    : None
 
     triangle
         returns -> Triangle
@@ -210,8 +211,7 @@ Line
     circle
         returns -> Circle
         Draw circle with line as diameter, chord or tangent.
-            Expected args    : ()
-            Of Types         : None
+            Expected args    : None
 
     tangentCircle
         returns -> Circle
@@ -238,12 +238,12 @@ Line
             Of Types         : ('float', 'str')
 
 
-Arc
+Drawable: Arc
 
     new
         returns -> Arc
         Construct the class.
-            Expected args    : ('centre', 'radius', 'startAngle', 'endAngle')
+            Expected args    : ('centre', 'radius', 'angleStart', 'angleEnd')
             Of Types         : ('Point', 'float', 'float', 'float')
         Construct the class.
             Expected args    : ('centre', 'point', 'angle')
@@ -252,14 +252,15 @@ Arc
     copy
         returns -> Arc
         Make a copy of an arc.
-            Expected args    : ()
-            Of Types         : None
+            Expected args    : None
 
 
-Circle
+Drawable: Circle
 
     new
         returns -> Circle
+        Draws a random circle.
+            Expected args    : None
         Construct a circle using a centre and a radius.
             Expected args    : ('centre', 'radius')
             Of Types         : ('Point', 'float')
@@ -270,26 +271,22 @@ Circle
     copy
         returns -> Circle
         Copy another circle.
-            Expected args    : ()
-            Of Types         : None
+            Expected args    : None
 
     radius
         returns -> float
         Get radius.
-            Expected args    : ()
-            Of Types         : None
+            Expected args    : None
 
     centre
         returns -> float
         Get the radius itself.
-            Expected args    : ()
-            Of Types         : None
+            Expected args    : None
 
     area
         returns -> float
         Calculate area.
-            Expected args    : ()
-            Of Types         : None
+            Expected args    : None
 
     diameter
         returns -> Line
@@ -316,7 +313,7 @@ Circle
             Of Types         : ('float',)
 
 
-Polygon
+Drawable: Polygon
 
     new
         returns -> Polygon
@@ -330,32 +327,27 @@ Polygon
     copy
         returns -> Circle
         Copy a polygon.
-            Expected args    : ()
-            Of Types         : None
+            Expected args    : None
 
     area
         returns -> float
         Area of polygon.
-            Expected args    : ()
-            Of Types         : None
+            Expected args    : None
 
     signedArea
         returns -> float
         Signed area for nonintersecting Polygon using shielace formula.
-            Expected args    : ()
-            Of Types         : None
+            Expected args    : None
 
     centroid
         returns -> Point
         Calculate centroid.
-            Expected args    : ()
-            Of Types         : None
+            Expected args    : None
 
     vertexCentroid
         returns -> Point
         Return centroid of vertices.
-            Expected args    : ()
-            Of Types         : None
+            Expected args    : None
 
     internalAngle
         returns -> float
@@ -376,7 +368,7 @@ Polygon
             Of Types         : ('Point',)
 
 
-Triangle
+Drawable: Triangle
 
     new
         returns -> Triangle
@@ -393,50 +385,42 @@ Triangle
     copy
         returns -> Circle
         Draw Triangle copied from another triangle.
-            Expected args    : ()
-            Of Types         : None
+            Expected args    : None
 
     area
         returns -> float
         Heron's Formula.
-            Expected args    : ()
-            Of Types         : None
+            Expected args    : None
 
     centroid
         returns -> Point
         Find centroid of triangle.
-            Expected args    : ()
-            Of Types         : None
+            Expected args    : None
 
     orthocentre
         returns -> Point
         Find orthocentre of triangle.
-            Expected args    : ()
-            Of Types         : None
+            Expected args    : None
 
     incenter
         returns -> Point
         Find incentre of triangle.
-            Expected args    : ()
-            Of Types         : None
+            Expected args    : None
 
     circumcenter
         returns -> Point
         Find circumcentre of triangle.
-            Expected args    : ()
-            Of Types         : None
+            Expected args    : None
 
     incircle
         returns -> Circle
         Draw incircle of triangle.
-            Expected args    : ()
-            Of Types         : None
+            Expected args    : None
 
     circumcircle
         returns -> Circle
         Draw circumcircle of triangle.
-            Expected args    : ()
-            Of Types         : None
+            Expected args    : None
 
     median
         returns -> Line
@@ -477,14 +461,12 @@ Triangle
     signedArea
         returns -> float
         Signed area for nonintersecting Polygon using shielace formula.
-            Expected args    : ()
-            Of Types         : None
+            Expected args    : None
 
     vertexCentroid
         returns -> Point
         Return centroid of vertices.
-            Expected args    : ()
-            Of Types         : None
+            Expected args    : None
 
     internalAngle
         returns -> float

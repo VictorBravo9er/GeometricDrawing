@@ -3,6 +3,10 @@ from rules.drawable import *
 pointADT = {
     is_a:None,
     "new":{
+        tuple():{
+            args:tuple(),
+            trgt:Point.default
+        },
         (float, float,):{
             args:("x", "y",),
             trgt:Point.fromCoOrdinates

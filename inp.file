@@ -4,7 +4,7 @@ a new point 3 6
 
 k a distanceTo b
 l a lineTo b
-
+p new line y-axis
 kl l parallelLine 2
 g l parallelLine -2
 

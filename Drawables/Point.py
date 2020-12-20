@@ -2,7 +2,7 @@
 from Drawables.Drawable import Drawable
 import numpy as np
 from math import inf, pi, atan, sqrt, cos, sin
-
+from random import randint
 
 class Point(Drawable):
     """Description of class."""
@@ -55,11 +55,19 @@ class Point(Drawable):
                 )
         return new
 
+    @classmethod
+    def default(cls):
+        """Return a random point."""
+        return cls.fromCoOrdinates(
+            randint(int(Drawable._minX)-5,int(Drawable._maxX)-5),
+            randint(int(Drawable._minY)-5,int(Drawable._maxY)-5),
+        )
+
 
     # Getters and Setters
     def setPoint(self, x:float, y:float):
         """Set x and y."""
-        if isinstance(x,float) and isinstance(y,float):
+        if isinstance(x,(float, int)) and isinstance(y,(float,int)):
             (self.X, self.Y) = (x, y)
         else:
             raise TypeError(

@@ -32,7 +32,7 @@ class Parser:
         if not isinstance(rules, dict):
             rules = Collector().getDS()
         for obj, content in rules.items():
-            var.append(f"{obj.__name__}")
+            var.append(f"Drawable: {obj.__name__}")
             for ops, content in content.items():
                 try:
                     var.append(
@@ -49,9 +49,15 @@ class Parser:
                     argList  = content[args]
                     try:
                         if len(argList) == 0:
-                            argTypes = "None"
+                            argTypes = (
+                                f"{_tab * 3}Expected args{_tab}: None"
+                            )
                         else:
-                            argTypes = tuple([x.__name__ for x in argTypes])
+                            argTypes = (
+                                f"{_tab * 3}Expected args{_tab}: {argList}"+
+                                f"\n{_tab * 3}Of Types     {_tab}: "+
+                                f"{tuple([x.__name__ for x in argTypes])}"
+                            )
                     except:
                         print(obj.__name__)
                         print(ops)
@@ -59,8 +65,7 @@ class Parser:
                         print(argList)
                     var.append(
                         f"{_tab * 2}{target.__doc__}\n"+
-                        f"{_tab * 3}Expected args{_tab}: {argList}\n"+
-                        f"{_tab * 3}Of Types     {_tab}: {argTypes}"
+                        argTypes
                     )
             var.append("\n")
         printable = "\n".join(var)
@@ -171,10 +176,8 @@ class Parser:
                     val = float(item)
                     tp  = float
                 except:
-                    raise ValueError(
-                        f"ValueError:\tValue for {item}"
-                        +" couldn't be resolved."
-                    )
+                    val = item
+                    tp  = str
             paramType.append(tp )
             paramValue.append(val)
         if forConstructor and len(paramList) > 2:

@@ -3,6 +3,14 @@ from rules.drawable import *
 lineADT = {
     is_a:None,
     "new":{
+        tuple():{
+            args:tuple(),
+            trgt:Line.default
+        },
+        (str,):{
+            args:("parallelAxis",),
+            trgt:Line.default
+        },
         (Point,Point,):{
             args:("point1","point2"),
             trgt:Line.fromPoints,

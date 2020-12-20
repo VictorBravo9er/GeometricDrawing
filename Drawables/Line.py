@@ -2,11 +2,13 @@
 import numpy as np
 from Drawables.Drawable import Drawable
 from math import inf, pi, atan, cos, sin
+from random import random, randint
 
 
 class Line(Drawable):
     """Description of class."""
 
+    _x, _y = "x-axis", "y-axis"
     def __init__(self):
         """Construct default."""
         from Drawables.Point import Point
@@ -59,6 +61,33 @@ class Line(Drawable):
             end=Point.fromMetrics(angle, length, point)
         )
         return new
+
+    @classmethod
+    def default(cls, parallelAxis:str=...):
+        """Construct a random line or axis parallel line(X or Y axis)."""
+        from Drawables.Point import Point
+        if isinstance(parallelAxis, str):
+            angle = -1
+            if parallelAxis == cls._x:
+                angle = 0
+            elif parallelAxis == cls._y:
+                angle = pi * 0.5
+            if angle != -1:
+                return Line.fromMetrics(
+                    angle=angle,
+                    point=Point.default(),
+                    length=randint(
+                        int(5+Drawable._minX),
+                        int(Drawable._maxY-5)
+                    )
+                )
+        return cls.fromMetrics(
+            angle=random() % 3, point=Point.default(),
+            length=randint(
+                int(5+Drawable._minX),
+                int(Drawable._maxY-5)
+            )
+        )
 
 
     # Getters and Setters
@@ -219,6 +248,7 @@ class Line(Drawable):
 
     # Helpers
     def extendLimits(self):
+        """Extend Drawable extents."""
         self.start.extendLimits()
         self.end.extendLimits()
 

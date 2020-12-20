@@ -1,7 +1,8 @@
 """Module for Circle."""
-from math import pi, sqrt
 from Drawables.Drawable import Drawable
 from Drawables.Arc import Arc
+from math import pi, sqrt
+from random import randint
 
 class Circle(Arc):
     """Description of class."""
@@ -44,6 +45,15 @@ class Circle(Arc):
             circle.radius+0
         )
         return new
+
+    @classmethod
+    def default(cls):
+        """Draws a random circle."""
+        from Drawables.Point import Point
+        return cls.fromMetrics(
+            Point.default(),
+            randint(1, int(Drawable._maxX))
+        )
 
 
     # Getters and Setters

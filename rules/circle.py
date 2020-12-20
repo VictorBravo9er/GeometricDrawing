@@ -3,6 +3,10 @@ from rules.drawable import *
 circleADT = {
     is_a:Arc,
     "new":{
+        tuple():{
+            args:tuple(),
+            trgt:Circle.default
+        },
         (Point, float,):{
             args:("centre", "radius"),
             trgt:Circle.fromMetrics,
