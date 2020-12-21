@@ -1,6 +1,4 @@
 """Module for Polygons."""
-from random import randint
-from Drawables.Line import Line
 import numpy as np
 from math import pi
 from Drawables.Drawable import Drawable
@@ -91,6 +89,17 @@ class Polygon(Drawable):
                 "TypeError:\tInvalid arguements. Expected either a list of edges"+
                 f" or vertices, received {type(vertexList) and {type(edgeList)}}"
             )
+
+    def getIndexedPoint(self, idx:int):
+        """Return an indexed point. depends on input while construction."""
+        point, idx = self.resolvePoint(idx=idx)
+        return point
+
+    def getIndexedLine(self, idx:int):
+        """Return a line from point[i-1] to point[i]. Depends on input while construction."""
+        from Drawables.Point import Point
+        point, idx = self.resolvePoint(idx=idx)
+        return Point.lineToPoint(self.vertices[idx-1], point)
 
 
     # Methods

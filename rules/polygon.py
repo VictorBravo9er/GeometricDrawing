@@ -27,6 +27,20 @@ polygonADT = {
         },
         retVal:float
     },
+    "getPointNumber":{
+        (float):{
+            args:("idx",),
+            trgt:Polygon.getIndexedPoint
+        },
+        retVal:Point
+    },
+    "getLineNumber":{
+        (float):{
+            args:("idx",),
+            trgt:Polygon.getIndexedLine
+        },
+        retVal:Line
+    },
     "signedArea":{
         tuple():{
             args:tuple(),
