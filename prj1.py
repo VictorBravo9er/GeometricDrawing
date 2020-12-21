@@ -3,10 +3,9 @@ import __init__
 from Parser.parse import Parser
 
 
-p = Parser()
-p.tokenChecker("inp.file")
+d = Parser.parse("inp.file", _show=False)
 
-li, fi = p.draw(_show=True ,_store=False)
+print("\n".join(d[Parser._printObject]))
+print()
+print("\n".join(d[Parser._printError]))
 
-p.print()
-Drawable.printLimits()

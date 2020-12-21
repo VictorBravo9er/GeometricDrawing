@@ -211,6 +211,10 @@ class Line(Drawable):
         from Drawables.Triangle import Triangle
         return Triangle.fromLine(self, point)
 
+    def orientation(self, point):
+        """Orientation test. 0 - coliniar, 1 - left, -1 - right."""
+        return Drawable.orientation(self.start, self.end, point)
+
     def circleAround(
         self, chordDistance:float=...,
         tangentCentre=..., chordCentre=...
@@ -339,7 +343,7 @@ class Line(Drawable):
     def __eq__(self, o) -> bool:
         """'==' operator overload."""
         if isinstance(o, Line):
-            return (self.start == o.start and self.end == o.end)
+            return (self.getMetrics() == o.getMetrics())
         raise TypeError(
             f"TypeError:\tCan't compare {self.__class__} with {type(o).__name__}"
         )

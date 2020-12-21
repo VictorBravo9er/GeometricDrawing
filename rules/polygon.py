@@ -18,7 +18,7 @@ polygonADT = {
             args:tuple(),
             trgt:Polygon.fromPolygon
         },
-        retVal:Circle
+        retVal:Polygon
     },
     "area":{
         tuple():{
@@ -27,15 +27,15 @@ polygonADT = {
         },
         retVal:float
     },
-    "getPointNumber":{
-        (float):{
+    "getPointFromID":{
+        (float,):{
             args:("idx",),
             trgt:Polygon.getIndexedPoint
         },
         retVal:Point
     },
-    "getLineNumber":{
-        (float):{
+    "getLineFromID":{
+        (float,):{
             args:("idx",),
             trgt:Polygon.getIndexedLine
         },

@@ -15,6 +15,7 @@ class Drawable(object):
 
     @staticmethod
     def printLimits():
+        """Test function to print current limits."""
         print("MinX:",Drawable._minX)
         print("MaxX:",Drawable._maxX)
         print("MinY:",Drawable._minY)

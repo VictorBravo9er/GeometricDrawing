@@ -12,3 +12,5 @@ e new arc b 2 60 180
 d g bisector
 t new triangle a b c
 h t circumcircle
+
+h new Quad 

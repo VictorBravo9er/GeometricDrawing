@@ -19,7 +19,7 @@ class Polygon(Drawable):
     def fromPolygon(cls, polygon):
         """Copy a polygon."""
         new = cls()
-        new.setPolygon(cls.newVertices(polygon.vertices))
+        new.setPolygon(vertexList=cls.newVertices(polygon.vertices))
         return new
 
     @classmethod
@@ -27,7 +27,8 @@ class Polygon(Drawable):
         """Draw polygon from points."""
         l = len(listOfPoint)
         if l == 4:
-            pass
+            from Drawables.Quad import Quadrilateral
+            return Quadrilateral.fromPoints(listOfPoint)
         if l == 3:
             from Drawables.Triangle import Triangle
             return Triangle.fromPoints(listOfPoint)
@@ -45,7 +46,8 @@ class Polygon(Drawable):
         """Draw polygon from lines."""
         l = len(listOfLine)
         if l == 4:
-            pass
+            from Drawables.Quad import Quadrilateral
+            return Quadrilateral.fromPoints(listOfLine)
         if l == 3:
             from Drawables.Triangle import Triangle
             return Triangle.fromLines(listOfLine)
@@ -180,8 +182,18 @@ class Polygon(Drawable):
         for point in self.vertices:
             Point.extendLimits(self=point)
 
+    def edges(self):
+        """Provide list of edges in the polygon."""
+        from Drawables.Line import Line
+        prev = self.vertices[-1]
+        lines = []
+        for cur in self.vertices:
+            lines.append(Line.fromPoints(prev, cur))
+            prev = cur
+        return lines
+
     @staticmethod
-    def newVertices(points):
+    def newVertices(points:list):
         """Provide new vertices in order to form a new polygon."""
         if isinstance(points, list):
             from Drawables.Point import Point
@@ -342,7 +354,7 @@ class Polygon(Drawable):
         transform = self.translateMatrix(tx, ty)
         self._applyTransform(transform)
 
-    def _rotate(self, centre=...,angle:float=0):
+    def _rotate(self, centre=..., angle:float=0):
         """Rotate the polygon."""
         if angle == 0:
             return

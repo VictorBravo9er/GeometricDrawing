@@ -7,6 +7,7 @@ from Drawables.Polygon import Polygon
 from Drawables.Circle import Circle
 from Drawables.Triangle import Triangle
 from Drawables.Arc import Arc
+from Drawables.Quad import Quadrilateral
 
 is_a:str = "is_a"
 args:str = "arguements"
@@ -15,7 +16,7 @@ retVal:str = "return"
 
 initOrder = (
     Point, Line, Arc, Circle, Polygon, Triangle,
-
+    Quadrilateral,
     )
 
 objectADT = {
@@ -29,5 +30,6 @@ objectADT = {
     "arc":Arc,
     "circle":Circle,
     "polygon":Polygon,
-    "triangle":Triangle
+    "triangle":Triangle,
+    "quad":Quadrilateral
 }

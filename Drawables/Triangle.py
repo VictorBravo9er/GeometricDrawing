@@ -1,9 +1,9 @@
 """Module for Point."""
 from Drawables.Drawable import Drawable
 from Drawables.Polygon import Polygon
-import numpy as np
-from math import degrees, pi, radians
+from math import degrees, pi
 from random import random
+import numpy as np
 
 class Triangle(Polygon):
     """Triangle class."""
