@@ -3,6 +3,22 @@ from rules.drawable import *
 triangleADT = {
     is_a:Polygon,
     "new":{
+        tuple():{
+            args:tuple(),
+            trgt:Triangle.default
+        },
+        (str,):{
+            args:("_type",),
+            trgt:Triangle.default
+        },
+        (float, float):{
+            args:("angle1", "angle2"),
+            trgt:Triangle.fromAngles
+        },
+        (float, float, Line):{
+            args:("angle1", "angle2", "base"),
+            trgt:Triangle.fromAngles
+        },
         (Point,):{
             args:("listOfPoint",),
             trgt:Triangle.fromPoints,

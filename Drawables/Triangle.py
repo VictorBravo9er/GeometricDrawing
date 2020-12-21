@@ -1,11 +1,18 @@
 """Module for Point."""
-import numpy as np
 from Drawables.Drawable import Drawable
-from math import sqrt
 from Drawables.Polygon import Polygon
+import numpy as np
+from math import degrees, pi, radians
+from random import random
 
 class Triangle(Polygon):
     """Triangle class."""
+
+    _acute:str = "acute"
+    _obtuse:str= "obtuse"
+    _right:str = "right"
+    _equilateral:str= "equilateral"
+    _isoscales:str = "isoscales"
 
     def __init__(self):
         """Initialize method."""
@@ -60,6 +67,49 @@ class Triangle(Polygon):
         raise TypeError(
             f"TypeError:\tExpected: Triangle, received: {type(triangle).__name__}."
         )
+
+    @classmethod
+    def fromAngles(cls, angle1:float, angle2:float, base=...):
+        """Draw a triangle from given angles and an optional base."""
+        from Drawables.Line import Line
+        if angle1 + angle2 >= 6.2:
+            raise ValueError(
+                "ValueError:\tUnexpected values for the angles"+
+                "Expected: angle1 + angle2 < 180, received: "+
+                f"angle1 = {degrees(angle1)}, angle2 = {degrees(angle2)}"
+            )
+        if not isinstance(base, Line):
+            base = Line.default(Line._xAxis)
+        l1 = Line.fromMetrics(angle1, 2, base.start)
+        l2 = Line.fromMetrics(pi - angle2, 2, base.end)
+        point = l1.intersectionWith(l2)
+        if base.end.Y == base.start.Y:
+            if point.Y < base.start.Y:
+                point.Y = -point.Y
+        return cls.fromLine(base, point)
+
+    @classmethod
+    def default(cls, _type:str=...):
+        """Provide a random triangle, with type if provided(acute, obtuse, and right angled, equilateral and isoscales)."""
+        angle1 = 0.1 + random() % 6.2
+        angle2 = 0.1 + random() % (6.2 - angle1)
+        if isinstance(_type, str):
+            if _type == cls._acute:
+                angle1 = (random() % 1.45) + 0.1
+                angle2 = (random() % 1.45) + 0.1
+            elif _type == cls._right:
+                angle1 = (pi * 0.5)
+                angle2 = (random() % 1.45) + 0.1
+            elif _type == cls._obtuse:
+                angle1 = (random() % 1.40) + 1.6
+                angle2 = (random() % 1.45) + 0.1
+            elif _type == cls._equilateral:
+                angle1 = pi / 3
+                angle2 = angle1
+            elif _type == cls._isoscales:
+                angle1 = (random() % 1.45) + 0.1
+                angle2 = angle1
+        cls.fromAngles(angle1, angle2)
 
 
     # Methods
