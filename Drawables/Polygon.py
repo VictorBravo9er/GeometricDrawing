@@ -60,12 +60,6 @@ class Polygon(Drawable):
             f"lines, received {l}"
         )
 
-    @classmethod
-    def default(cls, _size:int=...):
-        if not isinstance(_size, int):
-            _size = randint(3,10)
-        pass
-
 
     # Getters and Setters
     def setPolygon(
