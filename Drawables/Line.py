@@ -8,7 +8,7 @@ from random import random, randint
 class Line(Drawable):
     """Description of class."""
 
-    _x, _y = "x-axis", "y-axis"
+    _xAxis, _yAxis = "x-axis", "y-axis"
     def __init__(self):
         """Construct default."""
         from Drawables.Point import Point
@@ -68,9 +68,9 @@ class Line(Drawable):
         from Drawables.Point import Point
         if isinstance(parallelAxis, str):
             angle = -1
-            if parallelAxis == cls._x:
+            if parallelAxis == cls._xAxis:
                 angle = 0
-            elif parallelAxis == cls._y:
+            elif parallelAxis == cls._yAxis:
                 angle = pi * 0.5
             if angle != -1:
                 return Line.fromMetrics(
