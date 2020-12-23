@@ -1,7 +1,7 @@
 """Parser Module."""
 import __init__
 from Parser.collect import *
-from math import radians
+from math import degrees, radians
 
 class Parser:
     """Parser Class."""
@@ -84,14 +84,15 @@ class Parser:
     def parse(
         fileName:str=..., inputList:list=...,
         _show:bool=False, _store:bool=True,
-        _storageName:str="./data/store"
+        _storageName:str="./data/store",
+        _print:bool=False
     ):
         """Standalone parsing Operation. Returns Descrpition."""
         ops = Parser()
         ops.tokenChecker(fileName, inputList)
-        ops.draw(_show, _store, _storageName)
+        ops.draw(_show, _store, _storageName, _print)
         return {
-            Parser._printObject:ops.print(_show),
+            Parser._printObject:ops.print(_print),
             Parser._printError:ops.errorLog
         }
 
@@ -218,16 +219,17 @@ class Parser:
         values = dict(zip(target[args], values))
         self.angleConversion(values)
         target = target[trgt]
-        types = constructorDict[retVal]
+        values = target(**values)
+        types = type(values).__name__
         if len(param) == 0:
             constr = "no parameters"
         else:
             constr = "parameters: "+", ".join(param)
         return {
             #self._type  :types,
-            self._desc  :f"{_id} is {types.__name__} using {target.__name__}"+
+            self._desc  :f"{_id} is {types} using {target.__name__}"+
                          f" with {constr}",
-            self._val   :target(**values)
+            self._val   :values
         }
 
     def objectConstruction(
@@ -247,16 +249,20 @@ class Parser:
         values = dict(zip(target[args], values))
         self.angleConversion(values)
         target = target[trgt]
-        types = methodDict[retVal]
+        values = target(ref, **values)
+        types = type(values).__name__
+        target = target.__name__
+        if "angle" in target and isinstance(values, (float, int)):
+            values = degrees(values)
         if len(param) == 0:
             constr = "no parameters"
         else:
             constr = "parameters: "+", ".join(param)
         return {
             #self._type  :types,
-            self._desc  :f"{_id} is {types.__name__} {target.__name__}"+
+            self._desc  :f"{_id} is {types} {target}"+
                          f" on {_refid} with {constr}",
-            self._val   :target(ref, **values)
+            self._val   :values
         }
 
     def tokenChecker(self, fileName:str=..., inputList:list=...,_printErrors:bool=True):
@@ -335,4 +341,3 @@ class Parser:
             _store=_store, _show=_show, _print=_print
         )
         return (drawableList, figure)
-

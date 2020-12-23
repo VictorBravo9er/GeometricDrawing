@@ -8,6 +8,10 @@ from rules.arc import arcADT
 from rules.circle import circleADT
 from rules.polygon import polygonADT
 from rules.triangle import triangleADT
+from rules.quad import quadADT
+from rules.parallelogram import paralleloADT
+from rules.trapezoid import trapezoidADT
+from rules.kite import kiteADT
 
 
 class Collector:
@@ -43,7 +47,12 @@ class Collector:
             Arc:arcADT,
             Circle:circleADT,
             Polygon:polygonADT,
-            Triangle:triangleADT
+            Triangle:triangleADT,
+            Quadrilateral:quadADT,
+            Parallelogram:paralleloADT,
+            Trapezoid:trapezoidADT,
+            Kite:kiteADT,
+            
         }
 
     def print(self, output:TextIOWrapper=..., toPrint:bool=False):

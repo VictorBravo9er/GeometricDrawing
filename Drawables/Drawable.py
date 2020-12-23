@@ -129,7 +129,7 @@ class Drawable(object):
 
     @staticmethod
     def draw(
-        drawables:list,_show:bool=True, _store:bool=False,
+        drawables:list, _show:bool=True, _store:bool=False,
         _storageName:str="./data/store", _print:bool=False
     ):
         """Draw call."""

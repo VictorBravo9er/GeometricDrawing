@@ -18,9 +18,14 @@ class Quadrilateral(Polygon):
     @classmethod
     def fromPoints(cls, listOfPoint: list):
         """Build Quad from provided points."""
+        if len(listOfPoint) != 4:
+            raise ValueError(
+                "ValueError:\tThe Polygon can't be constructed"+
+                " as a quadrilateral."
+            )
         new = cls()
         new.setPolygon(listOfPoint)
-        return new.checkSubClasses()
+        return new.checkSubClass()
 
     @classmethod
     def fromLines(cls, listOfLine: list):
@@ -106,23 +111,46 @@ class Quadrilateral(Polygon):
 
 
     # Helpers.
-    def checkSubClasses(self):
-        """Check if object could fit into a more specific subclass."""
+    def checkSubClass(self, checkSub:bool=True):
+        """Check if object could fit into a more specific subclass of quadrilateral."""
         lines = self.edges()
         slope = [x.slope() for x in lines]
         length = [x.length() for x in lines]
-        if slope[0] == slope[2] and slope[1] == slope[3]:
-            parallelogram
-            return self
+        if (
+            abs(slope[0]- slope[2]) < Drawable._comparisonLimit and
+            abs(slope[1] - slope[3]) < Drawable._comparisonLimit
+        ):
+            from Drawables.Parallelogram import Parallelogram
+            new = Parallelogram()
+            rectangle = abs((slope[1] * slope[2]) +1) < Drawable._comparisonLimit
+            rhombus = abs(length[1] - length[2]) < Drawable._comparisonLimit
+            if rectangle and rhombus:
+                square_
+            if rectangle:
+                rectangle_
+            if rhombus:
+                rhombus_
+            new.vertices = self.vertices
+            new.size = self.size
+            new.clockwise = self.clockwise
+            return new
         if slope[0] == slope[2] or slope[1] == slope[3]:
-            trapezoid
-            return self
+            from Drawables.Trapezoid import Trapezoid
+            new = Trapezoid()
+            new.vertices = self.vertices
+            new.size = self.size
+            new.clockwise = self.clockwise
+            return new
         if (
             (length[0] == length[1] and length[2] == length[3]) or
             (length[0] == length[3] and length[1] == length[2])
         ):
-            kite
-            return self
+            from Drawables.Kite import Kite
+            new = Kite()
+            new.vertices = self.vertices
+            new.size = self.size
+            new.clockwise = self.clockwise
+            return new
         return self
 
     def lineInQuad(self, line):

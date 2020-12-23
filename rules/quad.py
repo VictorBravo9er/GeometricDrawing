@@ -4,7 +4,7 @@ quadADT = {
     is_a:None,
     "new":{
         (list, Point,):{
-            args:("listOfPoints",),
+            args:("listOfPoint",),
             trgt:Quadrilateral.fromPoints,
         },
         (list, Line,):{

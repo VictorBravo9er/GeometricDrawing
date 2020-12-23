@@ -325,7 +325,7 @@ Drawable: Polygon
             Of Types         : list , Line.
 
     copy
-        returns -> Circle
+        returns -> Polygon
         Copy a polygon.
             Expected args    : None
 
@@ -334,13 +334,13 @@ Drawable: Polygon
         Area of polygon.
             Expected args    : None
 
-    getPointNumber
+    getPointFromID
         returns -> Point
         Return an indexed point. depends on input while construction.
             Expected args    : idx
             Of Types         : float.
 
-    getLineNumber
+    getLineFromID
         returns -> Line
         Return a line from point[i-1] to point[i]. Depends on input while construction.
             Expected args    : idx
@@ -481,13 +481,13 @@ Drawable: Triangle
             Expected args    : line
             Of Types         : Line.
 
-    getPointNumber
+    getPointFromID
         returns -> Point
         Return an indexed point. depends on input while construction.
             Expected args    : idx
             Of Types         : float.
 
-    getLineNumber
+    getLineFromID
         returns -> Line
         Return a line from point[i-1] to point[i]. Depends on input while construction.
             Expected args    : idx
@@ -511,4 +511,51 @@ Drawable: Triangle
         Calculate Internal angle at a vertex.
             Expected args    : point
             Of Types         : Point.
+
+
+Drawable: Quadrilateral
+
+    Constructor
+        returns -> Quadrilateral
+        Build Quad from provided points.
+            Expected args    : listOfPoints
+            Of Types         : list , Point.
+        Build Quad from provided lines.
+            Expected args    : listOfLine
+            Of Types         : list , Line.
+        Build a random Quadrilateral.
+            Expected args    : None
+
+    copy
+        returns -> Quadrilateral
+        Copy another Quad.
+            Expected args    : None
+
+    diagonalAt
+        returns -> Line
+        Draw diagonal from specified point/index of point.
+            Expected args    : point
+            Of Types         : Point.
+        Draw diagonal from specified point/index of point.
+            Expected args    : idx
+            Of Types         : float.
+
+    bimedianOn
+        returns -> Line
+        Draw bimedian from specified line/index of line.
+            Expected args    : line
+            Of Types         : Line.
+        Draw bimedian from specified line/index of line.
+            Expected args    : idx
+            Of Types         : float.
+
+    diagonalIntersection
+        returns -> Point
+        Find diagonal intersection point.
+            Expected args    : None
+
+    bimedianIntersection
+        returns -> Point
+        Find bimedian intersection point.
+            Expected args    : None
 
