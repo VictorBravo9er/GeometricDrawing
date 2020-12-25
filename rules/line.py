@@ -1,7 +1,7 @@
 """Point Structure."""
 from rules.drawable import *
 lineADT = {
-    is_a:None,
+    is_a:tuple(),
     "new":{
         tuple():{
             args:tuple(),
@@ -133,21 +133,21 @@ lineADT = {
     },
     "tangentCircle":{
         (Point,):{
-            args:("tangentPoint"),
+            args:("tangentPoint",),
             trgt:Line.circleAround
         },
         retVal:Circle
     },
     "chordCircle":{
         (Point,):{
-            args:("chordPoint"),
+            args:("chordPoint",),
             trgt:Line.circleAround
         },
         retVal:Circle
     },
     "quad":{
         (str,):{
-            args:("direction"),
+            args:("direction",),
             trgt:Line.square
         },
         retVal:int

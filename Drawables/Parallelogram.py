@@ -2,7 +2,6 @@
 from Drawables.Drawable import Drawable
 from Drawables.Quad import Quadrilateral
 from Drawables.Trapezoid import Trapezoid
-from random import random
 from math import degrees, pi, radians
 import numpy as np
 
@@ -34,43 +33,44 @@ class Parallelogram(Trapezoid):
         return cls.fromPoints(points)
 
     @classmethod
-    def fromParallelogram(cls, quad):
+    def fromParallelogram(cls, parallelo):
         """Copy another parallelogram."""
-        new = cls()
-        if isinstance(quad, cls):
-            points = cls.newVertices(quad.vertices)
-            new.setPolygon(vertexList=points)
+        if isinstance(parallelo, cls):
+            new = type(parallelo)()
+            new.vertices = cls.newVertices(parallelo.vertices)
+            new.size = parallelo.size
+            new.clockwise = parallelo.clockwise
             return new
         raise TypeError(
             "TypeError:\tExpected Quadrilateral, "+
-            f"received {type(quad).__name__}"
+            f"received {type(parallelo).__name__}"
         )
 
     @classmethod
-    def fromMetrics(cls, line=..., angle:float=..., length:float=...):
+    def fromMetrics(cls, line=...,angleLine:float=..., angle:float=..., length:float=...):
         """Draws a parallelogram from some metrics: a line(/line length), an internal angle, other length."""
         from Drawables.Line import Line
         from Drawables.Point import Point
         a,b=...,...
         if isinstance(line, Line):
             a, b = line.start, line.end
+            angleLine = a.angleTo(b)
         else:
+            if not isinstance(angleLine, (int, float)):
+                angleLine = Drawable.randomAngle180()
             a= Point.default()
             if isinstance(line, (float, int)):
                 b = Point.fromMetrics(
-                    angle=(random() % pi),
+                    angle=angleLine,
                     distance=line, point=a
                 )
             else:
                 b = Point.default()
         if not isinstance(angle, (float, int)):
-            angle = 0.1 + (random() % 3)
+            angle = Drawable.randomAngle180()
         if not isinstance(length, (float, int)):
-            length = (
-                Drawable._minX + 
-                random() % (Drawable._maxX -Drawable._minX)
-            )
-        angle += a.angleTo(b)
+            length = Drawable.randomLength()
+        angle += angleLine
         d = Point.fromMetrics(angle, length, a)
         c = Point.fromMetrics(angle, length, b)
         return cls.fromPoints([a,b,c,d])

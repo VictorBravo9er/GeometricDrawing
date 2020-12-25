@@ -2,7 +2,6 @@
 from Drawables.Drawable import Drawable
 from Drawables.Quad import Quadrilateral
 from math import degrees, pi, radians, sin
-from random import random
 import numpy as np
 
 class Trapezoid(Quadrilateral):
@@ -34,10 +33,11 @@ class Trapezoid(Quadrilateral):
     @classmethod
     def fromTrapezoid(cls, trap):
         """Copy another Trapezoid."""
-        new = cls()
         if isinstance(trap, cls):
-            points = cls.newVertices(trap.vertices)
-            new.setPolygon(vertexList=points)
+            new = type(trap)()
+            new.vertices = cls.newVertices(trap.vertices)
+            new.size = trap.size
+            new.clockwise = trap.clockwise
             return new
         raise TypeError(
             "TypeError:\tExpected Trapezoid, "+
@@ -54,25 +54,22 @@ class Trapezoid(Quadrilateral):
         from Drawables.Point import Point
         a,b=...,...
         if not isinstance(angle1, (float, int)):
-            angle1 = 0.1 + (random() % 3)
+            angle1 = Drawable.randomAngle180()
         if not isinstance(angle2, (float, int)):
-            angle2 = 0.1 + (random() % 3)
+            angle2 = Drawable.randomAngle180()
         if isinstance(line, Line):
             a, b = line.start, line.end
         else:
             a= Point.default()
             if isinstance(line, (float, int)):
                 b = Point.fromMetrics(
-                    angle=(random() % pi),
+                    angle=Drawable.randomAngleFull(),
                     distance=line, point=a
                 )
             else:
                 b = Point.default()
         if not isinstance(height, (float, int)):
-            height = (
-                Drawable._minX + 
-                random() % (Drawable._maxX -Drawable._minX)
-            )
+            height = Drawable.randomLength()
         angle = a.angleTo(b)
         d = Point.fromMetrics(angle1+angle, height / sin(angle1), a)
         c = Point.fromMetrics(pi-angle2+angle, height / sin(angle2), b)

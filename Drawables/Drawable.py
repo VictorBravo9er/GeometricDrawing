@@ -1,6 +1,7 @@
 """Base class."""
+from random import random
 import numpy as np
-from math import sin, cos, inf, atan
+from math import pi, sin, cos, inf, atan
 import matplotlib.pyplot as plt
 
 class Drawable(object):
@@ -8,6 +9,17 @@ class Drawable(object):
 
     _maxX, _minX, _maxY, _minY = (10.0,-10.0,10.0,-10.0)
     _comparisonLimit = 0.00000001
+    
+    randomAngleFull = lambda : random() % (2 * pi)
+    randomAngle180Par = lambda x: x + random() % 3
+    randomAngle180 = lambda : randomAngle180Par(0.1)
+    randomLengthPar = lambda x: x + random() % (Drawable._maxX - Drawable._minX) * 0.5
+    randomPointRangePar = lambda x: randomLengthPar(x)
+    randomPointRangeX = lambda : randomPointRangePar(Drawable._minX)
+    randomPointRangeY = lambda : randomPointRangePar(Drawable._minY)
+    randomLength = lambda : randomLengthPar(2)
+    randomRange = lambda x, y: x + random() % y
+
     def __init__(self):
         """Build Base constructor."""
         object.__init__(self)

@@ -18,9 +18,16 @@ class Polygon(Drawable):
     @classmethod
     def fromPolygon(cls, polygon):
         """Copy a polygon."""
-        new = cls()
-        new.setPolygon(vertexList=cls.newVertices(polygon.vertices))
-        return new
+        if isinstance(polygon, cls):
+            new = type(polygon)()
+            new.vertices = cls.newVertices(polygon.vertices)
+            new.size = polygon.size
+            new.clockwise = polygon.clockwise
+            return new
+        raise TypeError(
+            "TypeError:\tExpected Polygon, "+
+            f"received {type(polygon).__name__}"
+        )
 
     @classmethod
     def fromPoints(cls, listOfPoint:list):

@@ -16,7 +16,7 @@ class Quadrilateral(Polygon):
         super().__init__()
 
     @classmethod
-    def fromPoints(cls, listOfPoint: list):
+    def fromPoints(cls, listOfPoint: list, allowAbnormal:bool=True):
         """Build Quad from provided points."""
         if len(listOfPoint) != 4:
             raise ValueError(
@@ -24,7 +24,7 @@ class Quadrilateral(Polygon):
                 " as a quadrilateral."
             )
         new = cls()
-        new.setPolygon(listOfPoint)
+        new.setPolygon(listOfPoint,allowAbnormal=allowAbnormal)
         return new.checkSubClass()
 
     @classmethod
@@ -36,10 +36,11 @@ class Quadrilateral(Polygon):
     @classmethod
     def fromQuad(cls, quad):
         """Copy another Quad."""
-        new = cls()
         if isinstance(quad, cls):
-            points = cls.newVertices(quad.vertices)
-            new.setPolygon(vertexList=points)
+            new = type(quad)()
+            new.vertices = cls.newVertices(quad.vertices)
+            new.size = quad.size
+            new.clockwise = quad.clockwise
             return new
         raise TypeError(
             "TypeError:\tExpected Quadrilateral, "+
@@ -50,15 +51,15 @@ class Quadrilateral(Polygon):
     def default(cls):
         """Build a random Quadrilateral."""
         from Drawables.Point import Point
-        new = cls()
         while True:
             points = [
                 Point.default(), Point.default(),
                 Point.default(), Point.default()
             ]
             try:
-                new.setPolygon(vertexList=points, allowAbnormal=False)
-                return new
+                return cls.fromPoints(
+                    points, allowAbnormal=False
+                )
             except:
                 continue
 
@@ -116,25 +117,33 @@ class Quadrilateral(Polygon):
         lines = self.edges()
         slope = [x.slope() for x in lines]
         length = [x.length() for x in lines]
+
         if (
             abs(slope[0]- slope[2]) < Drawable._comparisonLimit and
-            abs(slope[1] - slope[3]) < Drawable._comparisonLimit
+            abs(slope[3] - slope[1]) < Drawable._comparisonLimit
         ):
             from Drawables.Parallelogram import Parallelogram
-            new = Parallelogram()
             rectangle = abs((slope[1] * slope[2]) +1) < Drawable._comparisonLimit
             rhombus = abs(length[1] - length[2]) < Drawable._comparisonLimit
             if rectangle and rhombus:
-                square_
-            if rectangle:
-                rectangle_
-            if rhombus:
-                rhombus_
+                from Drawables.Square import Square
+                new = Square()
+            elif rectangle:
+                from Drawables.Rectangle import Rectangle
+                new = Rectangle()
+            elif rhombus:
+                from Drawables.Rhombus import Rhombus
+                new = Rhombus()
+            else:
+                new = Parallelogram()
             new.vertices = self.vertices
             new.size = self.size
             new.clockwise = self.clockwise
             return new
-        if slope[0] == slope[2] or slope[1] == slope[3]:
+        if (
+            abs(slope[0] - slope[2]) < Drawable._comparisonLimit or
+            abs(slope[3] - slope[1]) < Drawable._comparisonLimit
+        ):
             from Drawables.Trapezoid import Trapezoid
             new = Trapezoid()
             new.vertices = self.vertices
@@ -142,8 +151,14 @@ class Quadrilateral(Polygon):
             new.clockwise = self.clockwise
             return new
         if (
-            (length[0] == length[1] and length[2] == length[3]) or
-            (length[0] == length[3] and length[1] == length[2])
+            (
+                abs(length[0] - length[1]) < Drawable._comparisonLimit and 
+                abs(length[2] - length[3]) < Drawable._comparisonLimit
+            ) or
+            (
+                abs(length[0] - length[3]) < Drawable._comparisonLimit and 
+                abs(length[1] - length[2]) < Drawable._comparisonLimit
+            )
         ):
             from Drawables.Kite import Kite
             new = Kite()

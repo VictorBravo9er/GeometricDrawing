@@ -1,7 +1,7 @@
 """Point Structure."""
 from rules.drawable import *
 trapezoidADT = {
-    is_a:None,
+    is_a:(Quadrilateral,),
     "new":{
         (list, Point,):{
             args:("listOfPoint",),

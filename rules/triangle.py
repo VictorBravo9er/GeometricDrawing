@@ -1,7 +1,7 @@
 """Point Structure."""
 from rules.drawable import *
 triangleADT = {
-    is_a:Polygon,
+    is_a:(Polygon,),
     "new":{
         tuple():{
             args:tuple(),
@@ -15,8 +15,12 @@ triangleADT = {
             args:("angle1", "angle2"),
             trgt:Triangle.fromAngles
         },
-        (float, float, Line):{
-            args:("angle1", "angle2", "base"),
+        (float, float, float):{
+            args:("base", "angle1", "angle2",),
+            trgt:Triangle.fromAngles
+        },
+        (Line, float, float):{
+            args:("base", "angle1", "angle2",),
             trgt:Triangle.fromAngles
         },
         (Point,):{

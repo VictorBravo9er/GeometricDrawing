@@ -1,21 +1,22 @@
 """Module for Point."""
 from Drawables.Drawable import Drawable
 from Drawables.Quad import Quadrilateral
+from Drawables.Parallelogram import Parallelogram
+from Drawables.Kite import Kite
 from math import degrees, pi, radians, sin
-from random import random
 import numpy as np
 
-class Kite(Quadrilateral):
+class Rhombus(Parallelogram, Kite):
     """Base class of kite."""
 
-    _rhombus:str = "rhombus"
+    _square:str = "square"
     def __init__(self):
         """Class constructor."""
         super().__init__()
 
     @classmethod
     def fromPoints(cls, listOfPoint: list):
-        """Build trapezoid from provided points."""
+        """Build rhombus from provided points."""
         if len(listOfPoint) != 4:
             raise ValueError(
                 "ValueError:\tThe Polygon can't even be "+
@@ -27,57 +28,50 @@ class Kite(Quadrilateral):
 
     @classmethod
     def fromLines(cls, listOfLine: list):
-        """Build parallelogram from provided lines."""
+        """Build rhombus from provided lines."""
         points = cls.edgeToVertex(listOfLine)
         return cls.fromPoints(points)
 
     @classmethod
-    def fromKite(cls, trap):
-        """Copy another Trapezoid."""
-        new = cls()
-        if isinstance(trap, cls):
-            points = cls.newVertices(trap.vertices)
+    def fromRhombus(cls, rhom):
+        """Copy another rhombus."""
+        if isinstance(rhom, cls):
+            new = type(rhom)()
+            points = cls.newVertices(rhom.vertices)
             new.setPolygon(vertexList=points)
             return new
         raise TypeError(
             "TypeError:\tExpected Kite, "+
-            f"received {type(trap).__name__}"
+            f"received {type(rhom).__name__}"
         )
 
     @classmethod
     def fromMetrics(
-        cls, line=..., lengthOther:float=...,
-        angle:float=..., angleCommon:float=...
+        cls, line=..., angleLine:float=...,
+        angleInternal:float=...,
     ):
         """Draws a kite from some metrics: a line(/line length), an internal angle, other length."""
         from Drawables.Line import Line
         from Drawables.Point import Point
         a,b=...,...
-        if not isinstance(angle, (float, int)):
-            angle = 0.1 + (random() % 3)
-        if not isinstance(angleCommon, (float, int)):
-            angleCommon = 0.1 + (random() % 3)
+        if not isinstance(angleInternal, (float, int)):
+            angleInternal = Drawable.randomAngle180()
         if isinstance(line, Line):
             a, b = line.start, line.end
-            line = line.length()
+            angleLine = line.angle()
         else:
             a= Point.default()
-            if isinstance(line, (float, int)):
-                b = Point.fromMetrics(
-                    angle=(random() % pi),
-                    distance=line, point=a
-                )
-            else:
-                b = Point.default()
-                line = a.distanceTo(b)
-        if not isinstance(lengthOther, (float, int)):
-            lengthOther = (
-                Drawable._minX + 
-                random() % (Drawable._maxX -Drawable._minX)
+            if not isinstance(angleLine, (float, int)):
+                angleLine = Drawable.randomAngleFull()
+            if not isinstance(line, (float, int)):
+                line = Drawable.randomLength()
+            b = Point.fromMetrics(
+                angle=angleLine,
+                distance=line, point=a
             )
-        angle = a.angleTo(b)
-        d = Point.fromMetrics(angle+angle, line, a)
-        c = Point.fromMetrics(pi-angleCommon+angle, lengthOther, b)
+        line = a.distanceTo(point=b)
+        d = Point.fromMetrics(angleInternal+angleLine, line, a)
+        c = Point.fromMetrics(angleInternal+angleLine, line, b)
         return cls.fromPoints([a,b,c,d])
 
     @classmethod
@@ -91,7 +85,7 @@ class Kite(Quadrilateral):
     def checkClass(trap:Quadrilateral):
         """Check if trapezoid can be constructed."""
         new = trap.checkSubClass()
-        if isinstance(new, Kite):
+        if isinstance(new, Rhombus):
             return new
         raise ValueError(
             "ValueError:\tThe Quadrilateral can't "+

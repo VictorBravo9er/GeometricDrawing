@@ -1,7 +1,7 @@
 """Point Structure."""
 from rules.drawable import *
 paralleloADT = {
-    is_a:None,
+    is_a:(Trapezoid,),
     "new":{
         (list, Point,):{
             args:("listOfPoint",),
@@ -13,6 +13,10 @@ paralleloADT = {
         },
         (Line, float, float):{
             args:("line", "angle", "length",),
+            trgt:Parallelogram.fromMetrics,
+        },
+        (float, float, float, float):{
+            args:("line", "angleLine", "angle", "length",),
             trgt:Parallelogram.fromMetrics,
         },
         (float, float, float):{

@@ -2,7 +2,6 @@
 from Drawables.Drawable import Drawable
 from Drawables.Polygon import Polygon
 from math import degrees, pi
-from random import random
 import numpy as np
 
 class Triangle(Polygon):
@@ -62,7 +61,9 @@ class Triangle(Polygon):
         """Draw Triangle copied from another triangle."""
         new = cls()
         if isinstance(triangle, Triangle):
-            new.setPolygon(vertexList=Triangle.newVertices(triangle.vertices))
+            new.vertices = Triangle.newVertices(triangle.vertices)
+            new.size = triangle.size
+            new.clockwise = triangle.clockwise
             return new
         raise TypeError(
             f"TypeError:\tExpected: Triangle, received: {type(triangle).__name__}."
@@ -78,10 +79,18 @@ class Triangle(Polygon):
                 "Expected: angle1 + angle2 < 180, received: "+
                 f"angle1 = {degrees(angle1)}, angle2 = {degrees(angle2)}"
             )
+        if isinstance(base, (float,int)):
+            from Drawables.Point import Point
+            base = Line.fromMetrics(
+                angle=Drawable.randomAngle180(),
+                length=Drawable.randomLength(),
+                point=Point.default()
+            )
         if not isinstance(base, Line):
             base = Line.default(Line._xAxis)
-        l1 = Line.fromMetrics(angle1, 2, base.start)
-        l2 = Line.fromMetrics(pi - angle2, 2, base.end)
+        angle = base.angle()
+        l1 = Line.fromMetrics(angle1+angle, 2, base.start)
+        l2 = Line.fromMetrics(pi-angle2+angle, 2, base.end)
         point = l1.intersectionWith(l2)
         if base.end.Y == base.start.Y:
             if point.Y < base.start.Y:
@@ -91,23 +100,23 @@ class Triangle(Polygon):
     @classmethod
     def default(cls, _type:str=...):
         """Provide a random triangle, with type if provided(acute, obtuse, and right angled, equilateral and isoscales)."""
-        angle1 = 0.1 + random() % 6.2
-        angle2 = 0.1 + random() % (6.2 - angle1)
+        angle1 = Drawable.randomRange(0.1, 3)
+        angle2 = Drawable.randomRange(0.1, 3 - angle1)
         if isinstance(_type, str):
             if _type == cls._acute:
-                angle1 = (random() % 1.45) + 0.1
-                angle2 = (random() % 1.45) + 0.1
+                angle1 = Drawable.randomRange(0.1, 1.45)
+                angle2 = Drawable.randomRange(0.1, 1.45)
             elif _type == cls._right:
                 angle1 = (pi * 0.5)
-                angle2 = (random() % 1.45) + 0.1
+                angle2 = Drawable.randomRange(0.1, 1.45)
             elif _type == cls._obtuse:
-                angle1 = (random() % 1.40) + 1.6
-                angle2 = (random() % 1.45) + 0.1
+                angle1 = Drawable.randomRange(1.6, 1.4)
+                angle2 = Drawable.randomRange(0.1, 3 - angle1)
             elif _type == cls._equilateral:
                 angle1 = pi / 3
                 angle2 = angle1
             elif _type == cls._isoscales:
-                angle1 = (random() % 1.45) + 0.1
+                angle1 = Drawable.randomRange(0.1, 1.45)
                 angle2 = angle1
         cls.fromAngles(angle1, angle2)
 

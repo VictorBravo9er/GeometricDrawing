@@ -2,7 +2,6 @@
 from Drawables.Drawable import Drawable
 from Drawables.Arc import Arc
 from math import pi, sqrt
-from random import randint
 
 class Circle(Arc):
     """Description of class."""
@@ -52,7 +51,7 @@ class Circle(Arc):
         from Drawables.Point import Point
         return cls.fromMetrics(
             Point.default(),
-            randint(1, int(Drawable._maxX))
+            Drawable.randomLengthPar(2)
         )
 
 

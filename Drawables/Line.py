@@ -2,8 +2,6 @@
 import numpy as np
 from Drawables.Drawable import Drawable
 from math import inf, pi, atan, cos, sin
-from random import random, randint
-
 
 class Line(Drawable):
     """Description of class."""
@@ -76,17 +74,11 @@ class Line(Drawable):
                 return Line.fromMetrics(
                     angle=angle,
                     point=Point.default(),
-                    length=randint(
-                        int(5+Drawable._minX),
-                        int(Drawable._maxY-5)
-                    )
+                    length=Drawable.randomLength()
                 )
         return cls.fromMetrics(
-            angle=random() % 3, point=Point.default(),
-            length=randint(
-                int(5+Drawable._minX),
-                int(Drawable._maxY-5)
-            )
+            angle=Drawable.randomAngle180(), point=Point.default(),
+            length=Drawable.randomLength()
         )
 
 

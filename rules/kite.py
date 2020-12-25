@@ -1,7 +1,7 @@
 """Point Structure."""
 from rules.drawable import *
 kiteADT = {
-    is_a:None,
+    is_a:(Quadrilateral,),
     "new":{
         (list, Point,):{
             args:("listOfPoint",),
@@ -11,12 +11,12 @@ kiteADT = {
             args:("listOfLine",),
             trgt:Kite.fromLines,
         },
-        (Line, float, float, float):{
-            args:("line", "angle", "angleCommon" "lengthOther",),
+        (Line, float, float):{
+            args:("line", "lengthOther", "angle"),
             trgt:Kite.fromMetrics,
         },
         (float, float, float, float,):{
-            args:("line", "angle", "angleCommon" "lengthOther",),
+            args:("line", "angleLine" "lengthOther", "angle"),
             trgt:Kite.fromMetrics,
         },
         tuple():{

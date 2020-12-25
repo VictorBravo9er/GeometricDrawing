@@ -1,7 +1,7 @@
 """Point Structure."""
 from rules.drawable import *
 quadADT = {
-    is_a:None,
+    is_a:(Polygon,),
     "new":{
         (list, Point,):{
             args:("listOfPoint",),

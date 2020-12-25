@@ -1,23 +1,21 @@
 """Module for Point."""
 from Drawables.Drawable import Drawable
 from Drawables.Quad import Quadrilateral
-from Drawables.Trapezoid import Trapezoid
-from random import random
+from Drawables.Parallelogram import Parallelogram
 from math import degrees, pi, radians
 import numpy as np
 
-class Parallelogram(Trapezoid):
+class Rectangle(Parallelogram):
     """Base class of Parallelogram."""
 
-    _rectangle:str = "rectangle"
-    _rhombus:str = "rhombus"
+    _square:str = "square"
     def __init__(self):
         """Class constructor."""
         super().__init__()
 
     @classmethod
     def fromPoints(cls, listOfPoint: list):
-        """Build parallelogram from provided points."""
+        """Build rectangle from provided points."""
         if len(listOfPoint) != 4:
             raise ValueError(
                 "ValueError:\tThe Polygon can't even be "+
@@ -34,45 +32,48 @@ class Parallelogram(Trapezoid):
         return cls.fromPoints(points)
 
     @classmethod
-    def fromParallelogram(cls, quad):
+    def fromRectangle(cls, rec):
         """Copy another parallelogram."""
-        new = cls()
-        if isinstance(quad, cls):
-            points = cls.newVertices(quad.vertices)
-            new.setPolygon(vertexList=points)
+        if isinstance(rec, cls):
+            new = type(rec)()
+            new.vertices = cls.newVertices(rec.vertices)
+            new.size = rec.size
+            new.clockwise = rec.clockwise
             return new
         raise TypeError(
             "TypeError:\tExpected Quadrilateral, "+
-            f"received {type(quad).__name__}"
+            f"received {type(rec).__name__}"
         )
 
     @classmethod
-    def fromMetrics(cls, line=..., angle:float=..., length:float=...):
+    def fromMetrics(cls, line=..., angleLine:float=..., lengthOther:float=...):
         """Draws a parallelogram from some metrics: a line(/line length), an internal angle, other length."""
         from Drawables.Line import Line
         from Drawables.Point import Point
         a,b=...,...
+        if not isinstance(angleLine, (int, float)):
+            angleLine = Drawable.randomAngleFull()
         if isinstance(line, Line):
             a, b = line.start, line.end
+            angleLine = a.angleTo(b)
         else:
             a= Point.default()
             if isinstance(line, (float, int)):
                 b = Point.fromMetrics(
-                    angle=(random() % pi),
+                    angle=angleLine,
                     distance=line, point=a
                 )
             else:
-                b = Point.default()
-        if not isinstance(angle, (float, int)):
-            angle = 0.1 + (random() % 3)
-        if not isinstance(length, (float, int)):
-            length = (
-                Drawable._minX + 
-                random() % (Drawable._maxX -Drawable._minX)
-            )
-        angle += a.angleTo(b)
-        d = Point.fromMetrics(angle, length, a)
-        c = Point.fromMetrics(angle, length, b)
+                line = Drawable.randomLength()
+                b = Point.fromMetrics(
+                    angle=angleLine, point=a,
+                    distance=line
+                )
+        if not isinstance(lengthOther, (float, int)):
+            lengthOther = Drawable.randomLength()
+        angleLine += (pi * 0.5)
+        d = Point.fromMetrics(angleLine, lengthOther, a)
+        c = Point.fromMetrics(angleLine, lengthOther, b)
         return cls.fromPoints([a,b,c,d])
 
     @classmethod
@@ -86,7 +87,7 @@ class Parallelogram(Trapezoid):
     def checkClass(trap:Quadrilateral):
         """Check if parallelogram can be constructed."""
         new = trap.checkSubClass()
-        if isinstance(new, Parallelogram):
+        if isinstance(new, Rectangle):
             return new
         raise ValueError(
             "ValueError:\tThe Quadrilateral can't "+

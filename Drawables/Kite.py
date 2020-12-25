@@ -1,8 +1,7 @@
 """Module for Point."""
 from Drawables.Drawable import Drawable
 from Drawables.Quad import Quadrilateral
-from math import degrees, pi, radians, sin
-from random import random
+from math import acos, degrees, pi, radians, sin
 import numpy as np
 
 class Kite(Quadrilateral):
@@ -32,52 +31,55 @@ class Kite(Quadrilateral):
         return cls.fromPoints(points)
 
     @classmethod
-    def fromKite(cls, trap):
+    def fromKite(cls, kite):
         """Copy another Trapezoid."""
-        new = cls()
-        if isinstance(trap, cls):
-            points = cls.newVertices(trap.vertices)
-            new.setPolygon(vertexList=points)
+        if isinstance(kite, cls):
+            new = type(kite)()
+            new.vertices = cls.newVertices(kite.vertices)
+            new.size = kite.size
+            new.clockwise = kite.clockwise
             return new
         raise TypeError(
             "TypeError:\tExpected Kite, "+
-            f"received {type(trap).__name__}"
+            f"received {type(kite).__name__}"
         )
 
     @classmethod
     def fromMetrics(
-        cls, line=..., lengthOther:float=...,
-        angle:float=..., angleCommon:float=...
+        cls, line=..., angleLine:float=..., lengthOther:float=...,
+        angle:float=...
     ):
         """Draws a kite from some metrics: a line(/line length), an internal angle, other length."""
         from Drawables.Line import Line
         from Drawables.Point import Point
         a,b=...,...
         if not isinstance(angle, (float, int)):
-            angle = 0.1 + (random() % 3)
-        if not isinstance(angleCommon, (float, int)):
-            angleCommon = 0.1 + (random() % 3)
+            angle = Drawable.randomAngle180()
         if isinstance(line, Line):
             a, b = line.start, line.end
+            angleLine = line.angle()
             line = line.length()
         else:
             a= Point.default()
+            if not isinstance(angleLine, (float, int)):
+                angleLine = Drawable.randomAngle180()
             if isinstance(line, (float, int)):
                 b = Point.fromMetrics(
-                    angle=(random() % pi),
+                    angle=angleLine,
                     distance=line, point=a
                 )
             else:
                 b = Point.default()
-                line = a.distanceTo(b)
+                line = a.distanceTo(point=b)
+                angleLine = a.angleTo(b)
         if not isinstance(lengthOther, (float, int)):
-            lengthOther = (
-                Drawable._minX + 
-                random() % (Drawable._maxX -Drawable._minX)
-            )
-        angle = a.angleTo(b)
-        d = Point.fromMetrics(angle+angle, line, a)
-        c = Point.fromMetrics(pi-angleCommon+angle, lengthOther, b)
+            lengthOther = Drawable.randomLength()
+        theta1 = (pi - angle) / 2
+        smiBse = line * sin(angle / 2)
+        theta2 = acos(smiBse / lengthOther)
+        angleCommon = theta1 - theta2
+        d = Point.fromMetrics(angle+angleLine, line, a)
+        c = Point.fromMetrics(pi-angleCommon+angleLine, lengthOther, b)
         return cls.fromPoints([a,b,c,d])
 
     @classmethod
@@ -93,6 +95,14 @@ class Kite(Quadrilateral):
         new = trap.checkSubClass()
         if isinstance(new, Kite):
             return new
+        a,b,c,d = trap.vertices
+        print(
+            a.distanceTo(point=b),
+            b.distanceTo(point=c),
+            c.distanceTo(point=d),
+            d.distanceTo(point=a)
+        )
+        return trap
         raise ValueError(
             "ValueError:\tThe Quadrilateral can't "+
             "be constructed as a kite."

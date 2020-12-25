@@ -2,7 +2,6 @@
 from Drawables.Drawable import Drawable
 import numpy as np
 from math import inf, pi, atan, sqrt, cos, sin
-from random import randint
 
 class Point(Drawable):
     """Description of class."""
@@ -59,8 +58,8 @@ class Point(Drawable):
     def default(cls):
         """Return a random point."""
         return cls.fromCoOrdinates(
-            randint(int(Drawable._minX)+5,int(Drawable._maxX)-5),
-            randint(int(Drawable._minY)+5,int(Drawable._maxY)-5),
+            Drawable.randomPointRangeX(),
+            Drawable.randomPointRangeY()
         )
 
 

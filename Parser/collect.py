@@ -9,9 +9,12 @@ from rules.circle import circleADT
 from rules.polygon import polygonADT
 from rules.triangle import triangleADT
 from rules.quad import quadADT
-from rules.parallelogram import paralleloADT
 from rules.trapezoid import trapezoidADT
 from rules.kite import kiteADT
+from rules.parallelogram import paralleloADT
+from rules.rectangle import rectangleADT
+from rules.rhombus import rhombusADT
+from rules.square import squareADT
 
 
 class Collector:
@@ -32,12 +35,13 @@ class Collector:
         """Inherit any remaining methods from base class."""
         backRef = self.ADT
         for key, CLASS in backRef.items():
-            BASE = CLASS[is_a]
-            del CLASS[is_a]
-            if BASE is not None:
-                inheritance = [(x, y) for (x, y) in backRef[BASE].items() if x not in CLASS]
-                for x, y in inheritance:
+            for index in CLASS[is_a]:
+                for x, y in [
+                    (x, y) for (x, y) in backRef[index].items()
+                    if x not in CLASS
+                ]:
                     CLASS[x] = y
+            del CLASS[is_a]
 
     def collect(self):
         """Collect all ADT's together."""
@@ -49,10 +53,12 @@ class Collector:
             Polygon:polygonADT,
             Triangle:triangleADT,
             Quadrilateral:quadADT,
-            Parallelogram:paralleloADT,
             Trapezoid:trapezoidADT,
             Kite:kiteADT,
-            
+            Parallelogram:paralleloADT,
+            Rectangle:rectangleADT,
+            Rhombus:rhombusADT,
+            Square:squareADT
         }
 
     def print(self, output:TextIOWrapper=..., toPrint:bool=False):
