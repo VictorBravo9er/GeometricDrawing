@@ -24,7 +24,7 @@ quadADT = {
         },
         retVal:Quadrilateral
     },
-    "diagonalAt":{
+    "diagonal":{
         (Point,):{
             args:("point",),
             trgt:Quadrilateral.diagonalAtPoint
@@ -35,7 +35,7 @@ quadADT = {
         },
         retVal:Line
     },
-    "bimedianOn":{
+    "bimedian":{
         (Line,):{
             args:("line",),
             trgt:Quadrilateral.bimedianOnLine
@@ -46,14 +46,14 @@ quadADT = {
         },
         retVal:Line
     },
-    "diagonalIntersection":{
+    "diagonal_intersection":{
         tuple():{
             args:tuple(),
             trgt:Quadrilateral.diagonalIntersection
         },
         retVal:Point
     },
-    "bimedianIntersection":{
+    "bimedian_intersection":{
         tuple():{
             args:tuple(),
             trgt:Quadrilateral.bimedianIntersection

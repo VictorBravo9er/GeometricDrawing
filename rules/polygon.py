@@ -27,21 +27,21 @@ polygonADT = {
         },
         retVal:float
     },
-    "getPointFromID":{
+    "get_indexed_point":{
         (float,):{
             args:("idx",),
             trgt:Polygon.getIndexedPoint
         },
         retVal:Point
     },
-    "getLineFromID":{
+    "get_indexed_line":{
         (float,):{
             args:("idx",),
             trgt:Polygon.getIndexedLine
         },
         retVal:Line
     },
-    "signedArea":{
+    "signed_area":{
         tuple():{
             args:tuple(),
             trgt:Polygon.signedArea
@@ -55,14 +55,14 @@ polygonADT = {
         },
         retVal:Point
     },
-    "vertexCentroid":{
+    "vertex_centroid":{
         tuple():{
             args:tuple(),
             trgt:Polygon.vertexCentroid
         },
         retVal:Point
     },
-    "internalAngle":{
+    "internal_angle":{
         (float,):{
             args:("idx",),
             trgt:Polygon.internAngle
@@ -73,7 +73,7 @@ polygonADT = {
         },
         retVal:float
     },
-    "angleBisector":{
+    "angle_bisector":{
         (float,):{
             args:("idx",),
             trgt:Polygon.angleBisector

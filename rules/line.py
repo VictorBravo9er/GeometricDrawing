@@ -42,7 +42,7 @@ lineADT = {
         },
         retVal:float
     },
-    "distanceFrom":{
+    "distance":{
         (Line,):{
             args:("line",),
             trgt:Line.distanceFrom
@@ -74,7 +74,7 @@ lineADT = {
         },
         retVal:Point
     },
-    "parallelLine":{
+    "parallel_line":{
         (Point,):{
             args:("point",),
             trgt:Line.parallelLine
@@ -85,24 +85,17 @@ lineADT = {
         },
         retVal:Point
     },
-    "projectionOf":{
+    "projection":{
         (Point,):{
             args:("point",),
             trgt:Line.projectionOf
         },
         retVal:Point
     },
-    "perpendicularFrom":{
+    "perpendicular":{
         (Point,):{
             args:("point",),
             trgt:Line.perpendicularFrom
-        },
-        retVal:Line
-    },
-    "perpendicularAt":{
-        (Point,):{
-            args:("point",),
-            trgt:Line.perpendicularAt
         },
         (float,):{
             args:("ratio",),
@@ -110,7 +103,7 @@ lineADT = {
         },
         retVal:Line
     },
-    "perpendicularBisector":{
+    "perpendicular_bisector":{
         tuple():{
             args:tuple(),
             trgt:Line.perpendicularBisector
@@ -131,14 +124,14 @@ lineADT = {
         },
         retVal:Circle
     },
-    "tangentCircle":{
+    "tangent_circle":{
         (Point,):{
             args:("tangentPoint",),
             trgt:Line.circleAround
         },
         retVal:Circle
     },
-    "chordCircle":{
+    "chord_circle":{
         (Point,):{
             args:("chordPoint",),
             trgt:Line.circleAround

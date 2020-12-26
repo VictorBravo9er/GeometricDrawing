@@ -56,7 +56,7 @@ circleADT = {
         },
         retVal:Line
     },
-    "commonChord":{
+    "common_chord":{
         (Line,):{
             args:("circle",),
             trgt:Circle.commonChord
