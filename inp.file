@@ -1,14 +1,4 @@
-c new point 1 2
-b new point -1 4
-a new point 3 6
-
-k a distanceTo b
-l a lineTo b
-
-kl l parallelLine 2
-g l parallelLine -2
-
-e new arc b 2 60 180 
-d g bisector
-t new triangle a b c
-h t circumcircle
+a new point 5 2
+b new point 6 4
+l new line a b
+p l perpendicular_bisector

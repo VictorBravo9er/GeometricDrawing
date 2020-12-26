@@ -1,8 +1,28 @@
 """Point Structure."""
 from rules.drawable import *
 triangleADT = {
-    is_a:Polygon,
+    is_a:(Polygon,),
     "new":{
+        tuple():{
+            args:tuple(),
+            trgt:Triangle.default
+        },
+        (str,):{
+            args:("_type",),
+            trgt:Triangle.default
+        },
+        (float, float):{
+            args:("angle1", "angle2"),
+            trgt:Triangle.fromAngles
+        },
+        (float, float, float):{
+            args:("base", "angle1", "angle2",),
+            trgt:Triangle.fromAngles
+        },
+        (Line, float, float):{
+            args:("base", "angle1", "angle2",),
+            trgt:Triangle.fromAngles
+        },
         (Point,):{
             args:("listOfPoint",),
             trgt:Triangle.fromPoints,

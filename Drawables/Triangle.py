@@ -1,11 +1,18 @@
 """Module for Point."""
-import numpy as np
+from Drawables.randoms import *
 from Drawables.Drawable import Drawable
-from math import sqrt
 from Drawables.Polygon import Polygon
+from math import degrees, pi
+import numpy as np
 
 class Triangle(Polygon):
     """Triangle class."""
+
+    _acute:str = "acute"
+    _obtuse:str= "obtuse"
+    _right:str = "right"
+    _equilateral:str= "equilateral"
+    _isoscales:str = "isoscales"
 
     def __init__(self):
         """Initialize method."""
@@ -13,7 +20,7 @@ class Triangle(Polygon):
 
     @classmethod
     def fromLine(cls, line, point):
-        """Draw Triangle from a line and a point."""
+        """Draw triangle using a line and a point."""
         from Drawables.Point import Point
         from Drawables.Line import Line
         new = cls()
@@ -28,7 +35,7 @@ class Triangle(Polygon):
 
     @classmethod
     def fromLines(cls, listOfLine:list):
-        """Draw Triangle from list of lines."""
+        """Draw triangle from list of lines."""
         l = len(listOfLine)
         if l != 3:
             raise ValueError(
@@ -40,7 +47,7 @@ class Triangle(Polygon):
 
     @classmethod
     def fromPoints(cls, listOfPoint:list):
-        """Draw Triangle list of points."""
+        """Draw triangle from a list of points."""
         l = len(listOfPoint)
         if l != 3:
             raise ValueError(
@@ -52,19 +59,72 @@ class Triangle(Polygon):
 
     @classmethod
     def fromTriangle(cls, triangle):
-        """Draw Triangle copied from another triangle."""
+        """Copy from another triangle."""
         new = cls()
         if isinstance(triangle, Triangle):
-            new.setPolygon(vertexList=Triangle.newVertices(triangle.vertices))
+            new.vertices = Triangle.newVertices(triangle.vertices)
+            new.size = triangle.size
+            new.clockwise = triangle.clockwise
             return new
         raise TypeError(
             f"TypeError:\tExpected: Triangle, received: {type(triangle).__name__}."
         )
 
+    @classmethod
+    def fromAngles(cls, angle1:float, angle2:float, base=...):
+        """Draw a triangle from given two angles and an optional base."""
+        from Drawables.Line import Line
+        if angle1 + angle2 >= 6.2:
+            raise ValueError(
+                "ValueError:\tUnexpected values for the angles"+
+                "Expected: angle1 + angle2 < 180, received: "+
+                f"angle1 = {degrees(angle1)}, angle2 = {degrees(angle2)}"
+            )
+        if isinstance(base, (float,int)):
+            from Drawables.Point import Point
+            base = Line.fromMetrics(
+                angle=randomAngle180(),
+                length=randomLength(),
+                point=Point.default()
+            )
+        if not isinstance(base, Line):
+            base = Line.default(Line._xAxis)
+        angle = base.angle()
+        l1 = Line.fromMetrics(angle1+angle, 2, base.start)
+        l2 = Line.fromMetrics(pi-angle2+angle, 2, base.end)
+        point = l1.intersectionWith(l2)
+        if base.end.Y == base.start.Y:
+            if point.Y < base.start.Y:
+                point.Y = -point.Y
+        return cls.fromLine(base, point)
+
+    @classmethod
+    def default(cls, _type:str=...):
+        """Draw a random triangle. Or Draw a specific type(acute, obtuse, and right angled, equilateral and isoscales)."""
+        angle1 = randomRange(0.1, 3)
+        angle2 = randomRange(0.1, 3 - angle1)
+        if isinstance(_type, str):
+            if _type == cls._acute:
+                angle1 = randomRange(0.1, 1.45)
+                angle2 = randomRange(0.1, 1.45)
+            elif _type == cls._right:
+                angle1 = (pi * 0.5)
+                angle2 = randomRange(0.1, 1.45)
+            elif _type == cls._obtuse:
+                angle1 = randomRange(1.6, 1.4)
+                angle2 = randomRange(0.1, 3 - angle1)
+            elif _type == cls._equilateral:
+                angle1 = pi / 3
+                angle2 = angle1
+            elif _type == cls._isoscales:
+                angle1 = randomRange(0.1, 1.45)
+                angle2 = angle1
+        cls.fromAngles(angle1, angle2)
+
 
     # Methods
     def area(self):
-        """Heron's Formula."""
+        """Calculate area using Heron's Formula."""
         from Drawables.Point import Point
         lengths = list()
         prev = self.vertices[-1]
@@ -123,7 +183,7 @@ class Triangle(Polygon):
         return Circle.fromMetrics(centre, distance)
 
     def medianFromPoint(self, point=..., idx:int=...):
-        """Draw a median from a specified point."""
+        """Draw a median from a specified point(or it's index)."""
         from Drawables.Point import Point
         from Drawables.Line import Line
         (a, point, c) = self.resolvePoint(point=point, idx=idx)
@@ -134,7 +194,7 @@ class Triangle(Polygon):
         return median
 
     def medianOnLine(self, line):
-        """Draw a median on a specified line."""
+        """Draw a median on a specified line(or it's index)."""
         from Drawables.Line import Line
         if isinstance(line, Line):
             return self.medianFromPoint(point=self.pointOppLine(line))
@@ -144,7 +204,7 @@ class Triangle(Polygon):
         )
 
     def angleBisector(self, point=..., idx:int=...):
-        """Angle Bisector from a certain point."""
+        """Angle Bisector from a certain point(or it's index)."""
         from Drawables.Line import Line
         (a, point, b) = self.resolvePoint(point=point, idx=idx)
         bisector = super().angleBisector(point=point)
@@ -166,7 +226,7 @@ class Triangle(Polygon):
         )
 
     def perpendicularFromPoint(self, point=..., idx:int=...):
-        """Draw a perpendicular from a specified point."""
+        """Draw a perpendicular from a specified point(or it's index)."""
         from Drawables.Line import Line
         (a, point, c) = self.resolvePoint(point=point, idx=idx)
         perpendicular = Line.fromPoints(

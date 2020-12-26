@@ -1,0 +1,3 @@
+A line AB is drawn using two points A(2,3) and B(4,4). Draw a 
+perpendicular_bisector CD to the line AB.  
+Given two points E(1,2) and F(8,6), draw a line.

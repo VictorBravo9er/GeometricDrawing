@@ -1,7 +1,6 @@
 """Base class."""
-from os import stat
 import numpy as np
-from math import sin, cos, inf, atan
+from math import pi, sin, cos, inf, atan
 import matplotlib.pyplot as plt
 
 class Drawable(object):
@@ -9,6 +8,7 @@ class Drawable(object):
 
     _maxX, _minX, _maxY, _minY = (10.0,-10.0,10.0,-10.0)
     _comparisonLimit = 0.00000001
+
     def __init__(self):
         """Build Base constructor."""
         object.__init__(self)
@@ -16,6 +16,7 @@ class Drawable(object):
 
     @staticmethod
     def printLimits():
+        """Test function to print current limits."""
         print("MinX:",Drawable._minX)
         print("MaxX:",Drawable._maxX)
         print("MinY:",Drawable._minY)
@@ -129,7 +130,7 @@ class Drawable(object):
 
     @staticmethod
     def draw(
-        drawables:list,_show:bool=True, _store:bool=False,
+        drawables:list, _show:bool=True, _store:bool=False,
         _storageName:str="./data/store", _print:bool=False
     ):
         """Draw call."""
@@ -149,9 +150,10 @@ class Drawable(object):
             else:
                 print("Error with object:",drawable)
         if _store:
-            # fig.savefig()
-            plt.savefig(f"{_storageName}.png")
-            plt.close()
+            plt.savefig(
+                f"{_storageName}.jpg", dpi=320,
+                pil_kwargs={'quality':90, 'optimize':True}
+            )
         if _show:
             plt.show()
         return fig

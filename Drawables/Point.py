@@ -1,8 +1,8 @@
 """Module for Point."""
+from Drawables.randoms import *
 from Drawables.Drawable import Drawable
 import numpy as np
 from math import inf, pi, atan, sqrt, cos, sin
-
 
 class Point(Drawable):
     """Description of class."""
@@ -17,7 +17,7 @@ class Point(Drawable):
     # Constructors
     @classmethod
     def fromSection(cls, point1, point2, m:float=1, n:float=1):
-        """Point sector using ratio m:n, and points point1 and point2."""
+        """Point that divides two points in ratio m:n."""
         tot = m + n
         x = (n * point1.X + m * point2.X) / tot
         y = (n * point1.Y + m * point2.Y) / tot
@@ -25,7 +25,7 @@ class Point(Drawable):
 
     @classmethod
     def fromPoint(cls, point):
-        """Construct new point from existing Point."""
+        """Copy from another point."""
         new = cls()
         if isinstance(point, cls):
             new.setPoint(point.X, point.Y)
@@ -36,14 +36,14 @@ class Point(Drawable):
 
     @classmethod
     def fromCoOrdinates(cls, x:float, y:float):
-        """Construct new Point using point Coordinates."""
+        """Point using point Coordinates."""
         new = cls()
         new.setPoint(x, y)
         return(new)
 
     @classmethod
     def fromMetrics(cls, angle:float, distance:float, point):
-        """Construct point using some Metrics. Angle in radians."""
+        """Point along an angle at a distance from another point."""
         new = cls.fromPoint(point)
         if distance != 0:
             try:
@@ -55,11 +55,19 @@ class Point(Drawable):
                 )
         return new
 
+    @classmethod
+    def default(cls):
+        """Random point."""
+        return cls.fromCoOrdinates(
+            randomPointRangeX(),
+            randomPointRangeY()
+        )
+
 
     # Getters and Setters
     def setPoint(self, x:float, y:float):
         """Set x and y."""
-        if isinstance(x,float) and isinstance(y,float):
+        if isinstance(x,(float, int)) and isinstance(y,(float,int)):
             (self.X, self.Y) = (x, y)
         else:
             raise TypeError(
@@ -74,7 +82,7 @@ class Point(Drawable):
 
     # Methods
     def slopeTo(self, point):
-        """Find slope(directionless) to another point w.r.t. X-axis. -ve allowed."""
+        """Find slope to another point."""
         num:float = (self.Y - point.Y)
         den:float = (self.X - point.X)
         if den == 0:
@@ -84,7 +92,7 @@ class Point(Drawable):
         return(num / den)
 
     def angleTo(self, point):
-        """Find angle(radians) to another point w.r.t. X-axis. -ve allowed."""
+        """Find angle to another point."""
         if not isinstance(point, Point):
             raise TypeError(
                 f"TypeError:\tExpected: Point, received: {type(point).__name__}"
@@ -98,32 +106,32 @@ class Point(Drawable):
         return((angle + pi) % (2 * pi))
 
     def angleFromPoints(self, point1, point2):
-        """Find angle(radian) subtended on self from A and B. -ve allowed."""
+        """Find angle subtended from two points."""
         a1 = self.angleTo(point1)
         a2 = self.angleTo(point2)
         angle = (a2 - a1) % (2* pi)
         return(angle)
 
     def angleFromLine(self, line):
-        """Find angle(radian) subtended on self from endpoints of a line. -ve allowed."""
+        """Find angle subtended from endpoints of a line."""
         return(self.angleFromPoints(line.start, line.end))
 
     def distanceTo(self, line=..., point=...):
-        """Distance to/from a Line or a point. Expected arguements: [line], [point]."""
+        """Distance to/from a Line or a point."""
         return sqrt(
             self.distanceSquared(line=line, point=point)
             )
 
     def middlePoint(self, point):
-        """Return midPoint of 2 points."""
+        """Mid point of two points."""
         return(Point.fromCoOrdinates((self.X + point.X)/2, (self.Y + point.Y)/2))
 
     def projectionOn(self, line):
-        """Return self-projection on a line."""
+        """Projection on a line."""
         return line.projectionOf(self)
 
     def bisect(self, point):
-        """Draws perpendicular bisector between two points."""
+        """Draws perpendicular bisector with respect to another point."""
         from Drawables.Line import Line
         return Line.perpendicularBisector(
             Line.fromPoints(self, point)
@@ -133,7 +141,7 @@ class Point(Drawable):
         self, point1, point2,
         bidirectional:bool=False
     ):
-        """Bisector of angle AXB."""
+        """Bisector of angle subtended by two other points."""
         from Drawables.Line import Line
         vLen = (self.distanceTo(point=point1) + self.distanceTo(point=point2)) / 2
         angle = (( self.angleTo(point1) + self.angleTo(point2) ) / 2) % (2 * pi)
@@ -146,21 +154,21 @@ class Point(Drawable):
         return Line.fromPoints(self, end)
 
     def bisectAngleLine(self, line):
-        """Bisector of angle sublended at point from ends of a line."""
+        """Bisector of angle sublended from ends of a line."""
         return self.bisectAnglePoints(line.start, line.end)
 
     def perpendicularTo(self, line):
-        """Return a perpendicular from self to a line provided."""
+        """Perpendicular to a line provided."""
         from Drawables.Line import Line
         return Line.perpendicularFrom(line, self)
 
     def lineToPoint(self, point):
-        """Return a line from current point to another point."""
+        """Line to another point."""
         from Drawables.Line import Line
         return(Line.fromPoints(self, point))
 
     def lineTo(self, angle:float, distance:float):
-        """Return a line using certain metrics."""
+        """Line along a direction(angle) of given length."""
         from Drawables.Line import Line
         return(Line.fromMetrics(angle, distance, self))
 
@@ -170,8 +178,7 @@ class Point(Drawable):
         return Triangle.fromLine(line, self)
 
     def circleFrom(self, chord=None, tangent=None):
-        """Create a circle using a centre and a chord\
-            or a tangent."""
+        """Create a circle centred on the point itself, provided a chord(if possible) or a tangent."""
         from Drawables.Line import Line
         if isinstance(tangent, Line):
             from Drawables.Circle import Circle
@@ -188,7 +195,7 @@ class Point(Drawable):
         )
 
     def circle(self, radius:float):
-        """Create a circle using a centre and a radius."""
+        """Create a circle provided a radius."""
         from Drawables.Circle import Circle
         return Circle.fromMetrics(self, radius)
 

@@ -33,7 +33,7 @@ class Arc(Drawable):
         cls, centre, point=None, angle=None,
         radius:float=None, angleStart:float=None, angleEnd:float=None
     ):
-        """Construct the class."""
+        """Construct an arc with the given arguements."""
         from Drawables.Point import Point
         try:
             if isinstance(point, Point):
@@ -54,6 +54,7 @@ class Arc(Drawable):
 
     # Helpers
     def extendLimits(self):
+        """Extend the drawable limits."""
         self.centre.extendLimits(self.radius)
 
     def plotPoints(self):

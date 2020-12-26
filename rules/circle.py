@@ -1,8 +1,12 @@
 """Point Structure."""
 from rules.drawable import *
 circleADT = {
-    is_a:Arc,
+    is_a:(Arc,),
     "new":{
+        tuple():{
+            args:tuple(),
+            trgt:Circle.default
+        },
         (Point, float,):{
             args:("centre", "radius"),
             trgt:Circle.fromMetrics,
@@ -52,7 +56,7 @@ circleADT = {
         },
         retVal:Line
     },
-    "commonChord":{
+    "common_chord":{
         (Line,):{
             args:("circle",),
             trgt:Circle.commonChord

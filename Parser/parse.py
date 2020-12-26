@@ -1,17 +1,21 @@
 """Parser Module."""
 import __init__
 from Parser.collect import *
-from math import radians
+from math import degrees, radians
+
 
 class Parser:
     """Parser Class."""
 
-    _objId:str = "id"
-    _refObj:str = "reference"
-    _constr:str = "construct"
-    _paramLst:str = "parameterList"
+    _objId:int = 0
+    _callerObj:int = 1
+    _constr:int = 2
+    _paramLst:int = 3
 
     _new:str = "new"
+
+    _printError:str = "errorLog"
+    _printObject:str="printDesc"
 
     _desc:str = "description"
     _val:str = "value"
@@ -22,19 +26,21 @@ class Parser:
         super().__init__()
         self.rules = Collector().getDS()
         self.symtab = {}
+        self.errorLog = []
 
     @staticmethod
-    def help(var:list=[], rules:dict=..., _print:bool=True):
+    def help(rules:dict=..., _print:bool=True):
         """Provide documentation of Library."""
-        if len(var) != 0:
-            return "\n".join(var)
         _tab = " " * 4
+        var = []
         if not isinstance(rules, dict):
             rules = Collector().getDS()
         for obj, content in rules.items():
-            var.append(f"{obj.__name__}")
+            var.append(f"Drawable: {obj.__name__}")
             for ops, content in content.items():
                 try:
+                    if ops == Parser._new:
+                        ops = "Constructor"
                     var.append(
                         f"\n{_tab}{ops}\n{_tab * 2}returns -> {content[retVal].__name__}"
                     )
@@ -49,18 +55,24 @@ class Parser:
                     argList  = content[args]
                     try:
                         if len(argList) == 0:
-                            argTypes = "None"
+                            argTypes = (
+                                f"{_tab * 3}Expected args{_tab}: None"
+                            )
                         else:
-                            argTypes = tuple([x.__name__ for x in argTypes])
+                            argTypes = (
+                                f"{_tab * 3}Expected args{_tab}: "+", ".join(argList)+
+                                f"\n{_tab * 3}Of Types     {_tab}: "+
+                                " , ".join([x.__name__ for x in argTypes])+"."
+                            )
                     except:
                         print(obj.__name__)
                         print(ops)
                         print(target.__name__)
                         print(argList)
+                        print(argTypes)
                     var.append(
                         f"{_tab * 2}{target.__doc__}\n"+
-                        f"{_tab * 3}Expected args{_tab}: {argList}\n"+
-                        f"{_tab * 3}Of Types     {_tab}: {argTypes}"
+                        argTypes
                     )
             var.append("\n")
         printable = "\n".join(var)
@@ -72,44 +84,54 @@ class Parser:
     def parse(
         fileName:str=..., inputList:list=...,
         _show:bool=False, _store:bool=True,
-        _storageName:str="./data/store"
+        _storageName:str="./data/store",
+        _print:bool=False, _error:bool=False
     ):
         """Standalone parsing Operation. Returns Descrpition."""
         ops = Parser()
-        ops.tokenChecker(fileName, inputList)
-        ops.draw(_show, _store, _storageName)
-        return ops.print(_show)
+        ops.tokenChecker(fileName=fileName, inputList=inputList,_printErrors=_error)
+        ops.draw(_show, _store, _storageName, _print)
+        return {
+            Parser._printObject:ops.print(_print),
+            Parser._printError:ops.errorLog
+        }
 
     @staticmethod
     def angleConversion(paramDict):
-        """Converts Degrees to radians."""
+        """Convert Degrees to radians."""
         for key in paramDict:
             if "angle" in key:
                 paramDict[key] = radians(paramDict[key])
 
-    def inputTokenizer(self, fileName:str):
+    def inputTokenizer(self, fileName:str=..., inputList:list=..., _error:bool=False):
         """Read in file and tokenizes it."""
-        with open(fileName) as file:
-            fileContent = file.read()
+        fileContent = ...
+        if not isinstance(inputList, list):
+            with open(fileName) as file:
+                fileContent = file.read()
+                fileContent = fileContent.split("\n")
+        else:
+            fileContent = inputList
         line = 0
-        fileContent = fileContent.split("\n")
         for content in fileContent:
             line += 1
-            content = content.split()
+            if isinstance(content, str):
+                content = content.split()
             try:
                 content = {
                     self._objId:content[0],
-                    self._refObj:content[1],
+                    self._callerObj:content[1],
                     self._constr:content[2],
                     self._paramLst:content[3:]
                 }
             except:
                 l = len(content)
+                if not _error:
+                    continue
                 if l == 0:
                     print(
                         f"Line {line}. \tEmpty"
                     )
-                    continue
                 else:
                     print(
                         f"Line {line}. \tSyntaxError:",
@@ -171,10 +193,8 @@ class Parser:
                     val = float(item)
                     tp  = float
                 except:
-                    raise ValueError(
-                        f"ValueError:\tValue for {item}"
-                        +" couldn't be resolved."
-                    )
+                    val = item
+                    tp  = str
             paramType.append(tp )
             paramValue.append(val)
         if forConstructor and len(paramList) > 2:
@@ -205,12 +225,17 @@ class Parser:
         values = dict(zip(target[args], values))
         self.angleConversion(values)
         target = target[trgt]
-        types = constructorDict[retVal]
+        values = target(**values)
+        types = type(values).__name__
+        if len(param) == 0:
+            constr = "no parameters"
+        else:
+            constr = "parameters: "+", ".join(param)
         return {
             #self._type  :types,
-            self._desc  :f"{_id} is {types.__name__} using {target.__name__}"+
-                         f" with parameters {param}",
-            self._val   :target(**values)
+            self._desc  :f"{_id} is {types} using {target.__name__}"+
+                         f" with {constr}",
+            self._val   :values
         }
 
     def objectConstruction(
@@ -230,35 +255,46 @@ class Parser:
         values = dict(zip(target[args], values))
         self.angleConversion(values)
         target = target[trgt]
-        types = methodDict[retVal]
+        values = target(ref, **values)
+        types = type(values).__name__
+        target = target.__name__
+        if "angle" in target and isinstance(values, (float, int)):
+            values = degrees(values)
+        if len(param) == 0:
+            constr = "no parameters"
+        else:
+            constr = "parameters: "+", ".join(param)
         return {
             #self._type  :types,
-            self._desc  :f"{_id} is {types.__name__} {target.__name__}"+
-                         f" on {_refid} with parameters {param}",
-            self._val   :target(ref, **values)
+            self._desc  :f"{_id} is {types} {target}"+
+                         f" on {_refid} with {constr}",
+            self._val   :values
         }
 
-    def tokenChecker(self, fileName:str=..., inputList:list=...):
+    def tokenChecker(self, fileName:str=..., inputList:list=...,_printErrors:bool=False):
         """Start point of operations."""
         from re import match
-        g = ...
+        
+        instStruct = ...
         if isinstance(inputList, list):
-            l = len(input())
-            g= zip(range(1, l+1), inputList)
+            l = len(inputList)
+            instStruct = self.inputTokenizer(inputList=inputList)
+
         elif isinstance(fileName, str):
-            g = self.inputTokenizer(fileName)
+            instStruct = self.inputTokenizer(fileName)
         else:
             raise ValueError(
                 "FATAL ERROR - No acceptable input detected."
             )
-        for (line, instruction) in g:
+        for (line, instruction) in instStruct:
             _id:str = instruction[self._objId]
-            if match(self._idLexicon, _id) == None:
+            if match(self._idLexicon, _id) == None and _printErrors:
                 print(
                     f"Line {line}. \tIDError:",
                     "\tIdentifier doesn't follow naming convension."
                 )
-            if _id in self.symtab:
+                continue
+            if _id in self.symtab and _printErrors:
                 print(
                     f"Line {line}. \tObject exists with same id.",
                     "Can't proceed without overwriting.",
@@ -267,30 +303,32 @@ class Parser:
                 continue
             try:
                 retStructure = self.processConstruction(
-                    instruction[self._refObj  ],
-                    instruction[self._constr  ],
+                    instruction[self._callerObj],
+                    instruction[self._constr],
                     _id,
                     instruction[self._paramLst]
                 )
                 self.symtab[_id] = retStructure
-                retStructure[self._val].extendLimits()
+                retStructure = retStructure[self._val]
+                if isinstance(retStructure, initOrder):
+                    retStructure.extendLimits()
             except Exception as e:
-                print(
-                    f"Line {line}. \t",
-                    e.args[0]
-                )
+                error = f"Line {line}. \t{e.args[0]}"
+                if _printErrors:
+                    print(error)
+                self.errorLog.append(error)
 
     def print(self, _print:bool = True):
         """Print drawable item's list."""
         drawableList = []
-        for x in self.symtab.values():
-            desc, x = x[self._desc], x[self._val]
-            if issubclass(type(x), initOrder):
+        for x,value in self.symtab.items():
+            desc, value = value[self._desc], value[self._val]
+            if issubclass(type(value), initOrder):
                 drawableList.append(desc)
                 if _print:
                     print(desc)
                 continue
-            x = f"{desc}, value: {x}"
+            x = f"{desc}, {x}: {value}"
             drawableList.append(x)
             if _print:
                 print(x)
@@ -313,4 +351,3 @@ class Parser:
             _store=_store, _show=_show, _print=_print
         )
         return (drawableList, figure)
-

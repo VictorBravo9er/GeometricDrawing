@@ -1,0 +1,63 @@
+"""Point Structure."""
+from rules.drawable import *
+quadADT = {
+    is_a:(Polygon,),
+    "new":{
+        (list, Point,):{
+            args:("listOfPoint",),
+            trgt:Quadrilateral.fromPoints,
+        },
+        (list, Line,):{
+            args:("listOfLine",),
+            trgt:Quadrilateral.fromLines,
+        },
+        tuple():{
+            args:tuple(),
+            trgt:Quadrilateral.default
+        },
+        retVal:Quadrilateral
+    },
+    "copy":{
+        tuple():{
+            args:tuple(),
+            trgt:Quadrilateral.fromQuad
+        },
+        retVal:Quadrilateral
+    },
+    "diagonal":{
+        (Point,):{
+            args:("point",),
+            trgt:Quadrilateral.diagonalAtPoint
+        },
+        (float,):{
+            args:("idx",),
+            trgt:Quadrilateral.diagonalAtPoint
+        },
+        retVal:Line
+    },
+    "bimedian":{
+        (Line,):{
+            args:("line",),
+            trgt:Quadrilateral.bimedianOnLine
+        },
+        (float,):{
+            args:("idx",),
+            trgt:Quadrilateral.bimedianOnLine
+        },
+        retVal:Line
+    },
+    "diagonal_intersection":{
+        tuple():{
+            args:tuple(),
+            trgt:Quadrilateral.diagonalIntersection
+        },
+        retVal:Point
+    },
+    "bimedian_intersection":{
+        tuple():{
+            args:tuple(),
+            trgt:Quadrilateral.bimedianIntersection
+        },
+        retVal:Point
+    }
+}

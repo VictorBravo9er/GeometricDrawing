@@ -1,12 +1,13 @@
 """Module Line."""
-import numpy as np
+from Drawables.randoms import *
 from Drawables.Drawable import Drawable
 from math import inf, pi, atan, cos, sin
-
+import numpy as np
 
 class Line(Drawable):
     """Description of class."""
 
+    _xAxis, _yAxis = "x-axis", "y-axis"
     def __init__(self):
         """Construct default."""
         from Drawables.Point import Point
@@ -21,7 +22,7 @@ class Line(Drawable):
     # Constructors
     @classmethod
     def fromLine(cls, line, distance:float=0):
-        """Derive another line from an existing one."""
+        """copy from another line."""
         from Drawables.Point import Point
         if not isinstance(line, cls):
             raise TypeError(
@@ -51,7 +52,7 @@ class Line(Drawable):
 
     @classmethod
     def fromMetrics(cls, angle:float, length:float, point):
-        """Draw Line using some metrics."""
+        """Draw line along an angle of some length from a point."""
         from Drawables.Point import Point
         new = cls()
         new.setLine(
@@ -59,6 +60,27 @@ class Line(Drawable):
             end=Point.fromMetrics(angle, length, point)
         )
         return new
+
+    @classmethod
+    def default(cls, parallelAxis:str=...):
+        """Construct a random line or axis parallel line(X or Y axis), if notified."""
+        from Drawables.Point import Point
+        if isinstance(parallelAxis, str):
+            angle = -1
+            if parallelAxis == cls._xAxis:
+                angle = 0
+            elif parallelAxis == cls._yAxis:
+                angle = pi * 0.5
+            if angle != -1:
+                return Line.fromMetrics(
+                    angle=angle,
+                    point=Point.default(),
+                    length=randomLength()
+                )
+        return cls.fromMetrics(
+            angle=randomAngle180(), point=Point.default(),
+            length=randomLength()
+        )
 
 
     # Getters and Setters
@@ -77,11 +99,11 @@ class Line(Drawable):
 
     # Methods
     def slope(self):
-        """Return slope of line."""
+        """Slope of line."""
         return(self.start.slopeTo(self.end))
 
     def angle(self):
-        """Angle subtended by line with x-axis."""
+        """Angle subtended by line with +ve direction of  x-axis."""
         return self.start.angleTo(self.end)
 
     def length(self):
@@ -89,7 +111,7 @@ class Line(Drawable):
         return self.start.distanceTo(point=self.end)
 
     def distanceFrom(self, line=..., point=...):
-        """Distance from point or line."""
+        """Distance from a point or line(if parallel)."""
         from Drawables.Point import Point
         if isinstance(point, Point):
             return point.distanceTo(point=self.projectionOf(point))
@@ -108,18 +130,18 @@ class Line(Drawable):
         )
 
     def bisector(self):
-        """Bisector of the line."""
+        """Bisector(mid point) of the line."""
         from Drawables.Point import Point
         return(Point.middlePoint(self.start, self.end))
         #return self.sector(1)
 
     def sector(self, m:float = 1, n:float = 1):
-        """Sector of line in a ratio of m:n."""
+        """Point that divides line in ratio of m:n."""
         from Drawables.Point import Point
         return(Point.fromSection(self.start, self.end, m, n))
 
     def intersectionWith(self, line):
-        """Point intersection of two lines."""
+        """Intersection point of two lines."""
         from Drawables.Point import Point
         if isinstance(line, Line):
             (m1, c1) = self.getMetrics()
@@ -132,7 +154,7 @@ class Line(Drawable):
         )
 
     def parallelLine(self, distance:float=None, point=None):
-        """Draw a parallel Line."""
+        """Draw a parallel line that is either at a certain distance or passes through a given point."""
         from Drawables.Point import Point
         if isinstance(point, Point):
             distance = point.distanceTo(line=self)
@@ -144,7 +166,7 @@ class Line(Drawable):
         )
 
     def projectionOf(self, point):
-        """Point projection."""
+        """Projection of point on the line."""
         l  = self.start.distanceTo(point=self.end)
         l1 = self.start.distanceTo(point=point)
         l2 = self.end.distanceTo(point=point)
@@ -157,7 +179,7 @@ class Line(Drawable):
         return Line.fromPoints(self.projectionOf(point), point)
 
     def perpendicularAt(self, point=..., ratio:float=...):
-        """Perpendicular at a point or ratio on the line."""
+        """Perpendicular at a point or a point that divides the line ina certain ratio."""
         if isinstance(ratio, (float, int)):
             point = self.sector(m=ratio)
         from Drawables.Point import Point
@@ -174,11 +196,11 @@ class Line(Drawable):
         )
 
     def perpendicularBisector(self):
-        """Perpendicular bisector."""
+        """Perpendicular bisector of the line."""
         return(self.perpendicularAt(point=self.bisector()))
 
     def triangleTo(self, point):
-        """Draw a Triangle."""
+        """Draw a triangle with the line and an additional point."""
         from Drawables.Triangle import Triangle
         return Triangle.fromLine(self, point)
 
@@ -186,7 +208,7 @@ class Line(Drawable):
         self, chordDistance:float=...,
         tangentCentre=..., chordCentre=...
     ):
-        """Draw circle with line as diameter, chord or tangent."""
+        """Draw circle with line as diameter, or as a chord or tangent if their respective centres are given."""
         from Drawables.Point import Point
         if isinstance(chordDistance, (float, int)):
             from Drawables.Circle import Circle
@@ -210,15 +232,24 @@ class Line(Drawable):
             f", and {type(chordCentre).__name__}"
         )
 
-    def square(self, direction:str="up"):
-        pass
+    def square(self):
+        """Draw a square with the line as one of it's sides."""
+        from Drawables.Square import Square
+        return Square.fromMetrics(self)
 
-    def rectangle(self, sideLength:float, direction:str="up"):
-        pass
+    def rectangle(self, sideLength:float,):
+        """Draw a rectangle with the line as one of it's sides and length of adjacent side."""
+        from Drawables.Rectangle import Rectangle
+        return Rectangle.fromMetrics(line=self, lengthOther=sideLength)
 
 
     # Helpers
+    def orientation(self, point):
+        """Orientation test. 0 - coliniar, 1 - left, -1 - right."""
+        return Drawable.orientation(self.start, self.end, point)
+
     def extendLimits(self):
+        """Extend Drawable extents."""
         self.start.extendLimits()
         self.end.extendLimits()
 
@@ -309,7 +340,7 @@ class Line(Drawable):
     def __eq__(self, o) -> bool:
         """'==' operator overload."""
         if isinstance(o, Line):
-            return (self.start == o.start and self.end == o.end)
+            return (self.getMetrics() == o.getMetrics())
         raise TypeError(
             f"TypeError:\tCan't compare {self.__class__} with {type(o).__name__}"
         )

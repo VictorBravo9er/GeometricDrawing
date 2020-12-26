@@ -1,8 +1,16 @@
 """Point Structure."""
 from rules.drawable import *
 lineADT = {
-    is_a:None,
+    is_a:tuple(),
     "new":{
+        tuple():{
+            args:tuple(),
+            trgt:Line.default
+        },
+        (str,):{
+            args:("parallelAxis",),
+            trgt:Line.default
+        },
         (Point,Point,):{
             args:("point1","point2"),
             trgt:Line.fromPoints,
@@ -34,7 +42,7 @@ lineADT = {
         },
         retVal:float
     },
-    "distanceFrom":{
+    "distance":{
         (Line,):{
             args:("line",),
             trgt:Line.distanceFrom
@@ -66,7 +74,7 @@ lineADT = {
         },
         retVal:Point
     },
-    "parallelLine":{
+    "parallel_line":{
         (Point,):{
             args:("point",),
             trgt:Line.parallelLine
@@ -77,24 +85,17 @@ lineADT = {
         },
         retVal:Point
     },
-    "projectionOf":{
+    "projection":{
         (Point,):{
             args:("point",),
             trgt:Line.projectionOf
         },
         retVal:Point
     },
-    "perpendicularFrom":{
+    "perpendicular":{
         (Point,):{
             args:("point",),
             trgt:Line.perpendicularFrom
-        },
-        retVal:Line
-    },
-    "perpendicularAt":{
-        (Point,):{
-            args:("point",),
-            trgt:Line.perpendicularAt
         },
         (float,):{
             args:("ratio",),
@@ -102,7 +103,7 @@ lineADT = {
         },
         retVal:Line
     },
-    "perpendicularBisector":{
+    "perpendicular_bisector":{
         tuple():{
             args:tuple(),
             trgt:Line.perpendicularBisector
@@ -123,32 +124,32 @@ lineADT = {
         },
         retVal:Circle
     },
-    "tangentCircle":{
+    "tangent_circle":{
         (Point,):{
-            args:("tangentPoint"),
+            args:("tangentPoint",),
             trgt:Line.circleAround
         },
         retVal:Circle
     },
-    "chordCircle":{
+    "chord_circle":{
         (Point,):{
-            args:("chordPoint"),
+            args:("chordPoint",),
             trgt:Line.circleAround
         },
         retVal:Circle
     },
-    "quad":{
-        (str,):{
-            args:("direction"),
+    "square":{
+        tuple():{
+            args:tuple(),
             trgt:Line.square
         },
         retVal:int
-    },#TODO
+    },
     "rectangle":{
-        (float, str,):{
-            args:("sideLength", "direction"),
+        (float,):{
+            args:("sideLength",),
             trgt:Line.rectangle
         },
         retVal:int
-    }#TODO
+    }
 }

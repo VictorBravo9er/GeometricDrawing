@@ -1,8 +1,12 @@
 """Point Structure."""
 from rules.drawable import *
 pointADT = {
-    is_a:None,
+    is_a:tuple(),
     "new":{
+        tuple():{
+            args:tuple(),
+            trgt:Point.default
+        },
         (float, float,):{
             args:("x", "y",),
             trgt:Point.fromCoOrdinates
@@ -24,21 +28,18 @@ pointADT = {
         },
         retVal:Point
     },
-    "slopeTo":{
+    "slope":{
         (Point,):{
             args:("point",),
             trgt:Point.slopeTo
         },
         retVal:float
     },
-    "angleTo":{
+    "angle":{
         (Point,):{
             args:("point",),
             trgt:Point.angleTo
         },
-        retVal:float
-    },
-    "angleFrom":{
         (Point, Point,):{
             args:("point1", "point2",),
             trgt:Point.angleFromPoints
@@ -49,7 +50,7 @@ pointADT = {
         },
         retVal:float
     },
-    "distanceTo":{
+    "distance":{
         (Point,):{
             args:("point",),
             trgt:Point.distanceTo,
@@ -60,7 +61,7 @@ pointADT = {
         },
         retVal:float
     },
-    "midPoint":{
+    "midpoint":{
         (Point,):{
             args:("point",),
             trgt:Point.middlePoint
@@ -81,7 +82,7 @@ pointADT = {
         },
         retVal:Line
     },
-    "angleBisector":{
+    "angle_bisector":{
         (Line,):{
             args:("line",),
             trgt:Point.bisectAngleLine
@@ -92,7 +93,7 @@ pointADT = {
         },
         retVal:Line
     },
-    "lineTo":{
+    "line":{
         (Point,):{
             args:("point",),
             trgt:Point.lineToPoint
@@ -117,14 +118,14 @@ pointADT = {
         },
         retVal:Circle
     },
-    "tangentCircle":{
+    "tangent_circle":{
         (Line,):{
             args:("tangent",),
             trgt:Point.circleFrom
         },
         retVal:Circle
     },
-    "chordCircle":{
+    "chord_circle":{
         (Line,):{
             args:("chord",),
             trgt:Point.circleFrom

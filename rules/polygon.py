@@ -1,7 +1,7 @@
 """Point Structure."""
 from rules.drawable import *
 polygonADT = {
-    is_a:None,
+    is_a:tuple(),
     "new":{
         (list, Point,):{
             args:("listOfPoints",),
@@ -18,7 +18,7 @@ polygonADT = {
             args:tuple(),
             trgt:Polygon.fromPolygon
         },
-        retVal:Circle
+        retVal:Polygon
     },
     "area":{
         tuple():{
@@ -27,7 +27,21 @@ polygonADT = {
         },
         retVal:float
     },
-    "signedArea":{
+    "get_indexed_point":{
+        (float,):{
+            args:("idx",),
+            trgt:Polygon.getIndexedPoint
+        },
+        retVal:Point
+    },
+    "get_indexed_line":{
+        (float,):{
+            args:("idx",),
+            trgt:Polygon.getIndexedLine
+        },
+        retVal:Line
+    },
+    "signed_area":{
         tuple():{
             args:tuple(),
             trgt:Polygon.signedArea
@@ -41,14 +55,14 @@ polygonADT = {
         },
         retVal:Point
     },
-    "vertexCentroid":{
+    "vertex_centroid":{
         tuple():{
             args:tuple(),
             trgt:Polygon.vertexCentroid
         },
         retVal:Point
     },
-    "internalAngle":{
+    "internal_angle":{
         (float,):{
             args:("idx",),
             trgt:Polygon.internAngle
@@ -59,7 +73,7 @@ polygonADT = {
         },
         retVal:float
     },
-    "angleBisector":{
+    "angle_bisector":{
         (float,):{
             args:("idx",),
             trgt:Polygon.angleBisector
