@@ -4,11 +4,3 @@ c new point 2 4
 t new triangle a b c
 i t incircle
 d t circumcircle 
-
-
-I. CFG of Intermediate stage
-II. Production Rules
-III. Drawable Structure Chart
-IV. Parser Data Flow
-V. Supported features(constructs.)
-VI. Sample Observations
