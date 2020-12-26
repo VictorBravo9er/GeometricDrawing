@@ -1,2 +1,13 @@
-a new line
+c new point 1 2
+b new point -1 4
+a new point 3 6
+k a distance b
+l a line b
+p new line y-axis
+kl l parallel_line 2
+g l parallel_line -2
+e new arc b 2 60 180 
+d g bisector
+t new triangle a b c
+h t circumcircle
 nnw new kite

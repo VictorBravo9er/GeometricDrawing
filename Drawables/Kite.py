@@ -63,8 +63,7 @@ class Kite(Quadrilateral):
         else:
             a= Point.default()
             if not isinstance(angleLine, (float, int)):
-                angleLine = randomAngle90plus()
-                print(angleLine)
+                angleLine = randomAngleFull()
             if isinstance(line, (float, int)):
                 b = Point.fromMetrics(
                     angle=angleLine,
@@ -77,7 +76,7 @@ class Kite(Quadrilateral):
                     point=a
                 )
         if not isinstance(lengthOther, (float, int)):
-            lengthOther = randomLength()
+            lengthOther = randomLengthPar(line)
         theta1 = (pi - angle) / 2
         smiBse = line * sin(angle / 2)
         theta2 = acos(smiBse / lengthOther)
