@@ -2,14 +2,16 @@
 import __init__
 from Parser.collect import *
 from math import degrees, radians
+import traceback 
+
 
 class Parser:
     """Parser Class."""
 
-    _objId:str = "id"
-    _refObj:str = "reference"
-    _constr:str = "construct"
-    _paramLst:str = "parameterList"
+    _objId:int = 0
+    _callerObj:int = 1
+    _constr:int = 2
+    _paramLst:int = 3
 
     _new:str = "new"
 
@@ -28,11 +30,10 @@ class Parser:
         self.errorLog = []
 
     @staticmethod
-    def help(var:list=[], rules:dict=..., _print:bool=True):
+    def help(rules:dict=..., _print:bool=True):
         """Provide documentation of Library."""
-        if len(var) != 0:
-            return "\n".join(var)
         _tab = " " * 4
+        var = []
         if not isinstance(rules, dict):
             rules = Collector().getDS()
         for obj, content in rules.items():
@@ -85,11 +86,11 @@ class Parser:
         fileName:str=..., inputList:list=...,
         _show:bool=False, _store:bool=True,
         _storageName:str="./data/store",
-        _print:bool=False
+        _print:bool=False, _error:bool=False
     ):
         """Standalone parsing Operation. Returns Descrpition."""
         ops = Parser()
-        ops.tokenChecker(fileName, inputList)
+        ops.tokenChecker(fileName=fileName, inputList=inputList,_printErrors=_error)
         ops.draw(_show, _store, _storageName, _print)
         return {
             Parser._printObject:ops.print(_print),
@@ -98,34 +99,40 @@ class Parser:
 
     @staticmethod
     def angleConversion(paramDict):
-        """Converts Degrees to radians."""
+        """Convert Degrees to radians."""
         for key in paramDict:
             if "angle" in key:
                 paramDict[key] = radians(paramDict[key])
 
-    def inputTokenizer(self, fileName:str):
+    def inputTokenizer(self, fileName:str=..., inputList:list=..., _error:bool=False):
         """Read in file and tokenizes it."""
-        with open(fileName) as file:
-            fileContent = file.read()
+        fileContent = ...
+        if not isinstance(inputList, list):
+            with open(fileName) as file:
+                fileContent = file.read()
+                fileContent = fileContent.split("\n")
+        else:
+            fileContent = inputList
         line = 0
-        fileContent = fileContent.split("\n")
         for content in fileContent:
             line += 1
-            content = content.split()
+            if isinstance(content, str):
+                content = content.split()
             try:
                 content = {
                     self._objId:content[0],
-                    self._refObj:content[1],
+                    self._callerObj:content[1],
                     self._constr:content[2],
                     self._paramLst:content[3:]
                 }
             except:
                 l = len(content)
+                if not _error:
+                    continue
                 if l == 0:
                     print(
                         f"Line {line}. \tEmpty"
                     )
-                    continue
                 else:
                     print(
                         f"Line {line}. \tSyntaxError:",
@@ -265,14 +272,15 @@ class Parser:
             self._val   :values
         }
 
-    def tokenChecker(self, fileName:str=..., inputList:list=...,_printErrors:bool=True):
+    def tokenChecker(self, fileName:str=..., inputList:list=...,_printErrors:bool=False):
         """Start point of operations."""
         from re import match
         
         instStruct = ...
         if isinstance(inputList, list):
-            l = len(input())
-            instStruct = zip(range(1, l+1), inputList)
+            l = len(inputList)
+            instStruct = self.inputTokenizer(inputList=inputList)
+
         elif isinstance(fileName, str):
             instStruct = self.inputTokenizer(fileName)
         else:
@@ -281,12 +289,12 @@ class Parser:
             )
         for (line, instruction) in instStruct:
             _id:str = instruction[self._objId]
-            if match(self._idLexicon, _id) == None:
+            if match(self._idLexicon, _id) == None and _printErrors:
                 print(
                     f"Line {line}. \tIDError:",
                     "\tIdentifier doesn't follow naming convension."
                 )
-            if _id in self.symtab:
+            if _id in self.symtab and _printErrors:
                 print(
                     f"Line {line}. \tObject exists with same id.",
                     "Can't proceed without overwriting.",
@@ -295,17 +303,20 @@ class Parser:
                 continue
             try:
                 retStructure = self.processConstruction(
-                    instruction[self._refObj  ],
+                    instruction[self._callerObj  ],
                     instruction[self._constr  ],
                     _id,
                     instruction[self._paramLst]
                 )
                 self.symtab[_id] = retStructure
-                retStructure[self._val].extendLimits()
+                retStructure = retStructure[self._val]
+                if isinstance(retStructure, initOrder):
+                    retStructure.extendLimits()
             except Exception as e:
                 error = f"Line {line}. \t{e.args[0]}"
                 if _printErrors:
                     print(error)
+                traceback.print_exc() 
                 self.errorLog.append(error)
 
     def print(self, _print:bool = True):

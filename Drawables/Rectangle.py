@@ -1,4 +1,5 @@
 """Module for Point."""
+from Drawables.randoms import *
 from Drawables.Drawable import Drawable
 from Drawables.Quad import Quadrilateral
 from Drawables.Parallelogram import Parallelogram
@@ -52,7 +53,7 @@ class Rectangle(Parallelogram):
         from Drawables.Point import Point
         a,b=...,...
         if not isinstance(angleLine, (int, float)):
-            angleLine = Drawable.randomAngleFull()
+            angleLine = randomAngleFull()
         if isinstance(line, Line):
             a, b = line.start, line.end
             angleLine = a.angleTo(b)
@@ -64,13 +65,13 @@ class Rectangle(Parallelogram):
                     distance=line, point=a
                 )
             else:
-                line = Drawable.randomLength()
+                line = randomLength()
                 b = Point.fromMetrics(
                     angle=angleLine, point=a,
                     distance=line
                 )
         if not isinstance(lengthOther, (float, int)):
-            lengthOther = Drawable.randomLength()
+            lengthOther = randomLength()
         angleLine += (pi * 0.5)
         d = Point.fromMetrics(angleLine, lengthOther, a)
         c = Point.fromMetrics(angleLine, lengthOther, b)

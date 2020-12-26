@@ -54,6 +54,7 @@ class Arc(Drawable):
 
     # Helpers
     def extendLimits(self):
+        """Extend the drawable limits."""
         self.centre.extendLimits(self.radius)
 
     def plotPoints(self):

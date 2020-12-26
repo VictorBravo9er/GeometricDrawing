@@ -1,4 +1,5 @@
 """Module for Point."""
+from Drawables.randoms import *
 from Drawables.Drawable import Drawable
 from Drawables.Quad import Quadrilateral
 from Drawables.Parallelogram import Parallelogram
@@ -55,16 +56,16 @@ class Rhombus(Parallelogram, Kite):
         from Drawables.Point import Point
         a,b=...,...
         if not isinstance(angleInternal, (float, int)):
-            angleInternal = Drawable.randomAngle180()
+            angleInternal = randomAngle180()
         if isinstance(line, Line):
             a, b = line.start, line.end
             angleLine = line.angle()
         else:
             a= Point.default()
             if not isinstance(angleLine, (float, int)):
-                angleLine = Drawable.randomAngleFull()
+                angleLine = randomAngleFull()
             if not isinstance(line, (float, int)):
-                line = Drawable.randomLength()
+                line = randomLength()
             b = Point.fromMetrics(
                 angle=angleLine,
                 distance=line, point=a

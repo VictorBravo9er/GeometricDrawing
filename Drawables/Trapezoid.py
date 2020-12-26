@@ -1,4 +1,5 @@
 """Module for Point."""
+from Drawables.randoms import *
 from Drawables.Drawable import Drawable
 from Drawables.Quad import Quadrilateral
 from math import degrees, pi, radians, sin
@@ -54,22 +55,22 @@ class Trapezoid(Quadrilateral):
         from Drawables.Point import Point
         a,b=...,...
         if not isinstance(angle1, (float, int)):
-            angle1 = Drawable.randomAngle180()
+            angle1 = randomAngle180()
         if not isinstance(angle2, (float, int)):
-            angle2 = Drawable.randomAngle180()
+            angle2 = randomAngle180()
         if isinstance(line, Line):
             a, b = line.start, line.end
         else:
             a= Point.default()
             if isinstance(line, (float, int)):
                 b = Point.fromMetrics(
-                    angle=Drawable.randomAngleFull(),
+                    angle=randomAngleFull(),
                     distance=line, point=a
                 )
             else:
                 b = Point.default()
         if not isinstance(height, (float, int)):
-            height = Drawable.randomLength()
+            height = randomLength()
         angle = a.angleTo(b)
         d = Point.fromMetrics(angle1+angle, height / sin(angle1), a)
         c = Point.fromMetrics(pi-angle2+angle, height / sin(angle2), b)

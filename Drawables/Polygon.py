@@ -1,7 +1,8 @@
 """Module for Polygons."""
-import numpy as np
-from math import pi
+from Drawables.randoms import *
 from Drawables.Drawable import Drawable
+from math import pi
+import numpy as np
 
 class Polygon(Drawable):
     """Polygon base class."""

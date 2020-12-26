@@ -1,4 +1,5 @@
 """Module for Circle."""
+from Drawables.randoms import *
 from Drawables.Drawable import Drawable
 from Drawables.Arc import Arc
 from math import pi, sqrt
@@ -51,7 +52,7 @@ class Circle(Arc):
         from Drawables.Point import Point
         return cls.fromMetrics(
             Point.default(),
-            Drawable.randomLengthPar(2)
+            randomLengthPar(2)
         )
 
 

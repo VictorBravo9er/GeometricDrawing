@@ -1,4 +1,5 @@
 """Module for Point."""
+from Drawables.randoms import *
 from Drawables.Drawable import Drawable
 from Drawables.Polygon import Polygon
 from math import degrees, pi
@@ -82,8 +83,8 @@ class Triangle(Polygon):
         if isinstance(base, (float,int)):
             from Drawables.Point import Point
             base = Line.fromMetrics(
-                angle=Drawable.randomAngle180(),
-                length=Drawable.randomLength(),
+                angle=randomAngle180(),
+                length=randomLength(),
                 point=Point.default()
             )
         if not isinstance(base, Line):
@@ -100,23 +101,23 @@ class Triangle(Polygon):
     @classmethod
     def default(cls, _type:str=...):
         """Provide a random triangle, with type if provided(acute, obtuse, and right angled, equilateral and isoscales)."""
-        angle1 = Drawable.randomRange(0.1, 3)
-        angle2 = Drawable.randomRange(0.1, 3 - angle1)
+        angle1 = randomRange(0.1, 3)
+        angle2 = randomRange(0.1, 3 - angle1)
         if isinstance(_type, str):
             if _type == cls._acute:
-                angle1 = Drawable.randomRange(0.1, 1.45)
-                angle2 = Drawable.randomRange(0.1, 1.45)
+                angle1 = randomRange(0.1, 1.45)
+                angle2 = randomRange(0.1, 1.45)
             elif _type == cls._right:
                 angle1 = (pi * 0.5)
-                angle2 = Drawable.randomRange(0.1, 1.45)
+                angle2 = randomRange(0.1, 1.45)
             elif _type == cls._obtuse:
-                angle1 = Drawable.randomRange(1.6, 1.4)
-                angle2 = Drawable.randomRange(0.1, 3 - angle1)
+                angle1 = randomRange(1.6, 1.4)
+                angle2 = randomRange(0.1, 3 - angle1)
             elif _type == cls._equilateral:
                 angle1 = pi / 3
                 angle2 = angle1
             elif _type == cls._isoscales:
-                angle1 = Drawable.randomRange(0.1, 1.45)
+                angle1 = randomRange(0.1, 1.45)
                 angle2 = angle1
         cls.fromAngles(angle1, angle2)
 

@@ -3,9 +3,9 @@ import __init__
 from Parser.parse import Parser
 
 
-d = Parser.parse("inp.file", _show=True)
+d = Parser.parse("inp3.file", _show=False, _error=False)
 
 print("\n".join(d[Parser._printObject]))
 print()
-# print("\n".join(d[Parser._printError]))
+print("\n".join(d[Parser._printError]))
 

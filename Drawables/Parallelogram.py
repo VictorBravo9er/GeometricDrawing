@@ -1,4 +1,5 @@
 """Module for Point."""
+from Drawables.randoms import *
 from Drawables.Drawable import Drawable
 from Drawables.Quad import Quadrilateral
 from Drawables.Trapezoid import Trapezoid
@@ -57,7 +58,7 @@ class Parallelogram(Trapezoid):
             angleLine = a.angleTo(b)
         else:
             if not isinstance(angleLine, (int, float)):
-                angleLine = Drawable.randomAngle180()
+                angleLine = randomAngle180()
             a= Point.default()
             if isinstance(line, (float, int)):
                 b = Point.fromMetrics(
@@ -67,9 +68,9 @@ class Parallelogram(Trapezoid):
             else:
                 b = Point.default()
         if not isinstance(angle, (float, int)):
-            angle = Drawable.randomAngle180()
+            angle = randomAngle180()
         if not isinstance(length, (float, int)):
-            length = Drawable.randomLength()
+            length = randomLength()
         angle += angleLine
         d = Point.fromMetrics(angle, length, a)
         c = Point.fromMetrics(angle, length, b)

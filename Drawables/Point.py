@@ -1,4 +1,5 @@
 """Module for Point."""
+from Drawables.randoms import *
 from Drawables.Drawable import Drawable
 import numpy as np
 from math import inf, pi, atan, sqrt, cos, sin
@@ -58,8 +59,8 @@ class Point(Drawable):
     def default(cls):
         """Return a random point."""
         return cls.fromCoOrdinates(
-            Drawable.randomPointRangeX(),
-            Drawable.randomPointRangeY()
+            randomPointRangeX(),
+            randomPointRangeY()
         )
 
 

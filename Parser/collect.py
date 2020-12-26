@@ -20,27 +20,28 @@ from rules.square import squareADT
 class Collector:
     """Collector exists is to combine all class together."""
 
-    def __init__(self) -> None:
+    def __init__(self, inheritance:bool=True) -> None:
         """Initialize method."""
         super().__init__()
         self.ADT = {}
         self.collect()
-        self.processSuper()
+        self.processSuper(inheritance)
 
     def getDS(self):
         """Provide the Data Structure constructed."""
         return self.ADT
 
-    def processSuper(self):
+    def processSuper(self, inheritance:bool=True):
         """Inherit any remaining methods from base class."""
         backRef = self.ADT
         for key, CLASS in backRef.items():
-            for index in CLASS[is_a]:
-                for x, y in [
-                    (x, y) for (x, y) in backRef[index].items()
-                    if x not in CLASS
-                ]:
-                    CLASS[x] = y
+            if inheritance:
+                for index in CLASS[is_a]:
+                    for x, y in [
+                        (x, y) for (x, y) in backRef[index].items()
+                        if x not in CLASS
+                    ]:
+                        CLASS[x] = y
             del CLASS[is_a]
 
     def collect(self):

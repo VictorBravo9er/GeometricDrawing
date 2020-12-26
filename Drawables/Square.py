@@ -1,4 +1,5 @@
 """Module for Point."""
+from Drawables.randoms import *
 from Drawables.Drawable import Drawable
 from Drawables.Quad import Quadrilateral
 from Drawables.Rhombus import Rhombus
@@ -57,9 +58,9 @@ class Square(Rectangle, Rhombus):
         else:
             a= Point.default()
             if not isinstance(angle, (float, int)):
-                angle = Drawable.randomAngle180()
+                angle = randomAngle180()
             if not isinstance(line, (float, int)):
-                line = Drawable.randomLength()
+                line = randomLength()
             b = Point.fromMetrics(
                 angle=angle,
                 distance=line, point=a

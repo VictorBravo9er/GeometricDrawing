@@ -1,4 +1,5 @@
 """Module for Point."""
+from Drawables.randoms import *
 from Drawables.Drawable import Drawable
 from Drawables.Quad import Quadrilateral
 from math import acos, degrees, pi, radians, sin
@@ -54,7 +55,7 @@ class Kite(Quadrilateral):
         from Drawables.Point import Point
         a,b=...,...
         if not isinstance(angle, (float, int)):
-            angle = Drawable.randomAngle180()
+            angle = randomAngle180()
         if isinstance(line, Line):
             a, b = line.start, line.end
             angleLine = line.angle()
@@ -62,7 +63,7 @@ class Kite(Quadrilateral):
         else:
             a= Point.default()
             if not isinstance(angleLine, (float, int)):
-                angleLine = Drawable.randomAngle180()
+                angleLine = randomAngle180()
             if isinstance(line, (float, int)):
                 b = Point.fromMetrics(
                     angle=angleLine,
@@ -73,7 +74,7 @@ class Kite(Quadrilateral):
                 line = a.distanceTo(point=b)
                 angleLine = a.angleTo(b)
         if not isinstance(lengthOther, (float, int)):
-            lengthOther = Drawable.randomLength()
+            lengthOther = randomLength()
         theta1 = (pi - angle) / 2
         smiBse = line * sin(angle / 2)
         theta2 = acos(smiBse / lengthOther)

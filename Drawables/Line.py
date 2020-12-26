@@ -1,7 +1,8 @@
 """Module Line."""
-import numpy as np
+from Drawables.randoms import *
 from Drawables.Drawable import Drawable
 from math import inf, pi, atan, cos, sin
+import numpy as np
 
 class Line(Drawable):
     """Description of class."""
@@ -74,11 +75,11 @@ class Line(Drawable):
                 return Line.fromMetrics(
                     angle=angle,
                     point=Point.default(),
-                    length=Drawable.randomLength()
+                    length=randomLength()
                 )
         return cls.fromMetrics(
-            angle=Drawable.randomAngle180(), point=Point.default(),
-            length=Drawable.randomLength()
+            angle=randomAngle180(), point=Point.default(),
+            length=randomLength()
         )
 
 
