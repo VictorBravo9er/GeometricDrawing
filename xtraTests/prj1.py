@@ -1,4 +1,3 @@
-from Drawables.Drawable import Drawable
 import __init__
 from Parser.parse import Parser
 

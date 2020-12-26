@@ -1,3 +1,5 @@
+import __init__
+
 class sample:
     from sample2 import sample2
     def __init__(self, a, b) -> None:
