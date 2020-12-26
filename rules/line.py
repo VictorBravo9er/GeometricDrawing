@@ -138,18 +138,18 @@ lineADT = {
         },
         retVal:Circle
     },
-    "quad":{
-        (str,):{
-            args:("direction",),
+    "square":{
+        tuple():{
+            args:tuple(),
             trgt:Line.square
         },
         retVal:int
-    },#TODO
+    },
     "rectangle":{
-        (float, str,):{
-            args:("sideLength", "direction"),
+        (float,):{
+            args:("sideLength",),
             trgt:Line.rectangle
         },
         retVal:int
-    }#TODO
+    }
 }

@@ -16,7 +16,7 @@ class Square(Rectangle, Rhombus):
 
     @classmethod
     def fromPoints(cls, listOfPoint: list):
-        """Build parallelogram from provided points."""
+        """Build square from provided points."""
         if len(listOfPoint) != 4:
             raise ValueError(
                 "ValueError:\tThe Polygon can't even be "+
@@ -28,13 +28,13 @@ class Square(Rectangle, Rhombus):
 
     @classmethod
     def fromLines(cls, listOfLine: list):
-        """Build parallelogram from provided lines."""
+        """Build square from provided lines."""
         points = cls.edgeToVertex(listOfLine)
         return cls.fromPoints(points)
 
     @classmethod
     def fromSquare(cls, sqre):
-        """Copy another parallelogram."""
+        """Copy from another square."""
         if isinstance(sqre, cls):
             new = type(sqre)()
             points = cls.newVertices(sqre.vertices)
@@ -47,7 +47,7 @@ class Square(Rectangle, Rhombus):
 
     @classmethod
     def fromMetrics(cls, line=..., angle:float=...,):
-        """Draws a parallelogram from some metrics: a line(/line length), an internal angle, other length."""
+        """Draws a square from some metrics: a line(or its length and angle)."""
         from Drawables.Line import Line
         from Drawables.Point import Point
         a,b=...,...
@@ -72,14 +72,14 @@ class Square(Rectangle, Rhombus):
 
     @classmethod
     def default(cls, ):
-        """Build a random Quadrilateral."""
+        """Build a random square."""
         return cls.fromMetrics()
 
 
     # Helpers.
     @staticmethod
     def checkClass(trap:Quadrilateral):
-        """Check if Square can be constructed."""
+        """Check if square can be constructed."""
         new = trap.checkSubClass()
         if isinstance(new, Square):
             return new

@@ -18,7 +18,7 @@ class Polygon(Drawable):
     # Constructors
     @classmethod
     def fromPolygon(cls, polygon):
-        """Copy a polygon."""
+        """Copy from another polygon."""
         if isinstance(polygon, cls):
             new = type(polygon)()
             new.vertices = cls.newVertices(polygon.vertices)
@@ -114,11 +114,11 @@ class Polygon(Drawable):
 
     # Methods
     def area(self, vectotized:bool=True):
-        """Area of polygon."""
+        """Area of the polygon."""
         return abs(self.signedArea(vectotized))
 
     def signedArea(self, vectorized:bool=True):
-        """Signed area for nonintersecting Polygon using shielace formula."""
+        """Signed area of polygon using shielace formula."""
         if vectorized:
             return self.signedAreaVectorized()
         area = 0
@@ -129,7 +129,7 @@ class Polygon(Drawable):
         return float(area * 0.5)
 
     def centroid(self, vectorized:bool=True):
-        """Calculate centroid."""
+        """Calculate centroid of polygon."""
         if vectorized:
             return self.centroidVectorized()
         from Drawables.Point import Point
@@ -147,7 +147,7 @@ class Polygon(Drawable):
         return Point.fromCoOrdinates(x, y)
 
     def vertexCentroid(self):
-        """Return centroid of vertices."""
+        """Calculate centroid of vertices."""
         from Drawables.Point import Point
         (x, y) = (0.0, 0.0)
         for point in self.vertices:
@@ -158,7 +158,7 @@ class Polygon(Drawable):
         return Point.fromCoOrdinates(x, y)
 
     def internAngle(self, point=..., idx:int=...):
-        """Calculate Internal angle at a vertex."""
+        """Calculate Internal angle at a vertex(point or index of the vertex)."""
         from Drawables.Point import Point
         (point, idx) = Polygon.resolvePoint(self, point=point, idx=idx)
         angle = Point.angleFromPoints(
@@ -170,7 +170,7 @@ class Polygon(Drawable):
         return (2 * pi) - angle
 
     def angleBisector(self, point=..., idx:int=...):
-        """Angle bisector."""
+        """Angle bisector of a vertex(point or index of the vertex)."""
         from Drawables.Point import Point
         (point, idx) = Polygon.resolvePoint(self, point=point, idx=idx)
         point1=self.vertices[idx - 1]

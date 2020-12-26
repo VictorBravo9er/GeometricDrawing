@@ -2,7 +2,6 @@
 import __init__
 from Parser.collect import *
 from math import degrees, radians
-import traceback 
 
 
 class Parser:
@@ -294,6 +293,7 @@ class Parser:
                     f"Line {line}. \tIDError:",
                     "\tIdentifier doesn't follow naming convension."
                 )
+                continue
             if _id in self.symtab and _printErrors:
                 print(
                     f"Line {line}. \tObject exists with same id.",
@@ -303,8 +303,8 @@ class Parser:
                 continue
             try:
                 retStructure = self.processConstruction(
-                    instruction[self._callerObj  ],
-                    instruction[self._constr  ],
+                    instruction[self._callerObj],
+                    instruction[self._constr],
                     _id,
                     instruction[self._paramLst]
                 )
@@ -316,7 +316,6 @@ class Parser:
                 error = f"Line {line}. \t{e.args[0]}"
                 if _printErrors:
                     print(error)
-                traceback.print_exc() 
                 self.errorLog.append(error)
 
     def print(self, _print:bool = True):

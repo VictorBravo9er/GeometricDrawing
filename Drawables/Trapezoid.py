@@ -27,13 +27,13 @@ class Trapezoid(Quadrilateral):
 
     @classmethod
     def fromLines(cls, listOfLine: list):
-        """Build parallelogram from provided lines."""
+        """Build trapezoid from provided lines."""
         points = cls.edgeToVertex(listOfLine)
         return cls.fromPoints(points)
 
     @classmethod
     def fromTrapezoid(cls, trap):
-        """Copy another Trapezoid."""
+        """Copy from another trapezoid."""
         if isinstance(trap, cls):
             new = type(trap)()
             new.vertices = cls.newVertices(trap.vertices)
@@ -50,7 +50,7 @@ class Trapezoid(Quadrilateral):
         cls, line=..., angle1:float=...,
         angle2:float=..., height:float=...
     ):
-        """Draws a parallelogram from some metrics: a line(/line length), an internal angle, other distance between parallel sides."""
+        """Draws a trapezoid from some metrics: a base(or its length and angle), internal angles at its ends, and height."""
         from Drawables.Line import Line
         from Drawables.Point import Point
         a,b=...,...
@@ -69,16 +69,19 @@ class Trapezoid(Quadrilateral):
                 )
             else:
                 b = Point.default()
-        if not isinstance(height, (float, int)):
-            height = randomLength()
         angle = a.angleTo(b)
+        if not isinstance(height, (float, int)):
+            d = Point.fromMetrics(angle1+angle, 1, a)
+            c = Point.fromMetrics(pi-angle2+angle, 1, b)
+            h = (a.lineToPoint(d)).intersectionWith(b.lineToPoint(c)).distanceTo(a.lineToPoint(b))
+            height = randomRange(1,h-1) * 0.9
         d = Point.fromMetrics(angle1+angle, height / sin(angle1), a)
         c = Point.fromMetrics(pi-angle2+angle, height / sin(angle2), b)
         return cls.fromPoints([a,b,c,d])
 
     @classmethod
     def default(cls, ):
-        """Build a random parallelogram."""
+        """Build a random trapezoid."""
         return cls.fromMetrics()
 
 

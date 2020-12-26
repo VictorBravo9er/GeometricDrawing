@@ -28,13 +28,13 @@ class Rectangle(Parallelogram):
 
     @classmethod
     def fromLines(cls, listOfLine: list):
-        """Build parallelogram from provided lines."""
+        """Build rectangle from provided lines."""
         points = cls.edgeToVertex(listOfLine)
         return cls.fromPoints(points)
 
     @classmethod
     def fromRectangle(cls, rec):
-        """Copy another parallelogram."""
+        """Copy from another rectangle."""
         if isinstance(rec, cls):
             new = type(rec)()
             new.vertices = cls.newVertices(rec.vertices)
@@ -48,7 +48,7 @@ class Rectangle(Parallelogram):
 
     @classmethod
     def fromMetrics(cls, line=..., angleLine:float=..., lengthOther:float=...):
-        """Draws a parallelogram from some metrics: a line(/line length), an internal angle, other length."""
+        """Draws a rectangle from some metrics: a line(or lis length and angle), and other length."""
         from Drawables.Line import Line
         from Drawables.Point import Point
         a,b=...,...
@@ -79,14 +79,14 @@ class Rectangle(Parallelogram):
 
     @classmethod
     def default(cls, ):
-        """Build a random Quadrilateral."""
+        """Build a random rectangle."""
         return cls.fromMetrics()
 
 
     # Helpers.
     @staticmethod
     def checkClass(trap:Quadrilateral):
-        """Check if parallelogram can be constructed."""
+        """Check if rectangle can be constructed."""
         new = trap.checkSubClass()
         if isinstance(new, Rectangle):
             return new

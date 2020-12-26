@@ -17,7 +17,7 @@ class Quadrilateral(Polygon):
 
     @classmethod
     def fromPoints(cls, listOfPoint: list, allowAbnormal:bool=True):
-        """Build Quad from provided points."""
+        """Build quadrilateral from provided points."""
         if len(listOfPoint) != 4:
             raise ValueError(
                 "ValueError:\tThe Polygon can't be constructed"+
@@ -29,13 +29,13 @@ class Quadrilateral(Polygon):
 
     @classmethod
     def fromLines(cls, listOfLine: list):
-        """Build Quad from provided lines."""
+        """Build quadrilateral from provided lines."""
         points = cls.edgeToVertex(listOfLine)
         return cls.fromPoints(points)
 
     @classmethod
     def fromQuad(cls, quad):
-        """Copy another Quad."""
+        """Copy from another Quad."""
         if isinstance(quad, cls):
             new = type(quad)()
             new.vertices = cls.newVertices(quad.vertices)
@@ -49,7 +49,7 @@ class Quadrilateral(Polygon):
 
     @classmethod
     def default(cls):
-        """Build a random Quadrilateral."""
+        """Build a random quadrilateral."""
         from Drawables.Point import Point
         while True:
             points = [

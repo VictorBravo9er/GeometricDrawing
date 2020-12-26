@@ -61,7 +61,7 @@ pointADT = {
         },
         retVal:float
     },
-    "mid_point":{
+    "midpoint":{
         (Point,):{
             args:("point",),
             trgt:Point.middlePoint

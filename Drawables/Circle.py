@@ -38,7 +38,7 @@ class Circle(Arc):
 
     @classmethod
     def fromCircle(cls, circle):
-        """Copy another circle."""
+        """Copy from another circle."""
         from Drawables.Point import Point
         new = cls.fromMetrics(
             Point.fromPoint(circle.centre),
@@ -90,15 +90,15 @@ class Circle(Arc):
 
     # Methods
     def area(self):
-        """Calculate area."""
+        """Calculate area of circle."""
         return pi * ((self.radius) ** 2)
 
     def diameterLength(self):
-        """Diameter is twice the radius."""
+        """Diameter length is twice the radius. Virtuallu useless."""
         return(2 * self.radius)
 
     def diameterAlongPoint(self, point):
-        """Return a diameter along the direction of a certain point."""
+        """Diameter along the direction of a given point."""
         from Drawables.Point import Point
         from Drawables.Line import Line
         if self.radius != Point.distanceTo(self.centre, point=point):
@@ -113,13 +113,13 @@ class Circle(Arc):
         return Line.fromPoints(point, newPoint)
 
     def diameterAlongSlope(self, angle:float):
-        """Return a diameter along a certain direction."""
+        """Return a diameter along a certain direction(cartesian angle)."""
         from Drawables.Point import Point
         point = Point.fromMetrics(angle, self.radius, self.centre)
         return self.diameterAlongPoint(point)
 
     def commonChord(self, circle):
-        """Calculate common chord with another circle.""" 
+        """Calculate common chord when intersected by another circle.""" 
         from Drawables.Point import Point
         X2 = Point.distanceTo(circle.centre, point=self.centre)
         R1 = self.radius
@@ -151,7 +151,7 @@ class Circle(Arc):
         return(Line.fromPoints(p1, p2))
 
     def tangentAt(self, point=..., angle:float=...):
-        """Draw a tangent on circle, with radius along a point, or an angle. Expected arguements: [point], [angle]."""
+        """Draw a tangent on circle, when the radius is along a given point, or an angle."""
         from Drawables.Point import Point
         from Drawables.Line import Line
         status = True

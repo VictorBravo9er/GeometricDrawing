@@ -35,7 +35,7 @@ class Rhombus(Parallelogram, Kite):
 
     @classmethod
     def fromRhombus(cls, rhom):
-        """Copy another rhombus."""
+        """Copy from another rhombus."""
         if isinstance(rhom, cls):
             new = type(rhom)()
             points = cls.newVertices(rhom.vertices)
@@ -51,7 +51,7 @@ class Rhombus(Parallelogram, Kite):
         cls, line=..., angleLine:float=...,
         angleInternal:float=...,
     ):
-        """Draws a kite from some metrics: a line(/line length), an internal angle, other length."""
+        """Draws a rhombus from some metrics: a line(or its length and angle), and an internal angle."""
         from Drawables.Line import Line
         from Drawables.Point import Point
         a,b=...,...
@@ -77,14 +77,14 @@ class Rhombus(Parallelogram, Kite):
 
     @classmethod
     def default(cls, ):
-        """Build a random Quadrilateral."""
+        """Build a random rhombus."""
         return cls.fromMetrics()
 
 
     # Helpers.
     @staticmethod
     def checkClass(trap:Quadrilateral):
-        """Check if trapezoid can be constructed."""
+        """Check if rhombus can be constructed."""
         new = trap.checkSubClass()
         if isinstance(new, Rhombus):
             return new

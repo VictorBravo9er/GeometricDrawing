@@ -35,7 +35,7 @@ class Parallelogram(Trapezoid):
 
     @classmethod
     def fromParallelogram(cls, parallelo):
-        """Copy another parallelogram."""
+        """Copy from another parallelogram."""
         if isinstance(parallelo, cls):
             new = type(parallelo)()
             new.vertices = cls.newVertices(parallelo.vertices)
@@ -49,7 +49,7 @@ class Parallelogram(Trapezoid):
 
     @classmethod
     def fromMetrics(cls, line=...,angleLine:float=..., angle:float=..., length:float=...):
-        """Draws a parallelogram from some metrics: a line(/line length), an internal angle, other length."""
+        """Draws a parallelogram from some metrics: a line(or its length and angle), an internal angle, other length."""
         from Drawables.Line import Line
         from Drawables.Point import Point
         a,b=...,...
@@ -78,7 +78,7 @@ class Parallelogram(Trapezoid):
 
     @classmethod
     def default(cls, ):
-        """Build a random Quadrilateral."""
+        """Build a random parallelogram."""
         return cls.fromMetrics()
 
 

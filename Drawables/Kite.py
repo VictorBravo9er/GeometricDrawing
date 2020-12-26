@@ -15,7 +15,7 @@ class Kite(Quadrilateral):
 
     @classmethod
     def fromPoints(cls, listOfPoint: list):
-        """Build trapezoid from provided points."""
+        """Build kite from provided points."""
         if len(listOfPoint) != 4:
             raise ValueError(
                 "ValueError:\tThe Polygon can't even be "+
@@ -27,13 +27,13 @@ class Kite(Quadrilateral):
 
     @classmethod
     def fromLines(cls, listOfLine: list):
-        """Build parallelogram from provided lines."""
+        """Build kite from provided lines."""
         points = cls.edgeToVertex(listOfLine)
         return cls.fromPoints(points)
 
     @classmethod
     def fromKite(cls, kite):
-        """Copy another Trapezoid."""
+        """Copy from another kite."""
         if isinstance(kite, cls):
             new = type(kite)()
             new.vertices = cls.newVertices(kite.vertices)
@@ -50,12 +50,12 @@ class Kite(Quadrilateral):
         cls, line=..., angleLine:float=..., lengthOther:float=...,
         angle:float=...
     ):
-        """Draws a kite from some metrics: a line(/line length), an internal angle, other length."""
+        """Draws a kite from some metrics: a line(or its length and angle), an internal angle, other length."""
         from Drawables.Line import Line
         from Drawables.Point import Point
         a,b=...,...
         if not isinstance(angle, (float, int)):
-            angle = randomAngle180()
+            angle = randomAngle90()
         if isinstance(line, Line):
             a, b = line.start, line.end
             angleLine = line.angle()
@@ -63,29 +63,32 @@ class Kite(Quadrilateral):
         else:
             a= Point.default()
             if not isinstance(angleLine, (float, int)):
-                angleLine = randomAngle180()
+                angleLine = randomAngle90plus()
+                print(angleLine)
             if isinstance(line, (float, int)):
                 b = Point.fromMetrics(
                     angle=angleLine,
                     distance=line, point=a
                 )
             else:
-                b = Point.default()
-                line = a.distanceTo(point=b)
-                angleLine = a.angleTo(b)
+                line = randomLength()
+                b = Point.fromMetrics(
+                    angle=angleLine, distance=line,
+                    point=a
+                )
         if not isinstance(lengthOther, (float, int)):
             lengthOther = randomLength()
         theta1 = (pi - angle) / 2
         smiBse = line * sin(angle / 2)
         theta2 = acos(smiBse / lengthOther)
-        angleCommon = theta1 - theta2
-        d = Point.fromMetrics(angle+angleLine, line, a)
+        angleCommon = theta1 + theta2
+        d = Point.fromMetrics((angle+angleLine), line, a)
         c = Point.fromMetrics(pi-angleCommon+angleLine, lengthOther, b)
         return cls.fromPoints([a,b,c,d])
 
     @classmethod
     def default(cls, ):
-        """Build a random Quadrilateral."""
+        """Build a random kite."""
         return cls.fromMetrics()
 
 
@@ -103,7 +106,6 @@ class Kite(Quadrilateral):
             c.distanceTo(point=d),
             d.distanceTo(point=a)
         )
-        return trap
         raise ValueError(
             "ValueError:\tThe Quadrilateral can't "+
             "be constructed as a kite."
