@@ -15,7 +15,7 @@ from Drawables.Rectangle import Rectangle
 from Drawables.Rhombus import Rhombus
 from Drawables.Square import Square
 
-is_a:str = "is_a"
+parent:str = "parent"
 args:str = "arguements"
 trgt:str = "target"
 retVal:str = "return"

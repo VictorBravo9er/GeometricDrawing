@@ -16,6 +16,7 @@ class Parser:
 
     _printError:str = "errorLog"
     _printObject:str="printDesc"
+    _subplots:str="subplot"
 
     _desc:str = "description"
     _val:str = "value"
@@ -103,15 +104,24 @@ class Parser:
             if "angle" in key:
                 paramDict[key] = radians(paramDict[key])
 
-    def inputTokenizer(self, fileName:str=..., inputList:list=..., _error:bool=False):
+    def inputTokenizer(
+        self, fileName:str=..., inputList:list=...,
+        inputString:str=..., _error:bool=False
+    ):
         """Read in file and tokenizes it."""
         fileContent = ...
-        if not isinstance(inputList, list):
+        if isinstance(inputList, list):
+            fileContent = inputList
+        elif isinstance(inputString, str):
+            fileContent = inputString.split("\n")
+        elif isinstance(fileName, str):
             with open(fileName) as file:
                 fileContent = file.read()
                 fileContent = fileContent.split("\n")
         else:
-            fileContent = inputList
+            raise ValueError(
+                "No acceptable input received."
+            )
         line = 0
         for content in fileContent:
             line += 1
@@ -271,15 +281,17 @@ class Parser:
             self._val   :values
         }
 
-    def tokenChecker(self, fileName:str=..., inputList:list=...,_printErrors:bool=False):
+    def tokenChecker(
+        self, fileName:str=..., inputList:list=...,
+        inputString:str=..., _printErrors:bool=False
+    ):
         """Start point of operations."""
         from re import match
-        
         instStruct = ...
         if isinstance(inputList, list):
-            l = len(inputList)
             instStruct = self.inputTokenizer(inputList=inputList)
-
+        if isinstance(inputString, str):
+            instStruct = self.inputTokenizer(inputList=inputList)
         elif isinstance(fileName, str):
             instStruct = self.inputTokenizer(fileName)
         else:

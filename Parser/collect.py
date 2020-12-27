@@ -36,13 +36,16 @@ class Collector:
         backRef = self.ADT
         for key, CLASS in backRef.items():
             if inheritance:
-                for index in CLASS[is_a]:
-                    for x, y in [
-                        (x, y) for (x, y) in backRef[index].items()
-                        if x not in CLASS
-                    ]:
-                        CLASS[x] = y
-            del CLASS[is_a]
+                try:
+                    for index in CLASS[parent]:
+                        for x, y in [
+                            (x, y) for (x, y) in backRef[index].items()
+                            if x not in CLASS
+                        ]:
+                            CLASS[x] = y
+                except:
+                    print(0)
+            del CLASS[parent]
 
     def collect(self):
         """Collect all ADT's together."""

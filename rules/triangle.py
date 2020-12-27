@@ -1,7 +1,7 @@
 """Point Structure."""
 from rules.drawable import *
 triangleADT = {
-    is_a:(Polygon,),
+    parent:(Polygon,),
     "new":{
         tuple():{
             args:tuple(),

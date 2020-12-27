@@ -1,7 +1,7 @@
 """Point Structure."""
 from rules.drawable import *
 rectangleADT = {
-    is_a:(Parallelogram,),
+    parent:(Parallelogram,),
     "new":{
         (list, Point,):{
             args:("listOfPoint",),

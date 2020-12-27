@@ -1,7 +1,7 @@
 """Point Structure."""
 from rules.drawable import *
 circleADT = {
-    is_a:(Arc,),
+    parent:(Arc,),
     "new":{
         tuple():{
             args:tuple(),

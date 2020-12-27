@@ -1,7 +1,7 @@
 """Point Structure."""
 from rules.drawable import *
 lineADT = {
-    is_a:tuple(),
+    parent:tuple(),
     "new":{
         tuple():{
             args:tuple(),

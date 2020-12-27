@@ -1,7 +1,7 @@
 """Point Structure."""
 from rules.drawable import *
 polygonADT = {
-    is_a:tuple(),
+    parent:tuple(),
     "new":{
         (list, Point,):{
             args:("listOfPoints",),
