@@ -297,7 +297,7 @@ class Parser:
         if isinstance(inputList, list):
             instStruct = self.inputTokenizer(inputList=inputList)
         elif isinstance(inputString, str):
-            instStruct = self.inputTokenizer(inputList=inputList)
+            instStruct = self.inputTokenizer(inputString=inputString)
         elif isinstance(fileName, str):
             instStruct = self.inputTokenizer(fileName)
         else:
