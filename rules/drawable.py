@@ -22,9 +22,9 @@ retVal:str = "return"
 
 initOrder = (
     Point, Line, Arc, Circle, Polygon, Triangle,
-    Quadrilateral, Parallelogram, Trapezoid, Kite,
-    Rectangle, Rhombus, Square
-    )
+    Quadrilateral, Trapezoid, Kite, Parallelogram,
+    Rectangle, Rhombus, Square, 
+)
 
 objectADT = {
     "int":int,

@@ -34,7 +34,8 @@ class Collector:
     def processSuper(self, inheritance:bool=True):
         """Inherit any remaining methods from base class."""
         backRef = self.ADT
-        for key, CLASS in backRef.items():
+        for key in initOrder:
+            CLASS = backRef[key]
             if inheritance:
                 try:
                     for index in CLASS[parent]:
@@ -44,7 +45,7 @@ class Collector:
                         ]:
                             CLASS[x] = y
                 except:
-                    print(0)
+                    continue
             del CLASS[parent]
 
     def collect(self):

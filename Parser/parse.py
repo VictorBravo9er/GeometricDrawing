@@ -84,13 +84,17 @@ class Parser:
     @staticmethod
     def parse(
         fileName:str=..., inputList:list=...,
+        inputString:str=...,
         _show:bool=False, _store:bool=True,
         _storageName:str="./data/store",
         _print:bool=False, _error:bool=False
     ):
         """Standalone parsing Operation. Returns Descrpition."""
         ops = Parser()
-        ops.tokenChecker(fileName=fileName, inputList=inputList,_printErrors=_error)
+        ops.tokenChecker(
+            fileName=fileName, inputList=inputList,
+            inputString=inputString, _printErrors=_error
+        )
         ops.draw(_show, _store, _storageName, _print)
         return {
             Parser._printObject:ops.print(_print),
@@ -290,7 +294,7 @@ class Parser:
         instStruct = ...
         if isinstance(inputList, list):
             instStruct = self.inputTokenizer(inputList=inputList)
-        if isinstance(inputString, str):
+        elif isinstance(inputString, str):
             instStruct = self.inputTokenizer(inputList=inputList)
         elif isinstance(fileName, str):
             instStruct = self.inputTokenizer(fileName)

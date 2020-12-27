@@ -9,7 +9,7 @@ text = "A line AB is drawn using two points A(2,3) and B(4,4). \
         Given two points E(1,2) and F(8,6), draw a line."
 
 
-def parseNaturalInput(text:str=...):
+def parseNaturalInput(text:str=..., debug:bool=False):
 
     objects = ['point', 'line', 'curve', 'plane', 'chord', 'triangle', 'quadrilateral', 'parallelogram', 'square', 'rectangle'\
                 'rhombus', 'kite', 'trapezium', 'diagonal', 'circle', 'sphere']
@@ -24,30 +24,35 @@ def parseNaturalInput(text:str=...):
     tokenized = sent_tokenize(text)
     stop_words = set(stopwords.words('english'))
     for i in tokenized:
-        print("sent: ",i)
+        if debug:
+            print("sent: ",i)
         # Using Word tokenizer to find the words and punctuation in a string 
         words_in_sent = nltk.word_tokenize(i)
     
         # removing stop words from wordList 
         wordsList = [w for w in words_in_sent if not w in stop_words]
-        print("Wordlist: ",wordsList)
+        if debug:
+            print("Wordlist: ",wordsList)
         
         # stemming using Porter Stemmer
         ps = PorterStemmer()
         stemList = [ps.stem(w) for w in wordsList]
-        print('Stemlist: ',stemList)
+        if debug:
+            print('Stemlist: ',stemList)
         
         # Classifying stems to objects and props
         objList = [stem for stem in stemList if stem in objects]
         propList = [stem for stem in stemList if stem in props]
-        print("List of objects present: ",objList)
-        print("List of properties present: ",propList)
+        if debug:
+            print("List of objects present: ",objList)
+            print("List of properties present: ",propList)
         
         # extracting point coordinates in 2D (if any)
         point_coordinates = re.findall('(\d+),(\d+)', i) # handles only integer coordinates
         #point_coordinates = re.findall('(\d+\.\d+),(\d+\.\d+)', i) # handles only float coordinates
-        print("Coordinates of points (if any): ",point_coordinates)
-        print('\n')
+        if debug:
+            print("Coordinates of points (if any): ",point_coordinates)
+            print('\n')
 
 
     def getObjects(id_c, line_ref):    
