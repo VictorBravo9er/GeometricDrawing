@@ -91,7 +91,7 @@ class Parser:
     ):
         """Standalone parsing Operation. Returns Descrpition."""
         ops = Parser()
-        ops.tokenChecker(
+        ops.initParse(
             fileName=fileName, inputList=inputList,
             inputString=inputString, _printErrors=_error
         )
@@ -285,11 +285,13 @@ class Parser:
             self._val   :values
         }
 
-    def tokenChecker(
+    def initParse(
         self, fileName:str=..., inputList:list=...,
         inputString:str=..., _printErrors:bool=False
     ):
         """Start point of operations."""
+        self.symtab.clear()
+        self.errorLog.clear()
         from re import match
         instStruct = ...
         if isinstance(inputList, list):
@@ -334,7 +336,7 @@ class Parser:
                     print(error)
                 self.errorLog.append(error)
 
-    def print(self, _print:bool = True):
+    def print(self, _print:bool=False):
         """Print drawable item's list."""
         drawableList = []
         for x,value in self.symtab.items():
