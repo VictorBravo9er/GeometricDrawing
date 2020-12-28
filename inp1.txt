@@ -1,1 +1,0 @@
-Using points (5, 2) and (6, 4), draw a line. Draw its perpendicular bisector.
