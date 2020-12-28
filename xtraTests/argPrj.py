@@ -5,7 +5,7 @@ from Parser.parse import Parser
 from Parser.Preprocessing_Parsing import parseNaturalInput as pni
 
 with open(argv[1]) as file:
-    a = pni(file.read())
-    Parser.parse(inputList=a, _show=False, _store=False, _error=False)
+    a = file.read()
+    Parser.parse(inputString=a, _show=False, _store=True, _error=True)
     # plt.show()
 #help(plt.savefig)

@@ -272,7 +272,7 @@ class Parser:
         values = target(ref, **values)
         types = type(values).__name__
         target = target.__name__
-        if "angle" in target and isinstance(values, (float, int)):
+        if "angle" in constr and isinstance(values, (float, int)):
             values = degrees(values)
         if len(param) == 0:
             constr = "no parameters"
@@ -346,7 +346,7 @@ class Parser:
                 if _print:
                     print(desc)
                 continue
-            x = f"{desc}, {x}: {value}"
+            x = f"{desc}, {x}: {round(value, 4)}"
             drawableList.append(x)
             if _print:
                 print(x)

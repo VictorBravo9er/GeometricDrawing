@@ -126,14 +126,14 @@ lineADT = {
     },
     "tangent_circle":{
         (Point,):{
-            args:("tangentPoint",),
+            args:("tangentCentre",),
             trgt:Line.circleAround
         },
         retVal:Circle
     },
     "chord_circle":{
         (Point,):{
-            args:("chordPoint",),
+            args:("chordCentre",),
             trgt:Line.circleAround
         },
         retVal:Circle

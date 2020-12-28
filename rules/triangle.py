@@ -15,13 +15,17 @@ triangleADT = {
             args:("angle1", "angle2"),
             trgt:Triangle.fromAngles
         },
-        (float, float, float):{
-            args:("base", "angle1", "angle2",),
+        (float, float, float, float):{
+            args:("base", "angleBase", "angle1", "angle2",),
             trgt:Triangle.fromAngles
         },
         (Line, float, float):{
             args:("base", "angle1", "angle2",),
             trgt:Triangle.fromAngles
+        },
+        (float, float, float,):{
+            args:("length1", "length2", "length3",),
+            trgt:Triangle.fromLengths
         },
         (Point,):{
             args:("listOfPoint",),

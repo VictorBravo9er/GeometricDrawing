@@ -114,13 +114,13 @@ class Line(Drawable):
         """Distance from a point or line(if parallel)."""
         from Drawables.Point import Point
         if isinstance(point, Point):
-            return point.distanceTo(point=self.projectionOf(point))
+            return point.distanceTo(point=self.projectionOf(point, False))
         if isinstance(line, Line):
             (m1, c1) = self.getMetrics()
             (m2, c2) = line.getMetrics()
             if abs(m1 - m2) > self._comparisonLimit:
                 raise ValueError(
-                    f"ValueError:\tLines intersect at{self.intersectionWith(line)}"
+                    f"ValueError:\tLines intersect at{self.intersectionWith(line, False)}"
                 )
             angle_rad = atan(abs(m1))
             return abs(c1 - c2) * cos(angle_rad)
@@ -140,7 +140,7 @@ class Line(Drawable):
         from Drawables.Point import Point
         return(Point.fromSection(self.start, self.end, m, n))
 
-    def intersectionWith(self, line):
+    def intersectionWith(self, line, _extend:bool=True):
         """Intersection point of two lines."""
         from Drawables.Point import Point
         if isinstance(line, Line):
@@ -148,7 +148,11 @@ class Line(Drawable):
             (m2, c2) = line.getMetrics()
             x = (c1 - c2) / (m2 - m1)
             y = m1 * x + c1
-            return(Point.fromCoOrdinates(x, y))
+            inter = (Point.fromCoOrdinates(x, y))
+            if _extend:
+                self.extend(inter)
+                line.extend(inter)
+            return inter
         raise TypeError(
             f"TypeError:\tExpected: Line, received {type(line).__name__}"
         )
@@ -158,6 +162,7 @@ class Line(Drawable):
         from Drawables.Point import Point
         if isinstance(point, Point):
             distance = point.distanceTo(line=self)
+            distance *= -self.orientation(point)
         if isinstance(distance, (float, int)):
             return Line.fromLine(line=self, distance=distance)
         raise TypeError(
@@ -165,20 +170,26 @@ class Line(Drawable):
             f"{type(distance).__name__} and {type(point).__name__}."
         )
 
-    def projectionOf(self, point):
+    def projectionOf(self, point, _extend:bool=True):
         """Projection of point on the line."""
         l  = self.start.distanceTo(point=self.end)
         l1 = self.start.distanceTo(point=point)
         l2 = self.end.distanceTo(point=point)
         n = ((l ** 2) + (l2 ** 2) - (l1 ** 2)) / (2 * l)
         m = l - n
-        return self.sector(m, n)
+        projected = self.sector(m, n)
+        if _extend:
+            self.extend(projected)
+        return projected
 
-    def perpendicularFrom(self, point):
+    def perpendicularFrom(self, point, _extend:bool=True):
         """Perpendicular from a point to the line."""
-        return Line.fromPoints(self.projectionOf(point), point)
+        prjkt = self.projectionOf(point, _extend)
+        if prjkt.distanceTo(point=point) < 1:
+            return self.perpendicularAt(point=prjkt)
+        return Line.fromPoints(prjkt, point)
 
-    def perpendicularAt(self, point=..., ratio:float=...):
+    def perpendicularAt(self, point=..., ratio:float=..., _extend:bool=True):
         """Perpendicular at a point or a point that divides the line ina certain ratio."""
         if isinstance(ratio, (float, int)):
             point = self.sector(m=ratio)
@@ -186,6 +197,8 @@ class Line(Drawable):
         if isinstance(point, Point):
             from Drawables.Point import Point
             len_ = self.length() / 2
+            if _extend:
+                self.extend(point)
             angle = atan(-1/self.slope())
             point1 = Point.fromMetrics( angle, len_, point)
             point2 = Point.fromMetrics( angle,-len_, point)
@@ -263,11 +276,12 @@ class Line(Drawable):
             if Drawable.orientation(
                 self.start, self.end, point
             ) != 0:
+                return
                 raise ValueError("Point is non coliniar with Line")
             _x, x_, l = (
-                Point.distanceSquared(point, self.start),
-                Point.distanceSquared(point, self.end),
-                Point.distanceSquared(self.start, self.end)
+                Point.distanceTo(point, point=self.start),
+                Point.distanceTo(point, point=self.end),
+                self.length()
             )
             if abs(_x + x_ - l) < Drawable._comparisonLimit:
                 return
@@ -355,6 +369,10 @@ class Line(Drawable):
         """Draw plots."""
         a = self.angle()
         c, s = cos(a), sin(a)
-        x = (self.start.X - c * self.__extend, self.end.X + c * self.extend__)
-        y = (self.start.Y - s * self.__extend, self.end.Y + s * self.extend__)
-        axes.plot(x,y)
+        if self.__extend != 0 or self.extend__ != 0:
+            x = (self.start.X - c * self.__extend, self.end.X + c * self.extend__)
+            y = (self.start.Y - s * self.__extend, self.end.Y + s * self.extend__)
+            axes.plot(x,y)
+        axes.plot(
+            (self.start.X, self.end.X),(self.start.Y, self.end.Y)
+        )

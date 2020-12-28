@@ -68,6 +68,7 @@ class Quadrilateral(Polygon):
     def diagonalAtPoint(self, point=..., idx:int=...):
         """Draw diagonal from specified point/index of point."""
         point, idx = self.resolvePoint(point=point, idx=idx)
+        print(idx, type(idx))
         return point.lineToPoint(self.vertices[idx-2])
 
     def bimedianOnLine(self, line=..., idx:int=...):

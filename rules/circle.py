@@ -36,7 +36,7 @@ circleADT = {
             args:tuple(),
             trgt:Circle.getCentre
         },
-        retVal:float
+        retVal:Point
     },
     "area":{
         tuple():{
@@ -57,7 +57,7 @@ circleADT = {
         retVal:Line
     },
     "common_chord":{
-        (Line,):{
+        (Circle,):{
             args:("circle",),
             trgt:Circle.commonChord
         },
