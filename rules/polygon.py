@@ -1,13 +1,13 @@
 """Point Structure."""
 from rules.drawable import *
 polygonADT = {
-    is_a:tuple(),
+    parent:tuple(),
     "new":{
-        (list, Point,):{
-            args:("listOfPoints",),
+        (Point,):{
+            args:("listOfPoint",),
             trgt:Polygon.fromPoints,
         },
-        (list, Line,):{
+        (Line,):{
             args:("listOfLine",),
             trgt:Polygon.fromLines,
         },
@@ -62,7 +62,7 @@ polygonADT = {
         },
         retVal:Point
     },
-    "internal_angle":{
+    "angle_internal":{
         (float,):{
             args:("idx",),
             trgt:Polygon.internAngle

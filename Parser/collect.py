@@ -34,15 +34,19 @@ class Collector:
     def processSuper(self, inheritance:bool=True):
         """Inherit any remaining methods from base class."""
         backRef = self.ADT
-        for key, CLASS in backRef.items():
+        for key in initOrder:
+            CLASS = backRef[key]
             if inheritance:
-                for index in CLASS[is_a]:
-                    for x, y in [
-                        (x, y) for (x, y) in backRef[index].items()
-                        if x not in CLASS
-                    ]:
-                        CLASS[x] = y
-            del CLASS[is_a]
+                try:
+                    for index in CLASS[parent]:
+                        for x, y in [
+                            (x, y) for (x, y) in backRef[index].items()
+                            if x not in CLASS
+                        ]:
+                            CLASS[x] = y
+                except:
+                    continue
+            del CLASS[parent]
 
     def collect(self):
         """Collect all ADT's together."""

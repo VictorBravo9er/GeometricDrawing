@@ -1,7 +1,7 @@
 """Point Structure."""
 from rules.drawable import *
 paralleloADT = {
-    is_a:(Trapezoid,),
+    parent:(Trapezoid,),
     "new":{
         (list, Point,):{
             args:("listOfPoint",),

@@ -2,86 +2,83 @@ Drawable: Point
 
     Constructor
         returns -> Point
-        Return a random point.
+        Random point.
             Expected args    : None
-        Construct new Point using point Coordinates.
+        Point using point Coordinates.
             Expected args    : x, y
             Of Types         : float , float.
-        Point sector using ratio m:n, and points point1 and point2.
+        Point that divides two points in ratio m:n.
             Expected args    : point1, point2, m, n
             Of Types         : Point , Point , float , float.
-        Construct point using some Metrics. Angle in radians.
+        Point along an angle at a distance from another point.
             Expected args    : angle, distance, point
             Of Types         : float , float , Point.
 
     copy
         returns -> Point
-        Construct new point from existing Point.
+        Copy from another point.
             Expected args    : None
 
-    slopeTo
+    slope
         returns -> float
-        Find slope(directionless) to another point w.r.t. X-axis. -ve allowed.
+        Find slope to another point.
             Expected args    : point
             Of Types         : Point.
 
-    angleTo
+    angle
         returns -> float
-        Find angle(radians) to another point w.r.t. X-axis. -ve allowed.
+        Find angle to another point.
             Expected args    : point
             Of Types         : Point.
-
-    angleFrom
-        returns -> float
-        Find angle(radian) subtended on self from A and B. -ve allowed.
+        Find angle subtended from two points.
             Expected args    : point1, point2
             Of Types         : Point , Point.
-        Find angle(radian) subtended on self from endpoints of a line. -ve allowed.
+        Find angle subtended from endpoints of a line.
             Expected args    : line
             Of Types         : Line.
 
-    distanceTo
+    distance
         returns -> float
-        Distance to/from a Line or a point. Expected arguements: [line], [point].
+        Distance to/from a Line or a point.
             Expected args    : point
             Of Types         : Point.
-        Distance to/from a Line or a point. Expected arguements: [line], [point].
+        Distance to/from a Line or a point.
             Expected args    : line
             Of Types         : Line.
 
-    midPoint
+    midpoint
         returns -> Point
-        Return midPoint of 2 points.
+        Mid point of two points.
             Expected args    : point
             Of Types         : Point.
 
     projection
         returns -> Point
-        Return self-projection on a line.
+        Projection on a line.
             Expected args    : line
             Of Types         : Line.
 
     bisector
         returns -> Line
-        Draws perpendicular bisector between two points.
+        Draws perpendicular bisector with respect to another point.
             Expected args    : point
             Of Types         : Point.
 
-    angleBisector
+    angle_bisector
         returns -> Line
-        Bisector of angle sublended at point from ends of a line.
+        Bisector of angle sublended from ends of a line.
             Expected args    : line
             Of Types         : Line.
-        Bisector of angle AXB.
+        Bisector of angle subtended by two other points.
             Expected args    : point1, point2
             Of Types         : Point , Point.
 
-    lineTo
+    line
         returns -> Line
-        Return a line from current point to another point.
+        Line to another point.
             Expected args    : point
             Of Types         : Point.
-        Return a line using certain metrics.
+        Line along a direction(angle) of given length.
             Expected args    : angle, distance
             Of Types         : float , float.
 
@@ -93,19 +90,19 @@ Drawable: Point
 
     circle
         returns -> Circle
-        Create a circle using a centre and a radius.
+        Create a circle provided a radius.
             Expected args    : radius
             Of Types         : float.
 
-    tangentCircle
+    tangent_circle
         returns -> Circle
-        Create a circle using a centre and a chord            or a tangent.
+        Create a circle centred on the point itself, provided a chord(if possible) or a tangent.
             Expected args    : tangent
             Of Types         : Line.
 
-    chordCircle
+    chord_circle
         returns -> Circle
-        Create a circle using a centre and a chord            or a tangent.
+        Create a circle centred on the point itself, provided a chord(if possible) or a tangent.
             Expected args    : chord
             Of Types         : Line.
 
@@ -114,26 +111,26 @@ Drawable: Line
 
     Constructor
         returns -> Point
-        Construct a random line or axis parallel line(X or Y axis).
+        Construct a random line or axis parallel line(X or Y axis), if notified.
             Expected args    : None
-        Construct a random line or axis parallel line(X or Y axis).
+        Construct a random line or axis parallel line(X or Y axis), if notified.
             Expected args    : parallelAxis
             Of Types         : str.
         Construct a line provided two end-points are given.
             Expected args    : point1, point2
             Of Types         : Point , Point.
-        Draw Line using some metrics.
+        Draw line along an angle of some length from a point.
             Expected args    : angle, length, point
             Of Types         : float , float , Point.
 
     copy
         returns -> Line
-        Derive another line from an existing one.
+        copy from another line.
             Expected args    : None
 
     angle
         returns -> float
-        Angle subtended by line with x-axis.
+        Angle subtended by line with +ve direction of  x-axis.
             Expected args    : None
 
     length
@@ -141,111 +138,104 @@ Drawable: Line
         Find length of the Line segment.
             Expected args    : None
 
-    distanceFrom
+    distance
         returns -> float
-        Distance from point or line.
+        Distance from a point or line(if parallel).
             Expected args    : line
             Of Types         : Line.
-        Distance from point or line.
+        Distance from a point or line(if parallel).
             Expected args    : point
             Of Types         : Point.
 
     bisector
         returns -> Point
-        Bisector of the line.
+        Bisector(mid point) of the line.
             Expected args    : None
 
     sector
         returns -> Point
-        Sector of line in a ratio of m:n.
+        Point that divides line in ratio of m:n.
             Expected args    : m, n
             Of Types         : float , float.
 
     intersect
         returns -> Point
-        Point intersection of two lines.
+        Intersection point of two lines.
             Expected args    : line
             Of Types         : Line.
 
-    parallelLine
+    parallel_line
         returns -> Point
-        Draw a parallel Line.
+        Draw a parallel line that is either at a certain distance or passes through a given point.
             Expected args    : point
             Of Types         : Point.
-        Draw a parallel Line.
+        Draw a parallel line that is either at a certain distance or passes through a given point.
             Expected args    : distance
             Of Types         : float.
 
-    projectionOf
+    projection
         returns -> Point
-        Point projection.
+        Projection of point on the line.
             Expected args    : point
             Of Types         : Point.
 
-    perpendicularFrom
+    perpendicular
         returns -> Line
         Perpendicular from a point to the line.
             Expected args    : point
             Of Types         : Point.
-
-    perpendicularAt
-        returns -> Line
-        Perpendicular at a point or ratio on the line.
-            Expected args    : point
-            Of Types         : Point.
-        Perpendicular at a point or ratio on the line.
+        Perpendicular at a point or a point that divides the line ina certain ratio.
             Expected args    : ratio
             Of Types         : float.
 
-    perpendicularBisector
+    perpendicular_bisector
         returns -> Line
-        Perpendicular bisector.
+        Perpendicular bisector of the line.
             Expected args    : None
 
     triangle
         returns -> Triangle
-        Draw a Triangle.
+        Draw a triangle with the line and an additional point.
             Expected args    : point
             Of Types         : Point.
 
     circle
         returns -> Circle
-        Draw circle with line as diameter, chord or tangent.
+        Draw circle with line as diameter, or as a chord or tangent if their respective centres are given.
             Expected args    : None
 
-    tangentCircle
+    tangent_circle
         returns -> Circle
-        Draw circle with line as diameter, chord or tangent.
-            Expected args    : tangentPoint
+        Draw circle with line as diameter, or as a chord or tangent if their respective centres are given.
+            Expected args    : tangentCentre
             Of Types         : Point.
 
-    chordCircle
+    chord_circle
         returns -> Circle
-        Draw circle with line as diameter, chord or tangent.
-            Expected args    : chordPoint
+        Draw circle with line as diameter, or as a chord or tangent if their respective centres are given.
+            Expected args    : chordCentre
             Of Types         : Point.
 
-    quad
+    square
         returns -> int
-        None
-            Expected args    : direction
-            Of Types         : str.
+        Draw a square with the line as one of it's sides.
+            Expected args    : None
 
     rectangle
         returns -> int
-        None
-            Expected args    : sideLength, direction
-            Of Types         : float , str.
+        Draw a rectangle with the line as one of it's sides and length of adjacent side.
+            Expected args    : sideLength
+            Of Types         : float.
 
 
 Drawable: Arc
 
     Constructor
         returns -> Arc
-        Construct the class.
+        Construct an arc with the given arguements.
             Expected args    : centre, radius, angleStart, angleEnd
             Of Types         : Point , float , float , float.
-        Construct the class.
+        Construct an arc with the given arguements.
             Expected args    : centre, point, angle
             Of Types         : Point , Point , float.
 
@@ -270,7 +260,7 @@ Drawable: Circle
 
     copy
         returns -> Circle
-        Copy another circle.
+        Copy from another circle.
             Expected args    : None
 
     radius
@@ -279,36 +269,36 @@ Drawable: Circle
             Expected args    : None
 
     centre
-        returns -> float
+        returns -> Point
         Get the radius itself.
             Expected args    : None
 
     area
         returns -> float
-        Calculate area.
+        Calculate area of circle.
             Expected args    : None
 
     diameter
         returns -> Line
-        Return a diameter along a certain direction.
+        Return a diameter along a certain direction(cartesian angle).
             Expected args    : angle
             Of Types         : float.
-        Return a diameter along the direction of a certain point.
+        Diameter along the direction of a given point.
             Expected args    : point
             Of Types         : Point.
 
-    commonChord
+    common_chord
         returns -> Line
-        Calculate common chord with another circle.
+        Calculate common chord when intersected by another circle.
             Expected args    : circle
-            Of Types         : Line.
+            Of Types         : Circle.
 
     tangent
         returns -> Point
-        Draw a tangent on circle, with radius along a point, or an angle. Expected arguements: [point], [angle].
+        Draw a tangent on circle, when the radius is along a given point, or an angle.
             Expected args    : point
             Of Types         : Point.
-        Draw a tangent on circle, with radius along a point, or an angle. Expected arguements: [point], [angle].
+        Draw a tangent on circle, when the radius is along a given point, or an angle.
             Expected args    : angle
             Of Types         : float.
 
@@ -318,64 +308,64 @@ Drawable: Polygon
     Constructor
         returns -> Polygon
         Draw polygon from points.
-            Expected args    : listOfPoints
-            Of Types         : list , Point.
+            Expected args    : listOfPoint
+            Of Types         : Point.
         Draw polygon from lines.
             Expected args    : listOfLine
-            Of Types         : list , Line.
+            Of Types         : Line.
 
     copy
         returns -> Polygon
-        Copy a polygon.
+        Copy from another polygon.
             Expected args    : None
 
     area
         returns -> float
-        Area of polygon.
+        Area of the polygon.
             Expected args    : None
 
-    getPointFromID
+    get_indexed_point
         returns -> Point
         Return an indexed point. depends on input while construction.
             Expected args    : idx
             Of Types         : float.
 
-    getLineFromID
+    get_indexed_line
         returns -> Line
         Return a line from point[i-1] to point[i]. Depends on input while construction.
             Expected args    : idx
             Of Types         : float.
 
-    signedArea
+    signed_area
         returns -> float
-        Signed area for nonintersecting Polygon using shielace formula.
+        Signed area of polygon using shielace formula.
             Expected args    : None
 
     centroid
         returns -> Point
-        Calculate centroid.
+        Calculate centroid of polygon.
             Expected args    : None
 
-    vertexCentroid
+    vertex_centroid
         returns -> Point
-        Return centroid of vertices.
+        Calculate centroid of vertices.
             Expected args    : None
 
-    internalAngle
+    angle_internal
         returns -> float
-        Calculate Internal angle at a vertex.
+        Calculate Internal angle at a vertex(point or index of the vertex).
             Expected args    : idx
             Of Types         : float.
-        Calculate Internal angle at a vertex.
+        Calculate Internal angle at a vertex(point or index of the vertex).
             Expected args    : point
             Of Types         : Point.
 
-    angleBisector
+    angle_bisector
         returns -> Line
-        Angle bisector.
+        Angle bisector of a vertex(point or index of the vertex).
             Expected args    : idx
             Of Types         : float.
-        Angle bisector.
+        Angle bisector of a vertex(point or index of the vertex).
             Expected args    : point
             Of Types         : Point.
 
@@ -384,38 +374,41 @@ Drawable: Triangle
 
     Constructor
         returns -> Triangle
-        Provide a random triangle, with type if provided(acute, obtuse, and right angled, equilateral and isoscales).
+        Draw a random triangle. Or Draw a specific type(acute, obtuse, and right angled, equilateral and isoscales).
             Expected args    : None
-        Provide a random triangle, with type if provided(acute, obtuse, and right angled, equilateral and isoscales).
+        Draw a random triangle. Or Draw a specific type(acute, obtuse, and right angled, equilateral and isoscales).
             Expected args    : _type
             Of Types         : str.
-        Draw a triangle from given angles and an optional base.
+        Draw a triangle from given two angles and an optional base.
             Expected args    : angle1, angle2
             Of Types         : float , float.
-        Draw a triangle from given angles and an optional base.
-            Expected args    : base, angle1, angle2
-            Of Types         : float , float , float.
-        Draw a triangle from given angles and an optional base.
+        Draw a triangle from given two angles and an optional base.
+            Expected args    : base, angleBase, angle1, angle2
+            Of Types         : float , float , float , float.
+        Draw a triangle from given two angles and an optional base.
             Expected args    : base, angle1, angle2
             Of Types         : Line , float , float.
-        Draw Triangle list of points.
+        Draw the line from three provided lengths.
+            Expected args    : length1, length2, length3
+            Of Types         : float , float , float.
+        Draw triangle from a list of points.
             Expected args    : listOfPoint
             Of Types         : Point.
-        Draw Triangle from list of lines.
+        Draw triangle from list of lines.
             Expected args    : listOfLine
             Of Types         : Line.
-        Draw Triangle from a line and a point.
+        Draw triangle using a line and a point.
             Expected args    : line, point
             Of Types         : Line , Point.
 
     copy
         returns -> Circle
-        Draw Triangle copied from another triangle.
+        Copy from another triangle.
             Expected args    : None
 
     area
         returns -> float
-        Heron's Formula.
+        Calculate area using Heron's Formula.
             Expected args    : None
 
     centroid
@@ -450,22 +443,22 @@ Drawable: Triangle
 
     median
         returns -> Line
-        Draw a median from a specified point.
+        Draw a median from a specified point(or it's index).
             Expected args    : point
             Of Types         : Point.
-        Draw a median from a specified point.
+        Draw a median from a specified point(or it's index).
             Expected args    : idx
             Of Types         : float.
-        Draw a median on a specified line.
+        Draw a median on a specified line(or it's index).
             Expected args    : line
             Of Types         : Line.
 
     perpendicular
         returns -> Line
-        Draw a perpendicular from a specified point.
+        Draw a perpendicular from a specified point(or it's index).
             Expected args    : point
             Of Types         : Point.
-        Draw a perpendicular from a specified point.
+        Draw a perpendicular from a specified point(or it's index).
             Expected args    : idx
             Of Types         : float.
         Draw a perpendicular on a specified line.
@@ -474,44 +467,53 @@ Drawable: Triangle
 
     angleBisector
         returns -> Line
-        Angle Bisector from a certain point.
+        Angle Bisector from a certain point(or it's index).
             Expected args    : idx
             Of Types         : float.
-        Angle Bisector from a certain point.
+        Angle Bisector from a certain point(or it's index).
             Expected args    : point
             Of Types         : Point.
         Angle Bisector on a certain line.
             Expected args    : line
             Of Types         : Line.
 
-    getPointFromID
+    get_indexed_point
         returns -> Point
         Return an indexed point. depends on input while construction.
             Expected args    : idx
             Of Types         : float.
 
-    getLineFromID
+    get_indexed_line
         returns -> Line
         Return a line from point[i-1] to point[i]. Depends on input while construction.
             Expected args    : idx
             Of Types         : float.
 
-    signedArea
+    signed_area
         returns -> float
-        Signed area for nonintersecting Polygon using shielace formula.
+        Signed area of polygon using shielace formula.
             Expected args    : None
 
-    vertexCentroid
+    vertex_centroid
         returns -> Point
-        Return centroid of vertices.
+        Calculate centroid of vertices.
             Expected args    : None
 
-    internalAngle
+    angle_internal
         returns -> float
-        Calculate Internal angle at a vertex.
+        Calculate Internal angle at a vertex(point or index of the vertex).
             Expected args    : idx
             Of Types         : float.
-        Calculate Internal angle at a vertex.
+        Calculate Internal angle at a vertex(point or index of the vertex).
+            Expected args    : point
+            Of Types         : Point.
+
+    angle_bisector
+        returns -> Line
+        Angle bisector of a vertex(point or index of the vertex).
+            Expected args    : idx
+            Of Types         : float.
+        Angle bisector of a vertex(point or index of the vertex).
             Expected args    : point
             Of Types         : Point.
 
@@ -520,21 +522,21 @@ Drawable: Quadrilateral
 
     Constructor
         returns -> Quadrilateral
-        Build Quad from provided points.
+        Build quadrilateral from provided points.
             Expected args    : listOfPoint
             Of Types         : list , Point.
-        Build Quad from provided lines.
+        Build quadrilateral from provided lines.
             Expected args    : listOfLine
             Of Types         : list , Line.
-        Build a random Quadrilateral.
+        Build a random quadrilateral.
             Expected args    : None
 
     copy
         returns -> Quadrilateral
-        Copy another Quad.
+        Copy from another Quad.
             Expected args    : None
 
-    diagonalAt
+    diagonal
         returns -> Line
         Draw diagonal from specified point/index of point.
             Expected args    : point
@@ -543,7 +545,7 @@ Drawable: Quadrilateral
             Expected args    : idx
             Of Types         : float.
 
-    bimedianOn
+    bimedian
         returns -> Line
         Draw bimedian from specified line/index of line.
             Expected args    : line
@@ -552,63 +554,63 @@ Drawable: Quadrilateral
             Expected args    : idx
             Of Types         : float.
 
-    diagonalIntersection
+    diagonal_intersection
         returns -> Point
         Find diagonal intersection point.
             Expected args    : None
 
-    bimedianIntersection
+    bimedian_intersection
         returns -> Point
         Find bimedian intersection point.
             Expected args    : None
 
     area
         returns -> float
-        Area of polygon.
+        Area of the polygon.
             Expected args    : None
 
-    getPointFromID
+    get_indexed_point
         returns -> Point
         Return an indexed point. depends on input while construction.
             Expected args    : idx
             Of Types         : float.
 
-    getLineFromID
+    get_indexed_line
         returns -> Line
         Return a line from point[i-1] to point[i]. Depends on input while construction.
             Expected args    : idx
             Of Types         : float.
 
-    signedArea
+    signed_area
         returns -> float
-        Signed area for nonintersecting Polygon using shielace formula.
+        Signed area of polygon using shielace formula.
             Expected args    : None
 
     centroid
         returns -> Point
-        Calculate centroid.
+        Calculate centroid of polygon.
             Expected args    : None
 
-    vertexCentroid
+    vertex_centroid
         returns -> Point
-        Return centroid of vertices.
+        Calculate centroid of vertices.
             Expected args    : None
 
-    internalAngle
+    angle_internal
         returns -> float
-        Calculate Internal angle at a vertex.
+        Calculate Internal angle at a vertex(point or index of the vertex).
             Expected args    : idx
             Of Types         : float.
-        Calculate Internal angle at a vertex.
+        Calculate Internal angle at a vertex(point or index of the vertex).
             Expected args    : point
             Of Types         : Point.
 
-    angleBisector
+    angle_bisector
         returns -> Line
-        Angle bisector.
+        Angle bisector of a vertex(point or index of the vertex).
             Expected args    : idx
             Of Types         : float.
-        Angle bisector.
+        Angle bisector of a vertex(point or index of the vertex).
             Expected args    : point
             Of Types         : Point.
 
@@ -620,24 +622,24 @@ Drawable: Trapezoid
         Build trapezoid from provided points.
             Expected args    : listOfPoint
             Of Types         : list , Point.
-        Build parallelogram from provided lines.
+        Build trapezoid from provided lines.
             Expected args    : listOfLine
             Of Types         : list , Line.
-        Draws a parallelogram from some metrics: a line(/line length), an internal angle, other distance between parallel sides.
+        Draws a trapezoid from some metrics: a base(or its length and angle), internal angles at its ends, and height.
             Expected args    : line, angle1, angle2height
             Of Types         : Line , float , float , float.
-        Draws a parallelogram from some metrics: a line(/line length), an internal angle, other distance between parallel sides.
+        Draws a trapezoid from some metrics: a base(or its length and angle), internal angles at its ends, and height.
             Expected args    : line, angle1, angle2height
             Of Types         : float , float , float , float.
-        Build a random parallelogram.
+        Build a random trapezoid.
             Expected args    : None
 
     copy
         returns -> Trapezoid
-        Copy another Trapezoid.
+        Copy from another trapezoid.
             Expected args    : None
 
-    diagonalAt
+    diagonal
         returns -> Line
         Draw diagonal from specified point/index of point.
             Expected args    : point
@@ -646,7 +648,7 @@ Drawable: Trapezoid
             Expected args    : idx
             Of Types         : float.
 
-    bimedianOn
+    bimedian
         returns -> Line
         Draw bimedian from specified line/index of line.
             Expected args    : line
@@ -655,63 +657,63 @@ Drawable: Trapezoid
             Expected args    : idx
             Of Types         : float.
 
-    diagonalIntersection
+    diagonal_intersection
         returns -> Point
         Find diagonal intersection point.
             Expected args    : None
 
-    bimedianIntersection
+    bimedian_intersection
         returns -> Point
         Find bimedian intersection point.
             Expected args    : None
 
     area
         returns -> float
-        Area of polygon.
+        Area of the polygon.
             Expected args    : None
 
-    getPointFromID
+    get_indexed_point
         returns -> Point
         Return an indexed point. depends on input while construction.
             Expected args    : idx
             Of Types         : float.
 
-    getLineFromID
+    get_indexed_line
         returns -> Line
         Return a line from point[i-1] to point[i]. Depends on input while construction.
             Expected args    : idx
             Of Types         : float.
 
-    signedArea
+    signed_area
         returns -> float
-        Signed area for nonintersecting Polygon using shielace formula.
+        Signed area of polygon using shielace formula.
             Expected args    : None
 
     centroid
         returns -> Point
-        Calculate centroid.
+        Calculate centroid of polygon.
             Expected args    : None
 
-    vertexCentroid
+    vertex_centroid
         returns -> Point
-        Return centroid of vertices.
+        Calculate centroid of vertices.
             Expected args    : None
 
-    internalAngle
+    angle_internal
         returns -> float
-        Calculate Internal angle at a vertex.
+        Calculate Internal angle at a vertex(point or index of the vertex).
             Expected args    : idx
             Of Types         : float.
-        Calculate Internal angle at a vertex.
+        Calculate Internal angle at a vertex(point or index of the vertex).
             Expected args    : point
             Of Types         : Point.
 
-    angleBisector
+    angle_bisector
         returns -> Line
-        Angle bisector.
+        Angle bisector of a vertex(point or index of the vertex).
             Expected args    : idx
             Of Types         : float.
-        Angle bisector.
+        Angle bisector of a vertex(point or index of the vertex).
             Expected args    : point
             Of Types         : Point.
 
@@ -720,27 +722,27 @@ Drawable: Kite
 
     Constructor
         returns -> Kite
-        Build trapezoid from provided points.
+        Build kite from provided points.
             Expected args    : listOfPoint
             Of Types         : list , Point.
-        Build parallelogram from provided lines.
+        Build kite from provided lines.
             Expected args    : listOfLine
             Of Types         : list , Line.
-        Draws a kite from some metrics: a line(/line length), an internal angle, other length.
-            Expected args    : line, angle, angleCommonlengthOther
-            Of Types         : Line , float , float , float.
-        Draws a kite from some metrics: a line(/line length), an internal angle, other length.
-            Expected args    : line, angle, angleCommonlengthOther
+        Draws a kite from some metrics: a line(or its length and angle), an internal angle, other length.
+            Expected args    : line, lengthOther, angle
+            Of Types         : Line , float , float.
+        Draws a kite from some metrics: a line(or its length and angle), an internal angle, other length.
+            Expected args    : line, angleLinelengthOther, angle
             Of Types         : float , float , float , float.
-        Build a random Quadrilateral.
+        Build a random kite.
             Expected args    : None
 
     copy
         returns -> Kite
-        Copy another Trapezoid.
+        Copy from another kite.
             Expected args    : None
 
-    diagonalAt
+    diagonal
         returns -> Line
         Draw diagonal from specified point/index of point.
             Expected args    : point
@@ -749,7 +751,7 @@ Drawable: Kite
             Expected args    : idx
             Of Types         : float.
 
-    bimedianOn
+    bimedian
         returns -> Line
         Draw bimedian from specified line/index of line.
             Expected args    : line
@@ -758,63 +760,63 @@ Drawable: Kite
             Expected args    : idx
             Of Types         : float.
 
-    diagonalIntersection
+    diagonal_intersection
         returns -> Point
         Find diagonal intersection point.
             Expected args    : None
 
-    bimedianIntersection
+    bimedian_intersection
         returns -> Point
         Find bimedian intersection point.
             Expected args    : None
 
     area
         returns -> float
-        Area of polygon.
+        Area of the polygon.
             Expected args    : None
 
-    getPointFromID
+    get_indexed_point
         returns -> Point
         Return an indexed point. depends on input while construction.
             Expected args    : idx
             Of Types         : float.
 
-    getLineFromID
+    get_indexed_line
         returns -> Line
         Return a line from point[i-1] to point[i]. Depends on input while construction.
             Expected args    : idx
             Of Types         : float.
 
-    signedArea
+    signed_area
         returns -> float
-        Signed area for nonintersecting Polygon using shielace formula.
+        Signed area of polygon using shielace formula.
             Expected args    : None
 
     centroid
         returns -> Point
-        Calculate centroid.
+        Calculate centroid of polygon.
             Expected args    : None
 
-    vertexCentroid
+    vertex_centroid
         returns -> Point
-        Return centroid of vertices.
+        Calculate centroid of vertices.
             Expected args    : None
 
-    internalAngle
+    angle_internal
         returns -> float
-        Calculate Internal angle at a vertex.
+        Calculate Internal angle at a vertex(point or index of the vertex).
             Expected args    : idx
             Of Types         : float.
-        Calculate Internal angle at a vertex.
+        Calculate Internal angle at a vertex(point or index of the vertex).
             Expected args    : point
             Of Types         : Point.
 
-    angleBisector
+    angle_bisector
         returns -> Line
-        Angle bisector.
+        Angle bisector of a vertex(point or index of the vertex).
             Expected args    : idx
             Of Types         : float.
-        Angle bisector.
+        Angle bisector of a vertex(point or index of the vertex).
             Expected args    : point
             Of Types         : Point.
 
@@ -829,24 +831,24 @@ Drawable: Parallelogram
         Build parallelogram from provided lines.
             Expected args    : listOfLine
             Of Types         : list , Line.
-        Draws a parallelogram from some metrics: a line(/line length), an internal angle, other length.
+        Draws a parallelogram from some metrics: a line(or its length and angle), an internal angle, other length.
             Expected args    : line, angle, length
             Of Types         : Line , float , float.
-        Draws a parallelogram from some metrics: a line(/line length), an internal angle, other length.
+        Draws a parallelogram from some metrics: a line(or its length and angle), an internal angle, other length.
             Expected args    : line, angleLine, angle, length
             Of Types         : float , float , float , float.
-        Draws a parallelogram from some metrics: a line(/line length), an internal angle, other length.
+        Draws a parallelogram from some metrics: a line(or its length and angle), an internal angle, other length.
             Expected args    : line, angle, length
             Of Types         : float , float , float.
-        Build a random Quadrilateral.
+        Build a random parallelogram.
             Expected args    : None
 
     copy
         returns -> Parallelogram
-        Copy another parallelogram.
+        Copy from another parallelogram.
             Expected args    : None
 
-    diagonalAt
+    diagonal
         returns -> Line
         Draw diagonal from specified point/index of point.
             Expected args    : point
@@ -855,7 +857,7 @@ Drawable: Parallelogram
             Expected args    : idx
             Of Types         : float.
 
-    bimedianOn
+    bimedian
         returns -> Line
         Draw bimedian from specified line/index of line.
             Expected args    : line
@@ -864,63 +866,63 @@ Drawable: Parallelogram
             Expected args    : idx
             Of Types         : float.
 
-    diagonalIntersection
+    diagonal_intersection
         returns -> Point
         Find diagonal intersection point.
             Expected args    : None
 
-    bimedianIntersection
+    bimedian_intersection
         returns -> Point
         Find bimedian intersection point.
             Expected args    : None
 
     area
         returns -> float
-        Area of polygon.
+        Area of the polygon.
             Expected args    : None
 
-    getPointFromID
+    get_indexed_point
         returns -> Point
         Return an indexed point. depends on input while construction.
             Expected args    : idx
             Of Types         : float.
 
-    getLineFromID
+    get_indexed_line
         returns -> Line
         Return a line from point[i-1] to point[i]. Depends on input while construction.
             Expected args    : idx
             Of Types         : float.
 
-    signedArea
+    signed_area
         returns -> float
-        Signed area for nonintersecting Polygon using shielace formula.
+        Signed area of polygon using shielace formula.
             Expected args    : None
 
     centroid
         returns -> Point
-        Calculate centroid.
+        Calculate centroid of polygon.
             Expected args    : None
 
-    vertexCentroid
+    vertex_centroid
         returns -> Point
-        Return centroid of vertices.
+        Calculate centroid of vertices.
             Expected args    : None
 
-    internalAngle
+    angle_internal
         returns -> float
-        Calculate Internal angle at a vertex.
+        Calculate Internal angle at a vertex(point or index of the vertex).
             Expected args    : idx
             Of Types         : float.
-        Calculate Internal angle at a vertex.
+        Calculate Internal angle at a vertex(point or index of the vertex).
             Expected args    : point
             Of Types         : Point.
 
-    angleBisector
+    angle_bisector
         returns -> Line
-        Angle bisector.
+        Angle bisector of a vertex(point or index of the vertex).
             Expected args    : idx
             Of Types         : float.
-        Angle bisector.
+        Angle bisector of a vertex(point or index of the vertex).
             Expected args    : point
             Of Types         : Point.
 
@@ -932,24 +934,24 @@ Drawable: Rectangle
         Build rectangle from provided points.
             Expected args    : listOfPoint
             Of Types         : list , Point.
-        Build parallelogram from provided lines.
+        Build rectangle from provided lines.
             Expected args    : listOfLine
             Of Types         : list , Line.
-        Draws a parallelogram from some metrics: a line(/line length), an internal angle, other length.
-            Expected args    : line, angle, lengthOther
-            Of Types         : Line , float , float.
-        Draws a parallelogram from some metrics: a line(/line length), an internal angle, other length.
+        Draws a rectangle from some metrics: a line(or lis length and angle), and other length.
+            Expected args    : line, angleLine, lengthOther
+            Of Types         : float , float , float.
+        Draws a rectangle from some metrics: a line(or lis length and angle), and other length.
             Expected args    : line, lengthOther
             Of Types         : Line , float.
-        Build a random Quadrilateral.
+        Build a random rectangle.
             Expected args    : None
 
     copy
         returns -> Rectangle
-        Copy another parallelogram.
+        Copy from another rectangle.
             Expected args    : None
 
-    diagonalAt
+    diagonal
         returns -> Line
         Draw diagonal from specified point/index of point.
             Expected args    : point
@@ -958,7 +960,7 @@ Drawable: Rectangle
             Expected args    : idx
             Of Types         : float.
 
-    bimedianOn
+    bimedian
         returns -> Line
         Draw bimedian from specified line/index of line.
             Expected args    : line
@@ -967,63 +969,63 @@ Drawable: Rectangle
             Expected args    : idx
             Of Types         : float.
 
-    diagonalIntersection
+    diagonal_intersection
         returns -> Point
         Find diagonal intersection point.
             Expected args    : None
 
-    bimedianIntersection
+    bimedian_intersection
         returns -> Point
         Find bimedian intersection point.
             Expected args    : None
 
     area
         returns -> float
-        Area of polygon.
+        Area of the polygon.
             Expected args    : None
 
-    getPointFromID
+    get_indexed_point
         returns -> Point
         Return an indexed point. depends on input while construction.
             Expected args    : idx
             Of Types         : float.
 
-    getLineFromID
+    get_indexed_line
         returns -> Line
         Return a line from point[i-1] to point[i]. Depends on input while construction.
             Expected args    : idx
             Of Types         : float.
 
-    signedArea
+    signed_area
         returns -> float
-        Signed area for nonintersecting Polygon using shielace formula.
+        Signed area of polygon using shielace formula.
             Expected args    : None
 
     centroid
         returns -> Point
-        Calculate centroid.
+        Calculate centroid of polygon.
             Expected args    : None
 
-    vertexCentroid
+    vertex_centroid
         returns -> Point
-        Return centroid of vertices.
+        Calculate centroid of vertices.
             Expected args    : None
 
-    internalAngle
+    angle_internal
         returns -> float
-        Calculate Internal angle at a vertex.
+        Calculate Internal angle at a vertex(point or index of the vertex).
             Expected args    : idx
             Of Types         : float.
-        Calculate Internal angle at a vertex.
+        Calculate Internal angle at a vertex(point or index of the vertex).
             Expected args    : point
             Of Types         : Point.
 
-    angleBisector
+    angle_bisector
         returns -> Line
-        Angle bisector.
+        Angle bisector of a vertex(point or index of the vertex).
             Expected args    : idx
             Of Types         : float.
-        Angle bisector.
+        Angle bisector of a vertex(point or index of the vertex).
             Expected args    : point
             Of Types         : Point.
 
@@ -1038,21 +1040,21 @@ Drawable: Rhombus
         Build rhombus from provided lines.
             Expected args    : listOfLine
             Of Types         : list , Line.
-        Draws a kite from some metrics: a line(/line length), an internal angle, other length.
+        Draws a rhombus from some metrics: a line(or its length and angle), and an internal angle.
             Expected args    : line, angleInternal
             Of Types         : Line , float.
-        Draws a kite from some metrics: a line(/line length), an internal angle, other length.
+        Draws a rhombus from some metrics: a line(or its length and angle), and an internal angle.
             Expected args    : line, angleLine, angleInternal
             Of Types         : float , float , float.
-        Build a random Quadrilateral.
+        Build a random rhombus.
             Expected args    : None
 
     copy
         returns -> Rhombus
-        Copy another rhombus.
+        Copy from another rhombus.
             Expected args    : None
 
-    diagonalAt
+    diagonal
         returns -> Line
         Draw diagonal from specified point/index of point.
             Expected args    : point
@@ -1061,7 +1063,7 @@ Drawable: Rhombus
             Expected args    : idx
             Of Types         : float.
 
-    bimedianOn
+    bimedian
         returns -> Line
         Draw bimedian from specified line/index of line.
             Expected args    : line
@@ -1070,63 +1072,63 @@ Drawable: Rhombus
             Expected args    : idx
             Of Types         : float.
 
-    diagonalIntersection
+    diagonal_intersection
         returns -> Point
         Find diagonal intersection point.
             Expected args    : None
 
-    bimedianIntersection
+    bimedian_intersection
         returns -> Point
         Find bimedian intersection point.
             Expected args    : None
 
     area
         returns -> float
-        Area of polygon.
+        Area of the polygon.
             Expected args    : None
 
-    getPointFromID
+    get_indexed_point
         returns -> Point
         Return an indexed point. depends on input while construction.
             Expected args    : idx
             Of Types         : float.
 
-    getLineFromID
+    get_indexed_line
         returns -> Line
         Return a line from point[i-1] to point[i]. Depends on input while construction.
             Expected args    : idx
             Of Types         : float.
 
-    signedArea
+    signed_area
         returns -> float
-        Signed area for nonintersecting Polygon using shielace formula.
+        Signed area of polygon using shielace formula.
             Expected args    : None
 
     centroid
         returns -> Point
-        Calculate centroid.
+        Calculate centroid of polygon.
             Expected args    : None
 
-    vertexCentroid
+    vertex_centroid
         returns -> Point
-        Return centroid of vertices.
+        Calculate centroid of vertices.
             Expected args    : None
 
-    internalAngle
+    angle_internal
         returns -> float
-        Calculate Internal angle at a vertex.
+        Calculate Internal angle at a vertex(point or index of the vertex).
             Expected args    : idx
             Of Types         : float.
-        Calculate Internal angle at a vertex.
+        Calculate Internal angle at a vertex(point or index of the vertex).
             Expected args    : point
             Of Types         : Point.
 
-    angleBisector
+    angle_bisector
         returns -> Line
-        Angle bisector.
+        Angle bisector of a vertex(point or index of the vertex).
             Expected args    : idx
             Of Types         : float.
-        Angle bisector.
+        Angle bisector of a vertex(point or index of the vertex).
             Expected args    : point
             Of Types         : Point.
 
@@ -1135,27 +1137,27 @@ Drawable: Square
 
     Constructor
         returns -> Square
-        Build parallelogram from provided points.
+        Build square from provided points.
             Expected args    : listOfPoint
             Of Types         : list , Point.
-        Build parallelogram from provided lines.
+        Build square from provided lines.
             Expected args    : listOfLine
             Of Types         : list , Line.
-        Draws a parallelogram from some metrics: a line(/line length), an internal angle, other length.
+        Draws a square from some metrics: a line(or its length and angle).
             Expected args    : line
             Of Types         : Line.
-        Draws a parallelogram from some metrics: a line(/line length), an internal angle, other length.
+        Draws a square from some metrics: a line(or its length and angle).
             Expected args    : line, angle
             Of Types         : float , float.
-        Build a random Quadrilateral.
+        Build a random square.
             Expected args    : None
 
     copy
         returns -> Square
-        Copy another parallelogram.
+        Copy from another square.
             Expected args    : None
 
-    diagonalAt
+    diagonal
         returns -> Line
         Draw diagonal from specified point/index of point.
             Expected args    : point
@@ -1164,7 +1166,7 @@ Drawable: Square
             Expected args    : idx
             Of Types         : float.
 
-    bimedianOn
+    bimedian
         returns -> Line
         Draw bimedian from specified line/index of line.
             Expected args    : line
@@ -1173,63 +1175,63 @@ Drawable: Square
             Expected args    : idx
             Of Types         : float.
 
-    diagonalIntersection
+    diagonal_intersection
         returns -> Point
         Find diagonal intersection point.
             Expected args    : None
 
-    bimedianIntersection
+    bimedian_intersection
         returns -> Point
         Find bimedian intersection point.
             Expected args    : None
 
     area
         returns -> float
-        Area of polygon.
+        Area of the polygon.
             Expected args    : None
 
-    getPointFromID
+    get_indexed_point
         returns -> Point
         Return an indexed point. depends on input while construction.
             Expected args    : idx
             Of Types         : float.
 
-    getLineFromID
+    get_indexed_line
         returns -> Line
         Return a line from point[i-1] to point[i]. Depends on input while construction.
             Expected args    : idx
             Of Types         : float.
 
-    signedArea
+    signed_area
         returns -> float
-        Signed area for nonintersecting Polygon using shielace formula.
+        Signed area of polygon using shielace formula.
             Expected args    : None
 
     centroid
         returns -> Point
-        Calculate centroid.
+        Calculate centroid of polygon.
             Expected args    : None
 
-    vertexCentroid
+    vertex_centroid
         returns -> Point
-        Return centroid of vertices.
+        Calculate centroid of vertices.
             Expected args    : None
 
-    internalAngle
+    angle_internal
         returns -> float
-        Calculate Internal angle at a vertex.
+        Calculate Internal angle at a vertex(point or index of the vertex).
             Expected args    : idx
             Of Types         : float.
-        Calculate Internal angle at a vertex.
+        Calculate Internal angle at a vertex(point or index of the vertex).
             Expected args    : point
             Of Types         : Point.
 
-    angleBisector
+    angle_bisector
         returns -> Line
-        Angle bisector.
+        Angle bisector of a vertex(point or index of the vertex).
             Expected args    : idx
             Of Types         : float.
-        Angle bisector.
+        Angle bisector of a vertex(point or index of the vertex).
             Expected args    : point
             Of Types         : Point.
 

@@ -185,8 +185,8 @@ class Point(Drawable):
             return Circle.fromMetrics(self, self.distanceTo(line=tangent))
         if isinstance(chord, Line):
             from Drawables.Circle import Circle
-            e = self.distanceSquared(chord.start)
-            if e != self.distanceSquared(chord.end):
+            e = self.distanceSquared(point=chord.start)
+            if e != self.distanceSquared(point=chord.end):
                 raise Exception("Can not be constructed")
             return(Circle.fromMetrics(self, sqrt(e)))
         raise TypeError(
@@ -217,7 +217,7 @@ class Point(Drawable):
         """Return square of pythagorean distance."""
         from Drawables.Line import Line
         if isinstance(line, Line):
-            point = line.projectionOf(self)
+            point = line.projectionOf(self, False)
         if isinstance(point, Point):
             return float(
                 ((self.Y - point.Y) ** 2) + ((self.X - point.X) ** 2)
@@ -231,7 +231,7 @@ class Point(Drawable):
         """L1 distance."""
         from Drawables.Line import Line
         if isinstance(line, Line):
-            point = line.projectionOf(self)
+            point = line.projectionOf(self, False)
         if isinstance(point, Point):
             return( abs(self.Y - point.Y) + abs(self.X - point.X) )
         raise TypeError(

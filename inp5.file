@@ -1,0 +1,8 @@
+a new point 1 2
+b new point 4 3
+c new point 6 6
+k new polygon a b c
+m k angle_bisector 1
+z k angle_bisector 2
+n k angle_internal 1
+o k centroid

@@ -1,7 +1,7 @@
 """Point Structure."""
 from rules.drawable import *
 squareADT = {
-    is_a:(Parallelogram,Kite),
+    parent:(Rectangle, Rhombus,),
     "new":{
         (list, Point,):{
             args:("listOfPoint",),

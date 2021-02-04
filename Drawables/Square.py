@@ -53,7 +53,7 @@ class Square(Rectangle, Rhombus):
         a,b=...,...
         if isinstance(line, Line):
             a, b = line.start, line.end
-            angle = line.angle() + pi * 0.5
+            angle = line.angle()
             line = line.length()
         else:
             a= Point.default()
@@ -83,7 +83,8 @@ class Square(Rectangle, Rhombus):
         new = trap.checkSubClass()
         if isinstance(new, Square):
             return new
+        return new
         raise ValueError(
             "ValueError:\tThe Quadrilateral can't "+
-            "be constructed as a parallelogram."
+            "be constructed as a Square."
         )

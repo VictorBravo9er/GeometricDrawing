@@ -1,7 +1,7 @@
 """Point Structure."""
 from rules.drawable import *
 kiteADT = {
-    is_a:(Quadrilateral,),
+    parent:(Quadrilateral,),
     "new":{
         (list, Point,):{
             args:("listOfPoint",),

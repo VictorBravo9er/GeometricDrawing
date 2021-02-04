@@ -324,7 +324,7 @@ class Polygon(Drawable):
         if isinstance(idx, (int,float)):
             point = idx
             idx = round(idx)
-            if abs(point - idx) < self._comparisonLimit:
+            if abs(point - idx) > self._comparisonLimit:
                 raise ValueError(
                     "ValueError:\tExpected an integral index."
                 )

@@ -25,13 +25,14 @@ class Triangle(Polygon):
         from Drawables.Line import Line
         new = cls()
         if isinstance(point, Point) and isinstance(line, Line):
-            raise TypeError(
-                "TypeError:\tExpected: (Line, Point), received"+
-                f": ({type(line).__name__}, {type(point).__name__})"
-            )
-        points = [point, line.start, line.end]
-        new.setPolygon(vertexList=points)
-        return(new)
+            points = [point, line.start, line.end]
+            new.setPolygon(vertexList=points)
+            return(new)
+        raise TypeError(
+            "TypeError:\tExpected: (Line, Point), received"+
+            f": ({type(line).__name__}, {type(point).__name__})"
+        )
+
 
     @classmethod
     def fromLines(cls, listOfLine:list):
@@ -71,7 +72,21 @@ class Triangle(Polygon):
         )
 
     @classmethod
-    def fromAngles(cls, angle1:float, angle2:float, base=...):
+    def fromLengths(cls, length1, length2, length3):
+        """Draw the line from three provided lengths."""
+        from Drawables.Point import Point
+        length1 = length1 ** 2
+        x = (length1 - length2 ** 2 + length3 ** 2) / (2 * length3)
+        y = length3 - x
+        a = Point.default()
+        b = Point.fromMetrics(0, length3, a)
+        h = (length1 - x ** 2) ** 0.5
+        c = Point.fromSection(a, b, x, y)
+        c = Point.fromMetrics(pi/2 , h, c)
+        return cls.fromPoints([a,b,c])
+
+    @classmethod
+    def fromAngles(cls, angle1:float, angle2:float, base=..., angleBase:float=...):
         """Draw a triangle from given two angles and an optional base."""
         from Drawables.Line import Line
         if angle1 + angle2 >= 6.2:
@@ -82,8 +97,10 @@ class Triangle(Polygon):
             )
         if isinstance(base, (float,int)):
             from Drawables.Point import Point
+            if not isinstance(angleBase, (int, float)):
+                anglebase = randomAngle180()
             base = Line.fromMetrics(
-                angle=randomAngle180(),
+                angle=angleBase,
                 length=randomLength(),
                 point=Point.default()
             )
@@ -119,7 +136,7 @@ class Triangle(Polygon):
             elif _type == cls._isoscales:
                 angle1 = randomRange(0.1, 1.45)
                 angle2 = angle1
-        cls.fromAngles(angle1, angle2)
+        return cls.fromAngles(angle1, angle2)
 
 
     # Methods

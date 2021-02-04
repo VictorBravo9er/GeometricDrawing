@@ -1,7 +1,7 @@
 """Point Structure."""
 from rules.drawable import *
 arcADT = {
-    is_a:tuple(),
+    parent:tuple(),
     "new":{
         (Point, float, float, float,):{
             args:("centre", "radius", "angleStart", "angleEnd"),

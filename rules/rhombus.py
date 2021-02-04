@@ -1,7 +1,7 @@
 """Point Structure."""
 from rules.drawable import *
 rhombusADT = {
-    is_a:(Parallelogram,Kite),
+    parent:(Parallelogram,Kite),
     "new":{
         (list, Point,):{
             args:("listOfPoint",),

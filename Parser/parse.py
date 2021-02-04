@@ -16,6 +16,7 @@ class Parser:
 
     _printError:str = "errorLog"
     _printObject:str="printDesc"
+    _subplots:str="subplot"
 
     _desc:str = "description"
     _val:str = "value"
@@ -83,13 +84,17 @@ class Parser:
     @staticmethod
     def parse(
         fileName:str=..., inputList:list=...,
+        inputString:str=...,
         _show:bool=False, _store:bool=True,
         _storageName:str="./data/store",
         _print:bool=False, _error:bool=False
     ):
         """Standalone parsing Operation. Returns Descrpition."""
         ops = Parser()
-        ops.tokenChecker(fileName=fileName, inputList=inputList,_printErrors=_error)
+        ops.initParse(
+            fileName=fileName, inputList=inputList,
+            inputString=inputString, _printErrors=_error
+        )
         ops.draw(_show, _store, _storageName, _print)
         return {
             Parser._printObject:ops.print(_print),
@@ -103,15 +108,24 @@ class Parser:
             if "angle" in key:
                 paramDict[key] = radians(paramDict[key])
 
-    def inputTokenizer(self, fileName:str=..., inputList:list=..., _error:bool=False):
+    def inputTokenizer(
+        self, fileName:str=..., inputList:list=...,
+        inputString:str=..., _error:bool=False
+    ):
         """Read in file and tokenizes it."""
         fileContent = ...
-        if not isinstance(inputList, list):
+        if isinstance(inputList, list):
+            fileContent = inputList
+        elif isinstance(inputString, str):
+            fileContent = inputString.split("\n")
+        elif isinstance(fileName, str):
             with open(fileName) as file:
                 fileContent = file.read()
                 fileContent = fileContent.split("\n")
         else:
-            fileContent = inputList
+            raise ValueError(
+                "No acceptable input received."
+            )
         line = 0
         for content in fileContent:
             line += 1
@@ -258,7 +272,7 @@ class Parser:
         values = target(ref, **values)
         types = type(values).__name__
         target = target.__name__
-        if "angle" in target and isinstance(values, (float, int)):
+        if "angle" in constr and isinstance(values, (float, int)):
             values = degrees(values)
         if len(param) == 0:
             constr = "no parameters"
@@ -271,15 +285,19 @@ class Parser:
             self._val   :values
         }
 
-    def tokenChecker(self, fileName:str=..., inputList:list=...,_printErrors:bool=False):
+    def initParse(
+        self, fileName:str=..., inputList:list=...,
+        inputString:str=..., _printErrors:bool=False
+    ):
         """Start point of operations."""
+        self.symtab.clear()
+        self.errorLog.clear()
         from re import match
-        
         instStruct = ...
         if isinstance(inputList, list):
-            l = len(inputList)
             instStruct = self.inputTokenizer(inputList=inputList)
-
+        elif isinstance(inputString, str):
+            instStruct = self.inputTokenizer(inputString=inputString)
         elif isinstance(fileName, str):
             instStruct = self.inputTokenizer(fileName)
         else:
@@ -318,7 +336,7 @@ class Parser:
                     print(error)
                 self.errorLog.append(error)
 
-    def print(self, _print:bool = True):
+    def print(self, _print:bool=False):
         """Print drawable item's list."""
         drawableList = []
         for x,value in self.symtab.items():
@@ -328,7 +346,7 @@ class Parser:
                 if _print:
                     print(desc)
                 continue
-            x = f"{desc}, {x}: {value}"
+            x = f"{desc}, {x}: {round(value, 4)}"
             drawableList.append(x)
             if _print:
                 print(x)
