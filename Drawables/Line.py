@@ -22,7 +22,7 @@ class Line(Drawable):
     # Constructors
     @classmethod
     def fromLine(cls, line, distance:float=0):
-        """copy from another line."""
+        """Copy from another line."""
         from Drawables.Point import Point
         if not isinstance(line, cls):
             raise TypeError(
