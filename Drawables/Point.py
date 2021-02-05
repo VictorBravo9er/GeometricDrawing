@@ -10,8 +10,8 @@ class Point(Drawable):
     def __init__(self):
         """Construct new Point."""
         super().__init__()
-        self.X = 0
-        self.Y = 0
+        self.X = 0.0
+        self.Y = 0.0
 
 
     # Constructors
@@ -299,7 +299,7 @@ class Point(Drawable):
 
     def _reflectPoint(self, point):
         """Reflect point about another point."""
-        transform = self.reflectionPointmatrix(point)
+        transform = self.reflectionPointMatrix(point)
         self._applyTransform(transform)
 
     def _reflectLine(self, line):

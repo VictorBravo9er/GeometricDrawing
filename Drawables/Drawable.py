@@ -79,7 +79,7 @@ class Drawable(object):
         return shMat
 
     @staticmethod
-    def reflectionPointmatrix(point=...):
+    def reflectionPointMatrix(point=...):
         """Reflect matrix(Point)."""
         return Drawable.scaleMatrix(sx=-1, sy=-1, point=point)
 

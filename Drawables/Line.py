@@ -325,7 +325,7 @@ class Line(Drawable):
         self._applyTransform(transform)
 
     def _reflectPoint(self, point):
-        transform = self.reflectionPointmatrix(point)
+        transform = self.reflectionPointMatrix(point)
         self._applyTransform(transform)
 
     def _reflectLine(self, line):
@@ -357,6 +357,16 @@ class Line(Drawable):
             return (self.getMetrics() == o.getMetrics())
         raise TypeError(
             f"TypeError:\tCan't compare {self.__class__} with {type(o).__name__}"
+        )
+
+    def __hash__(self) -> int:
+        """Hash function."""
+        return  (
+            (int(self.angle()*1024) << 22) +
+            (int(self.start.X * 1024) << 15) +
+            (int(self.start.Y * 1024) << 10) +
+            (int(self.end.X * 1024) << 5) +
+            int(self.end.Y * 1024)
         )
 
 
