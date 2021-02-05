@@ -1,7 +1,0 @@
-
-p new line y-axis
-kl l parallel_line 2
-g l parallel_line -2
-
-d g bisector
-h t circumcircle

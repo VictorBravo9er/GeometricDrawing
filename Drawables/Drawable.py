@@ -15,14 +15,6 @@ class Drawable(object):
         # super().__init__()
 
     @staticmethod
-    def printLimits():
-        """Test function to print current limits."""
-        print("MinX:",Drawable._minX)
-        print("MaxX:",Drawable._maxX)
-        print("MinY:",Drawable._minY)
-        print("MaxY:",Drawable._maxY)
-
-    @staticmethod
     def rotateMatrix(rotation:float=0, centre=...):
         """Rotate Matrix."""
         from Drawables.Point import Point
@@ -136,19 +128,8 @@ class Drawable(object):
         """Draw call."""
         fig, ax = plt.subplots(1)
         ax.set_aspect(1)
-        from Parser.collect import initOrder as acceptable
         for drawable in drawables:
-            if isinstance(drawable, acceptable):
-                drawable.draw(ax)
-            elif isinstance(drawable, tuple):
-                # process values other than drawable figures
-                try:
-                    if _print:
-                        Drawable.processPrintableData(drawable)
-                except Exception as e:
-                    print(e.args[0])
-            else:
-                print("Error with object:",drawable)
+            drawable.draw(ax)
         if _store:
             plt.savefig(
                 f"{_storageName}.jpg", dpi=320,

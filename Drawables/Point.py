@@ -1,5 +1,4 @@
 """Module for Point."""
-from Drawables.randoms import *
 from Drawables.Drawable import Drawable
 import numpy as np
 from math import inf, pi, atan, sqrt, cos, sin
@@ -54,14 +53,6 @@ class Point(Drawable):
                     f"{type(angle).__name__} and {type(distance).__name__}"
                 )
         return new
-
-    @classmethod
-    def default(cls):
-        """Random point."""
-        return cls.fromCoOrdinates(
-            randomPointRangeX(),
-            randomPointRangeY()
-        )
 
 
     # Getters and Setters
@@ -171,33 +162,6 @@ class Point(Drawable):
         """Line along a direction(angle) of given length."""
         from Drawables.Line import Line
         return(Line.fromMetrics(angle, distance, self))
-
-    def triangleTo(self, line):
-        """Draw a triangle, provided a side of the triangle."""
-        from Drawables.Triangle import Triangle
-        return Triangle.fromLine(line, self)
-
-    def circleFrom(self, chord=None, tangent=None):
-        """Create a circle centred on the point itself, provided a chord(if possible) or a tangent."""
-        from Drawables.Line import Line
-        if isinstance(tangent, Line):
-            from Drawables.Circle import Circle
-            return Circle.fromMetrics(self, self.distanceTo(line=tangent))
-        if isinstance(chord, Line):
-            from Drawables.Circle import Circle
-            e = self.distanceSquared(point=chord.start)
-            if e != self.distanceSquared(point=chord.end):
-                raise Exception("Can not be constructed")
-            return(Circle.fromMetrics(self, sqrt(e)))
-        raise TypeError(
-            "TypeError:\tExpected: Line, received: "+
-            f"{type(chord).__name__} and {type(tangent).__name__}"
-        )
-
-    def circle(self, radius:float):
-        """Create a circle provided a radius."""
-        from Drawables.Circle import Circle
-        return Circle.fromMetrics(self, radius)
 
 
     # Helpers

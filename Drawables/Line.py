@@ -1,5 +1,4 @@
 """Module Line."""
-from Drawables.randoms import *
 from Drawables.Drawable import Drawable
 from math import inf, pi, atan, cos, sin
 import numpy as np
@@ -60,28 +59,6 @@ class Line(Drawable):
             end=Point.fromMetrics(angle, length, point)
         )
         return new
-
-    @classmethod
-    def default(cls, parallelAxis:str=...):
-        """Construct a random line or axis parallel line(X or Y axis), if notified."""
-        from Drawables.Point import Point
-        if isinstance(parallelAxis, str):
-            angle = -1
-            if parallelAxis == cls._xAxis:
-                angle = 0
-            elif parallelAxis == cls._yAxis:
-                angle = pi * 0.5
-            if angle != -1:
-                return Line.fromMetrics(
-                    angle=angle,
-                    point=Point.default(),
-                    length=randomLength()
-                )
-        return cls.fromMetrics(
-            angle=randomAngle180(), point=Point.default(),
-            length=randomLength()
-        )
-
 
     # Getters and Setters
     def getLine(self):
@@ -211,49 +188,6 @@ class Line(Drawable):
     def perpendicularBisector(self):
         """Perpendicular bisector of the line."""
         return(self.perpendicularAt(point=self.bisector()))
-
-    def triangleTo(self, point):
-        """Draw a triangle with the line and an additional point."""
-        from Drawables.Triangle import Triangle
-        return Triangle.fromLine(self, point)
-
-    def circleAround(
-        self, chordDistance:float=...,
-        tangentCentre=..., chordCentre=...
-    ):
-        """Draw circle with line as diameter, or as a chord or tangent if their respective centres are given."""
-        from Drawables.Point import Point
-        if isinstance(chordDistance, (float, int)):
-            from Drawables.Circle import Circle
-            centre = Point.fromMetrics(
-                    (self.angle() + pi / 2) % (2 * pi),
-                    chordDistance,
-                    self.bisector()
-                )
-            return Circle.fromMetrics(centre, centre.distanceTo(point=self.end))
-        if isinstance(tangentCentre, Point):
-            return Point.circleFrom(tangentCentre, tangent=self)
-        if isinstance(chordCentre, Point):
-            return Point.circleFrom(chordCentre, chord=self)
-        if chordCentre is ... or tangentCentre is ... and chordCentre is ...:
-            mid = self.bisector()
-            radius = self.length() / 2
-            return mid.circle(radius)
-        raise TypeError(
-            "TypeError:\tExpected a float, Point or Point, received "
-            f"{type(chordDistance).__name__}, {type(tangentCentre).__name__}"+
-            f", and {type(chordCentre).__name__}"
-        )
-
-    def square(self):
-        """Draw a square with the line as one of it's sides."""
-        from Drawables.Square import Square
-        return Square.fromMetrics(self)
-
-    def rectangle(self, sideLength:float,):
-        """Draw a rectangle with the line as one of it's sides and length of adjacent side."""
-        from Drawables.Rectangle import Rectangle
-        return Rectangle.fromMetrics(line=self, lengthOther=sideLength)
 
 
     # Helpers
