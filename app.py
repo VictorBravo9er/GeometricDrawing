@@ -1,52 +1,20 @@
 """App."""
 import __init__
-from Parser.parse import Parser
-from Parser.Preprocessing_Parsing import parseNaturalInput as pni
+from figures.base import base
+from Drawables.Drawable import Drawable as dw
 import streamlit as st
 
-
 @st.cache(persist=True, allow_output_mutation=True)
-def getParser():
+def getParser(input:int):
     """Get Parser."""
-    return Parser()
-
-
-inStr, inLst = ..., ...
-options = ("Plain text", "Geometry script")
-parser = getParser()
-
-
-def process(inpLst=..., inpStr=...):
-    """Process input text and return results."""
-    parser.initParse(
-        inputList=inpLst, inputString=inpStr,
-        _printErrors=False
-    )
-    _, figure = parser.draw(_store=False)
-    return (
-        figure,
-        "\n".join(parser.print()),
-        "\n".join(parser.errorLog)
-    )
-
+    return base.modify(input)
 
 st.title("App")
-inp = st.text_area("InputText", "Enter here")
-i = options.index(st.radio("Input Type", options=options))
-_print = st.checkbox("Print objects")
-_error = st.checkbox("Print Errors")
-try:
-    if st.button("Go"):
-        if i == 0:
-            inLst = pni(text=inp)
-        if i == 1:
-            inStr = inp
-        fig, printLog, errLog = process(inpLst=inLst, inpStr=inStr)
-        st.pyplot(fig)
-        if _print:
-            st.text(f"Objects:\n{printLog}")
-        if _error:
-            st.text(f"Errors:\n{errLog}")
-except Exception as e:
-    errors = "\n".join(e.args)
-    st.write(f"Error:\t{errors}")
+inp:int = st.number_input("Input a Number", min_value=0, value=0, step=1)
+
+
+if st.button("Go"):
+    items = base.modify(inp)
+    a = st.pyplot(dw.draw(items, _show=False), clear_figure=False)
+    
+    print(a)

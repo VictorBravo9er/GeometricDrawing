@@ -6,8 +6,8 @@ from figures._2 import two
 class nine(one, two, six):
     """Nine class."""
 
-    def __init__(self, marks:dict):
+    def __init__(self):
         """Return nine figure."""
-        super().__init__(marks)
-        two.add(self, marks)
-        six.add(self, marks)
+        super().__init__()
+        two.add(self)
+        six.add(self)

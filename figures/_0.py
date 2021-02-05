@@ -4,7 +4,7 @@ from figures.base import base
 class zero(base):
     """Zero class."""
 
-    def __init__(self, marks:dict):
+    def __init__(self):
         """Return base figure."""
-        super().__init__(marks)
+        super().__init__()
 

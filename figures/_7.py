@@ -5,7 +5,7 @@ from figures._1 import one
 class seven(one, six):
     """Seven class."""
 
-    def __init__(self, marks:dict):
+    def __init__(self):
         """Return seven figure."""
-        super().__init__(marks)
-        six.add(self, marks)
+        super().__init__()
+        six.add(self)

@@ -359,6 +359,7 @@ class Line(Drawable):
             f"TypeError:\tCan't compare {self.__class__} with {type(o).__name__}"
         )
 
+    '''  
     def __hash__(self) -> int:
         """Hash function."""
         return  (
@@ -368,7 +369,7 @@ class Line(Drawable):
             (int(self.end.X * 1024) << 5) +
             int(self.end.Y * 1024)
         )
-
+    '''
 
     # Output interface
     def __str__(self) -> str:
