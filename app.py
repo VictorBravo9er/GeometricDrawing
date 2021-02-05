@@ -17,4 +17,3 @@ if st.button("Go"):
     items = base.modify(inp)
     a = st.pyplot(dw.draw(items, _show=False), clear_figure=False)
     
-    print(a)
