@@ -10,7 +10,7 @@ def getParser(input:int):
     return base.modify(input)
 
 st.title("Number")
-inp: int = st.number_input("Input a Number", min_value=0, max_value=9999999999999999999999, value=0, step=1)
+inp: int = st.number_input("Input a Number", min_value=0, max_value=(1<<53-1), value=0, step=1)
 
 
 if st.button("Go"):
